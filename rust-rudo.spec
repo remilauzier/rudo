@@ -36,8 +36,8 @@ Summary:        %{summary}
 %files       -n %{crate}
 %doc README.md
 %license LICENSE
-%{_mandir}/man1/rudo.1
-%{_mandir}/man5/rudo.conf.5
+%{_mandir}/man1/rudo.1*
+%{_mandir}/man5/rudo.conf.5*
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/pam.d/rudo
 %attr(0640,root,root) %config(noreplace) %{_sysconfdir}/rudo.conf
 %attr(4755,root,root) %{_bindir}/rudo
