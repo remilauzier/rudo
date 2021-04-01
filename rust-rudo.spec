@@ -94,7 +94,7 @@ mkdir -p %{buildroot}%{_mandir}/man5
 install -m 0640 ~/rudo.conf %{buildroot}/etc/rudo.conf
 install -m 0644 ~/rudo %{buildroot}/etc/pam.d/rudo
 install -m 0644 ~/rudo.1 %{buildroot}%{_mandir}/man1
-install -m 0644 ~/rudo.5 %{buildroot}%{_mandir}/man5
+install -m 0644 ~/rudo.conf.5 %{buildroot}%{_mandir}/man5
 
 %if %{with check}
 %check
