@@ -72,8 +72,10 @@ which use "default" feature of "%{crate}" crate.
 %prep
 %autosetup -n %{crate}-%{version_no_tilde} -p1
 %cargo_prep
-cp conf/* ~/
-cp man/* ~/
+cp conf/rudo ~/
+cp conf/rudo.conf ~/
+cp man/rudo.1 ~/
+cp man/rudo.conf.5 ~/
 
 %generate_buildrequires
 %cargo_generate_buildrequires
