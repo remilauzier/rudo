@@ -34,8 +34,10 @@ Summary:        %{summary}
 %description -n %{crate} %{_description}
 
 %files       -n %{crate}
-%doc README.md man/rudo.md
+%doc README.md
 %license LICENSE
+%{_mandir}/man1/rudo.1
+%{_mandir}/man1/rudo.conf.5
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/pam.d/rudo
 %attr(0640,root,root) %config(noreplace) %{_sysconfdir}/rudo.conf
 %attr(4755,root,root) %{_bindir}/rudo
@@ -71,6 +73,8 @@ which use "default" feature of "%{crate}" crate.
 %autosetup -n %{crate}-%{version_no_tilde} -p1
 %cargo_prep
 cp conf/* ~/
+cp man/rudo.1 ~/
+cp man/rudo.conf.5 ~/
 
 %generate_buildrequires
 %cargo_generate_buildrequires
@@ -84,8 +88,12 @@ echo "systemd-devel"
 %cargo_install
 mkdir -p %{buildroot}/etc/
 mkdir -p %{buildroot}/etc/pam.d/
+mkdir -p %{buildroot}%{_mandir}/man1
+mkdir -p %{buildroot}%{_mandir}/man5
 install -m 0640 ~/rudo.conf %{buildroot}/etc/rudo.conf
 install -m 0644 ~/rudo %{buildroot}/etc/pam.d/rudo
+install -m 0644 ~/rudo.1 %{buildroot}%{_mandir}/man1
+install -m 0644 ~/rudo.5 %{buildroot}%{_mandir}/man5
 
 %if %{with check}
 %check
