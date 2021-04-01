@@ -4,7 +4,7 @@
 %global crate rudo
 
 Name:           rust-%{crate}
-Version:        0.6.1
+Version:        0.6.2
 Release:        1%{?dist}
 Summary:        Utility to gain privilege access on unix system with pam
 
@@ -73,8 +73,7 @@ which use "default" feature of "%{crate}" crate.
 %autosetup -n %{crate}-%{version_no_tilde} -p1
 %cargo_prep
 cp conf/* ~/
-cp man/rudo.1 ~/
-cp man/rudo.conf.5 ~/
+cp man/* ~/
 
 %generate_buildrequires
 %cargo_generate_buildrequires
@@ -101,5 +100,5 @@ install -m 0644 ~/rudo.5 %{buildroot}%{_mandir}/man5
 %endif
 
 %changelog
-* Fri Mar 26 21:42:40 EDT 2021 Rémi Lauzier <remilauzier@protonmail.com> - 0.6.1-1
+* Fri Mar 26 21:42:40 EDT 2021 Rémi Lauzier <remilauzier@protonmail.com> - 0.6.2-1
 - Initial package
