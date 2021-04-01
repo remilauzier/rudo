@@ -23,6 +23,7 @@ use clap::{
 pub fn init_cli() -> ArgMatches<'static> {
     let matches = app_from_crate!()
         .setting(AppSettings::ArgRequiredElseHelp) // Show help by default
+        .setting(AppSettings::AllowLeadingHyphen) // Authorize "-" in command
         .arg(
             Arg::with_name("command")
                 .short("c")
@@ -35,6 +36,7 @@ pub fn init_cli() -> ArgMatches<'static> {
                 .required_unless("edit")
                 .index(1) // Be sure that the command is the first so we dont have to write "-c" to take a command
                 .multiple(true) // To be able to have the command and it's list of argument
+                .allow_hyphen_values(true) // Should authorize "-" in command
                 .takes_value(true),
         )
         .arg(
