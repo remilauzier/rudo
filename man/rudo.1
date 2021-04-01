@@ -1,0 +1,112 @@
+.nh
+.TH rudo 1 2021\-04\-01 0.6.1 "Rudo User manual"
+
+.SH NAME
+.PP
+Rudo is a utility to gain privilege access on unix system with pam.
+
+
+.SH SYNOPSIS
+.PP
+\fB\fCrudo\fR [\fB\fCFLAGS\fR] [\fB\fCOPTIONS\fR] \fIcommand\fP ...
+
+.PP
+\fB\fCrudo\fR [\fB\fCFLAGS\fR] [\fB\fCOPTIONS\fR] \fB\fC\-\-edit\fR \fIfile\fP
+
+.PP
+\fB\fCrudo\fR [\fB\fCFLAGS\fR] [\fB\fCOPTIONS\fR] \-\-shell
+
+
+.SH DESCRIPTION
+.PP
+\fBRudo\fP "RustUser do" allows a system administrator to give certain
+users the ability to run some commands as \fBroot\fP or another user while
+logging all commands and its arguments.
+
+
+.SH OPTIONS:
+.PP
+\fB\fC\-d\fR, \fB\fC\-\-debug\fR
+Log debug messages
+
+.PP
+\fB\fC\-g\fR, \fB\fC\-\-greeting\fR
+Greeting user
+
+.PP
+\fB\fC\-h\fR, \fB\fC\-\-help\fR
+Prints help information
+
+.PP
+\fB\fC\-s\fR, \fB\fC\-\-shell\fR
+Initialize a privilege shell
+
+.PP
+\fB\fC\-V\fR, \fB\fC\-\-version\fR
+Prints version information
+
+.PP
+\fB\fC\-e\fR, \fB\fC\-\-edit edit\fR
+Edit a document with the editor of user
+
+.PP
+\fB\fC\-u\fR, \fB\fC\-\-user user\fR
+The user you want to impersonate
+
+.PP
+\fIcommand\fP ...
+Pass the command to execute
+
+
+.SH EXAMPLES
+.PP
+Run the command as privileged user
+  $ \fIrudo\fP command arguments
+
+.PP
+Open a shell as a privileged user
+  $ \fIrudo\fP \-\-shell
+
+
+.SH FILES
+.PP
+\fI/etc/rudo.conf\fP
+  The system wide configuration file.
+
+.PP
+\fI/etc/pam.d/rudo\fP
+  The PAM permission file
+
+
+.SH SEE ALSO
+.PP
+rudo.conf(5)
+
+
+.SH AUTHOR
+.PP
+Rémi Lauzier remilauzier@protonmail.com
+\[la]mailto:remilauzier@protonmail.com\[ra]
+
+
+.SH COPYRIGHT
+.PP
+Copyright (C) 2021  Rémi Lauzier remilauzier@protonmail.com
+\[la]mailto:remilauzier@protonmail.com\[ra]
+
+.PP
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+.PP
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+.PP
+You should have received a copy of the GNU General Public License along
+with this program; if not, write to the Free Software Foundation, Inc.,
+51 Franklin Street, Fifth Floor, Boston, MA 02110\-1301 USA.
