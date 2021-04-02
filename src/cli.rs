@@ -24,6 +24,7 @@ pub fn init_cli() -> ArgMatches<'static> {
     let matches = app_from_crate!()
         .setting(AppSettings::ArgRequiredElseHelp) // Show help by default
         .setting(AppSettings::AllowLeadingHyphen) // Authorize "-" in command
+        .setting(AppSettings::TrailingVarArg) // Make rudo don't care about other option after the command is pass
         .arg(
             Arg::with_name("command")
                 .short("c")
