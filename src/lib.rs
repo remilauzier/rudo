@@ -62,7 +62,8 @@ pub fn run(matches: ArgMatches) -> Result<(), Box<dyn Error>> {
 
     // Get the uid and gid of the impersonate user for further use
     debug!("Extract uid and gid of the impersonate user");
-    let impuser = users::get_user_by_name(&conf.rudo.impuser).expect("Please give rudo a real unix username");
+    let impuser =
+        users::get_user_by_name(&conf.rudo.impuser).expect("Please give rudo a real unix username");
     let impuser_uid = impuser.uid();
     let impuser_gid = impuser.primary_group_id();
     debug!("Extraction finish");
