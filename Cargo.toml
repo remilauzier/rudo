@@ -1,6 +1,6 @@
 [package]
 name = "rudo"
-version = "0.6.3"
+version = "0.6.4"
 edition = "2018"
 license = "GPL-2.0-or-later"
 authors = ["Rémi Lauzier <remilauzier@protonmail.com>"]
