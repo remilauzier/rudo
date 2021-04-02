@@ -127,16 +127,16 @@ impl Token {
     pub fn verify_token(&self, tty_name: &str, tty_uuid: String) -> Result<(), Box<dyn Error>> {
         let clock = SystemTime::now();
         if self.final_timestamp <= clock {
-            info!("Session has expired");
+            debug!("Session has expired");
             Err(From::from("Session has expired"))
         } else if self.tty_name == tty_name
             && self.tty_uuid == tty_uuid
             && self.final_timestamp > clock
         {
-            info!("Session is valid, will reuse it");
+            debug!("Session is valid, will reuse it");
             Ok(())
         } else {
-            info!("Not the same session");
+            debug!("Not the same session");
             Err(From::from("Not the same session"))
         }
     }
