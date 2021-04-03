@@ -32,7 +32,7 @@ pub struct UserConfig {
 }
 
 impl UserConfig {
-    pub fn update(mut self, matches: &ArgMatches) -> Self {
+    pub fn update(mut self, matches: &ArgMatches<'_>) -> Self {
         // Update greeting value if CLI option is present
         if matches.is_present("greeting") {
             debug!("Greeting value will be update");
@@ -113,7 +113,7 @@ impl Config {
         // Return the configuration
         Ok(config)
     }
-    pub fn update(mut self, matches: &ArgMatches) -> Self {
+    pub fn update(mut self, matches: &ArgMatches<'_>) -> Self {
         // Update user value if CLI option is present
         if matches.value_of("user").is_some() {
             debug!("User value will be update");

@@ -29,7 +29,7 @@ use std::process::Command;
 /// Run function of Rudo.
 /// It take the result of the command-line interface to decide
 /// if it most create a login shell or to pass a command or to invocate the editor
-pub fn run(matches: ArgMatches) -> Result<(), Box<dyn Error>> {
+pub fn run(matches: ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
     // Initialize configuration
     debug!("Start configuration initialization");
     let conf = config::init_conf()?;
