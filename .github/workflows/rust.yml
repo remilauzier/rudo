@@ -2,8 +2,10 @@ name: Rust
 
 on:
   push:
+    paths-ignore: [man/**, conf/**, README.md, LICENSE, .gitignore, rust-rudo.spec]
     branches: [ main ]
   pull_request:
+    paths-ignore: [man/**, conf/**, README.md, LICENSE, .gitignore, rust-rudo.spec]
     branches: [ main ]
 
 env:
