@@ -1,6 +1,10 @@
 name: Audit
 
 on:
+  push:
+    paths: [Cargo.lock, Cargo.toml]
+  pull_request:
+    paths: [Cargo.lock, Cargo.toml]
   schedule:
   - cron: "0 2 * * 1-5"
 
