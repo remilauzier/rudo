@@ -76,11 +76,11 @@ impl Config {
     fn create_config_file(&self) -> Result<(), Box<dyn Error>> {
         // Create the path for the configuration
         let config_path = Path::new(CONFIG_PATH);
-        // Transform the struct to yaml
-        debug!("Creating default data for config file");
+        // Transform the structure to YAML
+        debug!("Creating default data for configuration file");
         let config_file = serde_yaml::to_string(&self)?;
         // Create the configuration file
-        debug!("Creating config file at {}", CONFIG_PATH);
+        debug!("Creating configuration file at {}", CONFIG_PATH);
         let mut file = File::create(config_path)?;
         // Write data in the file
         debug!("Writing to file");
@@ -88,7 +88,7 @@ impl Config {
         // Sync data to drive
         debug!("Syncing data to drive");
         file.sync_all()?;
-        // Set permisions of 640 to restreint access
+        // Set permissions of 640 to restraint access
         debug!("Set file permission");
         let mut perms = file.metadata()?.permissions();
         perms.set_mode(0o640);
@@ -101,14 +101,14 @@ impl Config {
         // Create the path for the configuration
         let config_path = Path::new(CONFIG_PATH);
         // Open the existing configuration file
-        debug!("Opening config file at {}", CONFIG_PATH);
+        debug!("Opening configuration file at {}", CONFIG_PATH);
         let mut file = File::open(config_path)?;
         // Put data in a buffer for later use
-        debug!("Putting data in a string for futher use");
+        debug!("Putting data in a string for lather use");
         let mut buffer = String::new();
         file.read_to_string(&mut buffer)?;
-        // transform data to struct with serde
-        debug!("Transform data to a struct with serde");
+        // transform data to structure with serde
+        debug!("Transform data to a structure with serde");
         let config: Config = serde_yaml::from_str(&buffer)?;
         // Return the configuration
         Ok(config)
@@ -168,15 +168,15 @@ pub fn init_conf() -> Result<Config, Box<dyn Error>> {
         return Err(From::from(err));
     } else if !path.exists() {
         // Create a configuration file if it doesn't exist
-        info!("{} doesnt exist! Creating it", CONFIG_PATH);
-        eprintln!("{} doesnt exist! Creating it", CONFIG_PATH);
+        info!("{} doesn't exist! Creating it", CONFIG_PATH);
+        eprintln!("{} doesn't exist! Creating it", CONFIG_PATH);
         conf.create_config_file()?;
         debug!("Creation has finish");
     }
     Ok(conf)
 }
 
-// Extract from the vec of UserConfig of rudo.conf the user presently accessing rudo
+// Extract from the vector of UserConfig of rudo.conf the user presently accessing Rudo
 // Pass all the information associate with it after
 pub fn extract_userconf(
     conf: Vec<UserConfig>,

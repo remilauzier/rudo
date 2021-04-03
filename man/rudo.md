@@ -1,7 +1,7 @@
 # rudo 1 2021-04-01 0.6.4 "Rudo User manual"
 
 # NAME
-Rudo is a utility to gain privilege access on unix system with pam.
+Rudo is a utility to gain privilege access on Unix system with Pam.
 
 # SYNOPSIS
 `rudo` [`FLAGS`] [`OPTIONS`] *command* ...
@@ -11,7 +11,7 @@ Rudo is a utility to gain privilege access on unix system with pam.
 `rudo` [`FLAGS`] [`OPTIONS`] --shell
 
 # DESCRIPTION
-**Rudo** "RustUser do" allows a system administrator to give certain
+**Rudo** "Rust User do" allows a system administrator to give certain
 users the ability to run some commands as **root** or another user while
 logging all commands and its arguments.
 

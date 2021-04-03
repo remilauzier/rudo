@@ -25,7 +25,7 @@ use std::time::SystemTime;
 static DEFAULT_SESSION_TIMEOUT: u64 = 600;
 static SESSION_DIR: &str = "/run/rudo/";
 
-// Create a struct to containt the uuid of the terminal and the timestamp to determine
+// Create a structure to contain the UUID of the terminal and the timestamp to determine
 // if the session is valid for further use
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Token {
@@ -53,7 +53,7 @@ impl Token {
     // Create the file that will contain the token
     pub fn create_token_file(&self, username: &str) -> Result<(), Box<dyn Error>> {
         // Create the path of the file with the name of the program, the username to distinguish user
-        // and the name of tty to let user have multiple session, on multiple terminal
+        // and the name of TTY to let user have multiple session, on multiple terminal
         debug!("Creating token_path");
         let token_path = format!("{}{}{}", SESSION_DIR, username, self.tty_name);
         let token_path = Path::new(&token_path);
@@ -67,11 +67,11 @@ impl Token {
             debug!("Token_path doesn't exist, will create it");
             let path = token_path.parent().unwrap();
 
-            // Create the directory with mode 600 to restreint access
+            // Create the directory with mode 600 to restraint access
             debug!("Create directory: {:?}", path);
             DirBuilder::new().mode(0o600).recursive(true).create(path)?;
 
-            // Put the token data in a string of yaml
+            // Put the token data in a string of YAML
             debug!("Put Token in a string");
             let token_file = serde_yaml::to_string(&self)?;
 
@@ -87,7 +87,7 @@ impl Token {
             debug!("Syncing data on drive");
             file.sync_all()?;
 
-            // Put file permission to 600 to restreint access
+            // Put file permission to 600 to restraint access
             debug!("Set file permission to 600");
             let mut perms = file.metadata()?.permissions();
             perms.set_mode(0o600);
@@ -98,7 +98,7 @@ impl Token {
             debug!("Token_path exist will erase it");
             fs::remove_file(token_path)?;
 
-            // Put the token data in a string of yaml
+            // Put the token data in a string of YAML
             debug!("Put Token in a string");
             let token_file = serde_yaml::to_string(&self)?;
 
@@ -114,7 +114,7 @@ impl Token {
             debug!("Syncing data on drive");
             file.sync_all()?;
 
-            // Put file permission to 600 to restreint access
+            // Put file permission to 600 to restraint access
             debug!("Set file permission to 600");
             let mut perms = file.metadata()?.permissions();
             perms.set_mode(0o600);
@@ -151,7 +151,7 @@ pub fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
     debug!("Verify that {:?} exist", run_path);
     if !run_path.exists() {
         info!("{:?} doesn't exist, creating it", run_path);
-        // Create the path with permissions of 600 to restreint access
+        // Create the path with permissions of 600 to restraint access
         DirBuilder::new()
             .mode(0o600)
             .recursive(true)
@@ -164,7 +164,7 @@ pub fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
     // Verify the permissions of the directory and act accordingly
     debug!("Verifying permission on {:?}", run_path);
     if perms.mode() != 0o600 {
-        info!("Permissions are incorect and will be adjust");
+        info!("Permissions are incorrect and will be adjust");
         perms.set_mode(0o600);
         fs::set_permissions(SESSION_DIR, perms)?;
     }
@@ -177,7 +177,7 @@ pub fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
     debug!("Verifying that user_path exist: {:?}", user_path);
     if !user_path.exists() {
         info!("{:?} doesn't exist, creating it", user_path);
-        // Create the path with permissions of 600 to restreint access
+        // Create the path with permissions of 600 to restraint access
         DirBuilder::new()
             .mode(0o600)
             .recursive(true)
@@ -191,9 +191,9 @@ pub fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
     let metadata = fs::metadata(user_path)?;
     let mut perms = metadata.permissions();
     // Verifying if the permission of the directory and act accordingly
-    debug!("Verifying user_path permmisions");
+    debug!("Verifying user_path permissions");
     if perms.mode() != 0o600 {
-        debug!("Permissions are incorect, adjusting it");
+        debug!("Permissions are incorrect, adjusting it");
         perms.set_mode(0o600);
         fs::set_permissions(user_path, perms)?;
     }
@@ -211,8 +211,8 @@ pub fn read_token_file(token_path: &str) -> Result<Token, Box<dyn Error>> {
     let mut buffer = String::new();
     file.read_to_string(&mut buffer)?;
 
-    // Transform the buffer to the token struct
-    debug!("Transform the buffer to the token struct");
+    // Transform the buffer to the token structure
+    debug!("Transform the buffer to the token structure");
     let token: Token = serde_yaml::from_str(&buffer)?;
     Ok(token)
 }

@@ -26,7 +26,7 @@ use std::path::Path;
 static JOURNALD_PATH: &str = "/run/systemd/journal/";
 
 fn main() -> Result<(), Box<dyn Error>> {
-    // Initialize the cli interface with clap
+    // Initialize the CLI interface with clap
     let matches = cli::init_cli();
     // Extract debug logging variable for further use
     let debug = matches.is_present("debug");

@@ -27,12 +27,12 @@ use std::path::Path;
 
 static SESSION_DIR: &str = "/run/rudo/";
 
-// Verify if the user is authorized before using pam
+// Verify if the user is authorized before using Pam
 pub fn authentification(
     userconf: &config::UserConfig,
     userdata: &user::User,
 ) -> Result<(), Box<dyn Error>> {
-    // Verify that the user is authorize to run rudo
+    // Verify that the user is authorize to run Rudo
     debug!("User verification begin");
     userdata.verify_user(&userconf.username)?;
     debug!("User verification finish");
@@ -50,7 +50,7 @@ pub fn auth_pam(
     userconf: &config::UserConfig,
     userdata: &user::User,
 ) -> Result<Context<Conversation>, Box<dyn Error>> {
-    // Create the pam context
+    // Create the Pam context
     debug!("Pam context creation");
     let mut context = Context::new(
         "rudo",
@@ -62,7 +62,7 @@ pub fn auth_pam(
     // Extract the ttyname with libc
     debug!("extract tty name");
     let tty_name = tty::get_tty_name()?;
-    debug!("tty name has been extract: {}", tty_name);
+    debug!("TTY name has been extract: {}", tty_name);
 
     // Create the token path with the base, the username and the ttyname
     debug!("token_path will be create");
@@ -74,10 +74,10 @@ pub fn auth_pam(
     let mut result = false;
     debug!("Verifying if token_path exist");
     if token_path.exists() && token_path.is_file() {
-        // extract the uuid of the terminal for later use
-        debug!("Will determine uuid of the terminal");
+        // extract the UUID of the terminal for later use
+        debug!("Will determine UUID of the terminal");
         let tty_uuid = tty::tty_uuid()?;
-        debug!("Terminal uuid is {}", tty_uuid);
+        debug!("Terminal UUID is {}", tty_uuid);
 
         // Read the token file
         debug!("Token will be read from file");
@@ -103,8 +103,8 @@ pub fn auth_pam(
     // If the token was invalid ask for the password
     debug!("Asking for password if token is invalid");
     if !result {
-        info!("{} demand authorization to use rudo", userdata.username);
-        // Don't ask for password if false in the conf
+        info!("{} demand authorization to use Rudo", userdata.username);
+        // Don't ask for password if false in the configuration
         if userconf.password {
             // Authenticate the user (ask for password, 2nd-factor token, fingerprint, etc.)
             debug!("Password will be ask");
@@ -132,14 +132,14 @@ pub fn auth_pam(
         debug!("Run directory has been create");
 
         // Extract the ttyname with libc
-        debug!("Getting tty name");
+        debug!("Getting TTY name");
         let tty_name = tty::get_tty_name()?;
-        debug!("tty name was get: {}", tty_name);
+        debug!("TTY name was get: {}", tty_name);
 
-        // Extract the uuid of the terminal
-        debug!("Will determine uuid of the terminal");
+        // Extract the UUID of the terminal
+        debug!("Will determine UUID of the terminal");
         let tty_uuid = tty::tty_uuid()?;
-        debug!("Terminal uuid is {}", tty_uuid);
+        debug!("Terminal UUID is {}", tty_uuid);
 
         // Create token with all the necessary information
         debug!("Creating a new Token");
@@ -152,7 +152,7 @@ pub fn auth_pam(
         debug!("Token was writing to file");
     }
 
-    // Change the user to have privilege access acordingly to the configuration of the user
+    // Change the user to have privilege access accordingly to the configuration of the user
     debug!("Change the user as demand");
     context.set_user(Some(conf.rudo.impuser.as_str()))?;
     info!("User change to: {}", conf.rudo.impuser);

@@ -18,7 +18,7 @@ use std::error::Error;
 use std::sync::Arc;
 use users::{Group, Users, UsersCache};
 
-// Put the data of the actual user in a struct for later use
+// Put the data of the actual user in a structure for later use
 pub struct User {
     pub user: Arc<users::User>,
     pub username: String,

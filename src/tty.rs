@@ -19,7 +19,7 @@ use std::env;
 use std::error::Error;
 use std::ffi::CStr;
 
-/// Safe wrapper to get the name of the current tty
+/// Safe wrapper to get the name of the current TTY
 /// and return it as a Rust string for further use
 pub fn get_tty_name() -> Result<String, Box<dyn Error>> {
     unsafe {
@@ -28,13 +28,15 @@ pub fn get_tty_name() -> Result<String, Box<dyn Error>> {
             error!("Rudo must be called from a terminal!");
             return Err(From::from("Rudo must be called from a terminal!"));
         }
-        // transform the fd to a c_char
+        // Transform the File Descriptor to a c_char
         let ttyname_c = ttyname(0);
 
         // Verify that there is indeed a c_char
         if ttyname_c.is_null() {
-            error!("Couldn't transform fd to c_char for ttyname");
-            return Err(From::from("Couldn't transform fd to c_char for ttyname"));
+            error!("Couldn't transform File Descriptor to c_char for ttyname");
+            return Err(From::from(
+                "Couldn't transform File Descriptor to c_char for ttyname",
+            ));
         }
         // Transform the c_char to a rust string
         let ttyname_rust = CStr::from_ptr(ttyname_c).to_string_lossy().into_owned();
@@ -43,12 +45,12 @@ pub fn get_tty_name() -> Result<String, Box<dyn Error>> {
     }
 }
 
-// WINDOWID is the least trust beacause of is small size and don't change for different tabs
+// WINDOWID is the least trust because of is small size and don't change for different tabs
 // It only change the last five number most of the time
 // But it is used by st, xterm, sakura, kitty, xfce terminal, mate terminal and terminology
 // Rox terminal use a value that change only the last six number but change for tabs
-// Qterminal is unsecure as it put 0 in WINDOWID
-// Guake, lxterminal, elementary terminal and deepin terminal as no uuid to use
+// Qterminal is insecure as it put 0 in WINDOWID
+// Guake, lxterminal, elementary terminal and deepin terminal as no UUID to use
 pub fn tty_uuid() -> Result<String, Box<dyn Error>> {
     if env::var("GNOME_TERMINAL_SCREEN").is_ok() {
         let uuid = env::var("GNOME_TERMINAL_SCREEN")?;
@@ -74,12 +76,12 @@ pub fn tty_uuid() -> Result<String, Box<dyn Error>> {
         let uuid = env::var("WINDOWID")?;
         debug!("WINDOWID: {}", uuid);
         if uuid.parse::<u32>().unwrap() == 0 {
-            error!("Error: terminal has a uuid of zero");
-            return Err(From::from("Error: terminal has a uuid of zero"));
+            error!("Error: terminal has a UUID of zero");
+            return Err(From::from("Error: terminal has a UUID of zero"));
         }
         Ok(uuid)
     } else {
-        error!("Couldn't determine the terminal uuid");
-        Err(From::from("Couldn't determine the terminal uuid"))
+        error!("Couldn't determine the terminal UUID");
+        Err(From::from("Couldn't determine the terminal UUID"))
     }
 }

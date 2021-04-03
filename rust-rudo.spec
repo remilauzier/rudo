@@ -6,7 +6,7 @@
 Name:           rust-%{crate}
 Version:        0.6.4
 Release:        1%{?dist}
-Summary:        Utility to gain privilege access on unix system with pam
+Summary:        Utility to gain privilege access on Unix system with Pam
 
 # Upstream license specification: GPL-2.0-or-later
 License:        GPLv2+
@@ -23,7 +23,7 @@ Requires: pam
 BuildRequires:  rust-packaging
 
 %global _description %{expand:
-Utility to gain privilege access on unix system with pam.}
+Utility to gain privilege access on Unix system with Pam.}
 
 %description %{_description}
 

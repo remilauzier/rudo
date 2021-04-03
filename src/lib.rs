@@ -14,7 +14,7 @@
 //    You should have received a copy of the GNU General Public License along
 //    with this program; if not, write to the Free Software Foundation, Inc.,
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-/*! Rudo is a program that permit a system adminitrator
+/*! Rudo is a program that permit a system administrator
 to authorized a user to have privilege access with a few verification
 like group membership and validity of the account
 */
@@ -41,7 +41,7 @@ use std::process::Command;
 
 /// Run function of Rudo.
 /// It take the result of the command-line interface to decide
-/// if it most create a shell or to pass a command or invoc an editor
+/// if it most create a login shell or to pass a command or to invocate the editor
 pub fn run(matches: ArgMatches) -> Result<(), Box<dyn Error>> {
     // Initialize configuration
     debug!("Start configuration initialization");
@@ -54,7 +54,7 @@ pub fn run(matches: ArgMatches) -> Result<(), Box<dyn Error>> {
     debug!("User extraction finish");
 
     // Extract the information from rudo.conf that is tie to the actual user
-    debug!("Extraction of the vec of Userconf in rudo.conf");
+    debug!("Extraction of the vector of UserConf in rudo.conf");
     let userconf = config::extract_userconf(conf.user.clone(), &userdata.username)?;
     debug!("Extraction has been done");
 
@@ -68,15 +68,15 @@ pub fn run(matches: ArgMatches) -> Result<(), Box<dyn Error>> {
     let conf = config::Config::update(conf, &matches);
     debug!("Configuration has been update");
 
-    // Get the uid and gid of the impersonate user for further use
-    debug!("Extract uid and gid of the impersonate user");
+    // Get the UID and GID of the impersonate user for further use
+    debug!("Extract UID and GID of the impersonate user");
     let impuser =
         users::get_user_by_name(&conf.rudo.impuser).expect("Please give rudo a real unix username");
     let impuser_uid = impuser.uid();
     let impuser_gid = impuser.primary_group_id();
     debug!("Extraction finish");
 
-    // Greet the user if the conf said so
+    // Greet the user if the configuration said so
     if userconf.greeting {
         debug!("Start user greeting");
         println!("Hello {}!", userdata.username);
@@ -88,13 +88,13 @@ pub fn run(matches: ArgMatches) -> Result<(), Box<dyn Error>> {
     auth::authentification(&userconf, &userdata)?;
     debug!("User has been authenticate");
 
-    // Create the pam context and authenticate the user with pam
+    // Create the Pam context and authenticate the user with Pam
     debug!("Pam context initialization and identification of user");
     let mut context = auth::auth_pam(&conf, &userconf, &userdata)?;
     debug!("Pam context create and user authenticate");
 
-    // Open session with pam credentials
-    debug!("Session initialize with pam credential");
+    // Open session with Pam credentials
+    debug!("Session initialize with Pam credential");
     let session = context.open_session(Flag::NONE)?;
     debug!("Session has been create");
 
@@ -106,7 +106,7 @@ pub fn run(matches: ArgMatches) -> Result<(), Box<dyn Error>> {
         let data = command::Command::new(command).unwrap();
         debug!("Extraction has finish");
 
-        // Log the user and it's command for further audit by system adminitrator
+        // Log the user and it's command for further audit by system administrator
         info!(
             "{} has been authorized. Command: {} {:?}",
             userdata.username, data.program, data.args
@@ -116,7 +116,7 @@ pub fn run(matches: ArgMatches) -> Result<(), Box<dyn Error>> {
         debug!("Start the supply command");
         let mut child = Command::new(data.program)
             .args(data.args)
-            .envs(session.envlist().iter_tuples()) // Pass the pam session to the new proccess
+            .envs(session.envlist().iter_tuples()) // Pass the Pam session to the new process
             .uid(impuser_uid) // Necessary to have full access
             .gid(impuser_gid) // Necessary to have full access
             .spawn()?;
@@ -129,14 +129,14 @@ pub fn run(matches: ArgMatches) -> Result<(), Box<dyn Error>> {
         debug!("Extracting shell environment variable");
         let shell = env::var("SHELL").unwrap_or_else(|_| String::from("/bin/sh"));
 
-        // Log the user and it's shell for further audit by system adminitrator
+        // Log the user and it's shell for further audit by system administrator
         info!("{} has been authorized to use {}", userdata.username, shell);
 
         // Creation and ignition of the new shell
         debug!("Starting the shell");
         let mut child = Command::new(shell)
             .arg("-l") // Login shell
-            .envs(session.envlist().iter_tuples()) // Pass the pam session to the new proccess
+            .envs(session.envlist().iter_tuples()) // Pass the Pam session to the new process
             .uid(impuser_uid) // Necessary to have full access
             .gid(impuser_gid) // Necessary to have full access
             .spawn()?;
@@ -153,7 +153,7 @@ pub fn run(matches: ArgMatches) -> Result<(), Box<dyn Error>> {
         debug!("Extracting arguments and file path give to the editor");
         let arg = matches.value_of("edit").unwrap();
 
-        // Log the user, it's editor and it's arguments for further audit by system adminitrator
+        // Log the user, it's editor and it's arguments for further audit by system administrator
         info!(
             "{} has been authorized to use {} {}",
             userdata.username, editor, arg
@@ -163,7 +163,7 @@ pub fn run(matches: ArgMatches) -> Result<(), Box<dyn Error>> {
         debug!("Starting the editor");
         let mut child = Command::new(editor)
             .arg(arg)
-            .envs(session.envlist().iter_tuples()) // Pass the pam session to the new proccess
+            .envs(session.envlist().iter_tuples()) // Pass the Pam session to the new process
             .uid(impuser_uid) // Necessary to have full access
             .gid(impuser_gid) // Necessary to have full access
             .spawn()?;

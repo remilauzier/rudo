@@ -34,7 +34,7 @@ impl<'a> Command<'a> {
             command.remove(0);
             // Copy the rest of the value and return it
             let args = command;
-            debug!("Return Commmand struct");
+            debug!("Return Command structure");
             Ok(Self { program, args })
         } else {
             // Error if the command is empty
@@ -54,7 +54,7 @@ mod tests {
         if command.is_ok() {
             Ok(())
         } else {
-            Err(From::from("Test failed to create struct"))
+            Err(From::from("Test failed to create structure"))
         }
     }
     #[test]
@@ -63,7 +63,7 @@ mod tests {
         if command.is_err() {
             Ok(())
         } else {
-            Err(From::from("Test failed to see an empty vec"))
+            Err(From::from("Test failed to see an empty vector"))
         }
     }
     #[test]
@@ -72,7 +72,7 @@ mod tests {
         if command.program == "test" && command.args == vec!["command", "full"] {
             Ok(())
         } else {
-            Err(From::from("Test failed to reproduced struct"))
+            Err(From::from("Test failed to reproduced structure"))
         }
     }
 }
