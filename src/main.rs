@@ -14,11 +14,25 @@
 //    You should have received a copy of the GNU General Public License along
 //    with this program; if not, write to the Free Software Foundation, Inc.,
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+/*! Rudo is a program that permit a system administrator
+to authorized a user to have privilege access with a few verification
+like group membership and validity of the account
+*/
+#![deny(missing_docs, unused_variables)]
 #[macro_use]
 extern crate log;
+#[macro_use]
+extern crate serde;
 
+mod auth;
 mod cli;
+mod command;
+mod config;
 mod journal;
+mod run;
+mod session;
+mod tty;
+mod user;
 
 use std::error::Error;
 use std::path::Path;
@@ -40,7 +54,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
 
     debug!("Begin of run function");
-    rudo::run(matches)?;
+    run::run(matches)?;
     debug!("End of run function");
 
     Ok(())
