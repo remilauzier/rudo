@@ -14,6 +14,12 @@
 //    You should have received a copy of the GNU General Public License along
 //    with this program; if not, write to the Free Software Foundation, Inc.,
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+/*! Rudo is a program that permit a system adminitrator
+to authorized a user to have privilege access with a few verification
+like group membership and validity of the account
+*/
+#![deny(missing_docs)]
+
 #[macro_use]
 extern crate log;
 #[macro_use]
@@ -33,7 +39,9 @@ use std::error::Error;
 use std::os::unix::process::CommandExt;
 use std::process::Command;
 
-// Main function of Rudo
+/// Run function of Rudo.
+/// It take the result of the command-line interface to decide
+/// if it most create a shell or to pass a command or invoc an editor
 pub fn run(matches: ArgMatches) -> Result<(), Box<dyn Error>> {
     // Initialize configuration
     debug!("Start configuration initialization");
