@@ -1,13 +1,10 @@
 name: Rust
 
 on:
-  schedule:
-  - cron: "0 2 * * 1-5"
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch:
 
 env:
   CARGO_TERM_COLOR: always
