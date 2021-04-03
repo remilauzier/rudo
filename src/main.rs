@@ -18,7 +18,7 @@
 to authorized a user to have privilege access with a few verification
 like group membership and validity of the account
 */
-#![deny(elided_lifetimes_in_paths, missing_docs, warnings)]
+#![deny(missing_docs, warnings)]
 #[macro_use]
 extern crate log;
 #[macro_use]
