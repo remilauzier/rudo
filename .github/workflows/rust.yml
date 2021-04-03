@@ -2,7 +2,7 @@ name: Rust
 
 on:
   schedule:
-  - cron: "0 2 * * *"
+  - cron: "0 2 * * 1-5"
   push:
     branches: [ main ]
   pull_request:
