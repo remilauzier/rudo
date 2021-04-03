@@ -20,8 +20,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Install update
-      run: sudo apt update && sudo apt full-upgrade
+    #- name: Install update
+      #run: sudo apt update && sudo apt full-upgrade
     - name: Install dependency
       run: sudo apt install libpam0g-dev libsystemd-dev
     - name: Build
