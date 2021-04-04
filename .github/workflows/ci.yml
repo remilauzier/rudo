@@ -32,7 +32,7 @@ jobs:
       uses: actions-rs/cargo@v1
       with:
         command: build
-        args: --all-targets --all-features --verbose
+        args: --release --all-targets --all-features --verbose
     - name: Run cargo tests
       uses: actions-rs/cargo@v1
       with:
