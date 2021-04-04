@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    paths-ignore: [man/**, conf/**, README.md, LICENSE, .gitignore, rust-rudo.spec]
+  pull_request:
+    paths-ignore: [man/**, conf/**, README.md, LICENSE, .gitignore, rust-rudo.spec]
+
+env:
+  CARGO_TERM_COLOR: always
+  # Emit backtraces on panics.
+  RUST_BACKTRACE: 1
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        rust: [1.43, stable, beta, nightly]
+        os: [ubuntu-latest, ubuntu-18.04, ubuntu-16.04]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependency
+      run: sudo apt install libpam0g-dev libsystemd-dev
+    - uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: ${{ matrix.rust }}
+        components: clippy, rustfmt
+    - name: Run cargo build
+      uses: actions-rs/cargo@v1
+      with:
+        command: build
+        args: --release --all-features --verbose
+    - name: Run cargo tests
+      uses: actions-rs/cargo@v1
+      with:
+        command: test
+        args: --all-features --verbose
+      #run: cargo test --verbose
+    #- name: Run clippy
+      #run: cargo clippy --verbose --all-targets --all-features
+    #- name: cargo format
+      #run: cargo fmt --all -- --check
