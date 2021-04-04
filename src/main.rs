@@ -18,7 +18,8 @@
 to authorized a user to have privilege access with a few verification
 like group membership and validity of the account
 */
-#![deny(missing_docs, warnings)]
+#![deny(missing_docs, rustdoc, warnings)]
+#![deny(clippy::all, clippy::clippy::wildcard_dependencies)]
 #[macro_use]
 extern crate log;
 #[macro_use]
