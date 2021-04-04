@@ -25,7 +25,7 @@ like group membership and validity of the account
     clippy::missing_docs_in_private_items,
     clippy::cargo_common_metadata,
     clippy::create_dir,
-    clippy::verbose_file_reads
+    clippy::verbose_file_reads,
 )]
 #[macro_use]
 extern crate log;
