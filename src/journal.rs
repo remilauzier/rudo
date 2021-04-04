@@ -35,3 +35,13 @@ pub fn log_journald(debug: bool) -> Result<(), Box<dyn Error>> {
     }
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_journald() -> Result<(), Box<dyn Error>> {
+        log_journald(false)
+    }
+}
