@@ -11,8 +11,8 @@
 # Description
 **Rudo** "Rust User do" allows a system administrator to give certain
 users the ability to run some commands as **root** or another user while 
-logging all commands and it's arguments.
-Compile with rust 1.43 and later, as test in CI. ``2021-04-04``
+logging all commands and it's arguments. \
+Compile with rust ``1.43`` and later, as test in **CI**. ``2021-04-04``
 
 # Package
 https://copr.fedorainfracloud.org/coprs/remilauzier/rudo/
