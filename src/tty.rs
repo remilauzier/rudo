@@ -85,3 +85,30 @@ pub fn tty_uuid() -> Result<String, Box<dyn Error>> {
         Err(From::from("Couldn't determine the terminal UUID"))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_ttyname() -> Result<(), Box<dyn Error>> {
+        let ttyname = get_tty_name()?;
+        if ttyname.is_empty() {
+            Err(From::from("ttyname shouldn't be empty"))
+        } else {
+            Ok(())
+        }
+    }
+    #[test]
+    fn test_ttyuuid() -> Result<(), Box<dyn Error>> {
+        env::set_var("WINDOWID", "325768");
+        let ttyuuid = tty_uuid()?;
+        if ttyuuid.is_empty() {
+            Err(From::from("ttyuuid shouldn't be empty"))
+        } else if ttyuuid == "325768" {
+            Ok(())
+        } else {
+            Err(From::from("Test Failed"))
+        }
+    }
+}

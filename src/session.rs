@@ -219,3 +219,19 @@ pub fn read_token_file(token_path: &str) -> Result<Token, Box<dyn Error>> {
     let token: Token = serde_yaml::from_str(&buffer)?;
     Ok(token)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_timestamp() -> Result<(), Box<dyn Error>> {
+        let token = Token::new(String::from("name"), String::from("1234"));
+        let duration = std::time::Duration::from_secs(DEFAULT_SESSION_TIMEOUT);
+        if token.final_timestamp - duration == token.timestamp {
+            Ok(())
+        } else {
+            Err(From::from("Test failed"))
+        }
+    }
+}

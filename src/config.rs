@@ -200,3 +200,19 @@ pub fn extract_userconf(
     }
     Ok(user)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_extract_userconf() -> Result<(), Box<dyn Error>> {
+        let conf = UserConfig::default();
+        let conf = vec![conf];
+        if extract_userconf(conf, "root").is_ok() {
+            Ok(())
+        } else {
+            Err(From::from("Test failed when extracting the usersonf"))
+        }
+    }
+}
