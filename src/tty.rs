@@ -91,15 +91,6 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_ttyname() -> Result<(), Box<dyn Error>> {
-        let ttyname = get_tty_name()?;
-        if ttyname.is_empty() {
-            Err(From::from("ttyname shouldn't be empty"))
-        } else {
-            Ok(())
-        }
-    }
-    #[test]
     fn test_ttyuuid() -> Result<(), Box<dyn Error>> {
         env::set_var("WINDOWID", "325768");
         let ttyuuid = tty_uuid()?;
