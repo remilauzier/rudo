@@ -55,7 +55,13 @@ use std::error::Error;
 use std::path::Path;
 
 /// Define the path to journald file to verify it's existence
-static JOURNALD_PATH: &str = "/run/systemd/journal/";
+pub static JOURNALD_PATH: &str = "/run/systemd/journal/";
+/// The amount of time the session stay valid
+pub static DEFAULT_SESSION_TIMEOUT: u64 = 600;
+/// The beginning of the path where the session token will be written
+pub static SESSION_DIR: &str = "/run/rudo/";
+/// The default path of the configuration file
+pub static CONFIG_PATH: &str = "/etc/rudo.conf";
 
 /// Main function of the program
 fn main() -> Result<(), Box<dyn Error>> {

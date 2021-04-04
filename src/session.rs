@@ -22,10 +22,8 @@ use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
 use std::time::SystemTime;
 
-/// The amount of time the session stay valid
-static DEFAULT_SESSION_TIMEOUT: u64 = 600;
-/// The beginning of the path where the session token will be written
-static SESSION_DIR: &str = "/run/rudo/";
+use crate::SESSION_DIR;
+use crate::DEFAULT_SESSION_TIMEOUT;
 
 /// Create a structure to contain the UUID of the terminal and the timestamp to determine
 /// if the session is valid for later use

@@ -25,8 +25,7 @@ use std::error::Error;
 use std::fs;
 use std::path::Path;
 
-/// The beginning of the path of the token file
-static SESSION_DIR: &str = "/run/rudo/";
+use crate::SESSION_DIR;
 
 /// Function to verify if the user is authorized before using Pam
 pub fn authentification(

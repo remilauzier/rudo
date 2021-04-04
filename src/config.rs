@@ -21,8 +21,7 @@ use std::io::Write;
 use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
 
-/// The default path of the configuration file
-static CONFIG_PATH: &str = "/etc/rudo.conf";
+use crate::CONFIG_PATH;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 /// UserConfig structure is the representation of the data of a part of the configuration file
