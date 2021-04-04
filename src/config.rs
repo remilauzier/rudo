@@ -17,7 +17,7 @@
 use clap::ArgMatches;
 use std::error::Error;
 use std::fs::{self, File};
-use std::io::{Read, Write};
+use std::io::Write;
 use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
 
@@ -116,11 +116,7 @@ impl Config {
         let config_path = Path::new(CONFIG_PATH);
         // Open the existing configuration file
         debug!("Opening configuration file at {}", CONFIG_PATH);
-        let mut file = File::open(config_path)?;
-        // Put data in a buffer for later use
-        debug!("Putting data in a string for lather use");
-        let mut buffer = String::new();
-        file.read_to_string(&mut buffer)?;
+        let buffer = fs::read_to_string(config_path)?;
         // transform data to structure with serde
         debug!("Transform data to a structure with serde");
         let config: Config = serde_yaml::from_str(&buffer)?;

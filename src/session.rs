@@ -16,7 +16,7 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 use std::error::Error;
 use std::fs::{self, DirBuilder, File};
-use std::io::{Read, Write};
+use std::io::Write;
 use std::os::unix::fs::DirBuilderExt;
 use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
@@ -214,9 +214,7 @@ pub fn read_token_file(token_path: &str) -> Result<Token, Box<dyn Error>> {
         "Open the file at {} and put it's content in a buffer",
         token_path
     );
-    let mut file = File::open(token_path)?;
-    let mut buffer = String::new();
-    file.read_to_string(&mut buffer)?;
+    let buffer = fs::read_to_string(token_path)?;
 
     // Transform the buffer to the token structure
     debug!("Transform the buffer to the token structure");

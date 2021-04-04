@@ -21,8 +21,11 @@ like group membership and validity of the account
 #![deny(missing_docs, rustdoc, warnings)]
 #![deny(
     clippy::all,
-    clippy::clippy::wildcard_dependencies,
-    clippy::missing_docs_in_private_items
+    clippy::wildcard_dependencies,
+    clippy::missing_docs_in_private_items,
+    clippy::cargo_common_metadata,
+    clippy::create_dir,
+    clippy::verbose_file_reads
 )]
 #[macro_use]
 extern crate log;
