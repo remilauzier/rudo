@@ -22,8 +22,8 @@ use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
 use std::time::SystemTime;
 
-use crate::SESSION_DIR;
 use crate::DEFAULT_SESSION_TIMEOUT;
+use crate::SESSION_DIR;
 
 /// Create a structure to contain the UUID of the terminal and the timestamp to determine
 /// if the session is valid for later use
