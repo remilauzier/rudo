@@ -1,4 +1,4 @@
-name: Audit
+name: Security audit
 
 on:
   push:
@@ -12,11 +12,12 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
+  security-audit:
 
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Audit dependency
-      run: cargo audit
+      - uses: actions/checkout@v1
+      - uses: actions-rs/audit-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
