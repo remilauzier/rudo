@@ -18,14 +18,18 @@ use std::error::Error;
 use std::sync::Arc;
 use users::{Group, Users, UsersCache};
 
-// Put the data of the actual user in a structure for later use
+/// Put the data of the actual user in a structure for later use
 pub struct User {
+    /// Contain the user structure in a arc
     pub user: Arc<users::User>,
+    /// The Unix username of the actual user
     pub username: String,
+    /// The Unix groups the user is part of
     group: Vec<Group>,
 }
 
 impl User {
+    /// Function to create the user structure with all it's data
     pub fn new() -> User {
         // Create the user and it's data for later use
         debug!("Begin user creation");
@@ -41,7 +45,7 @@ impl User {
             group,
         }
     }
-    // Verify that the user is part of the list of authorized users
+    /// Function that verify that the user is part of the list of authorized users as defined in the configuration file
     pub fn verify_user(&self, username: &str) -> Result<(), Box<dyn Error>> {
         debug!("Begin to verify if user is authorized");
         let actualuser = self.user.name().to_str().unwrap();
@@ -52,7 +56,8 @@ impl User {
             Err(From::from("User is not authorized"))
         }
     }
-    // Take the vector containing the Group and search for the group supply in the configuration
+    /// Function that take the vector containing the list of groups the user is a member,
+    /// and search for the group supply in the configuration to determine the authorization of the user
     pub fn verify_group(&self, arggroup: &str) -> Result<(), Box<dyn Error>> {
         debug!("Beginning group verification");
         let group = &self.group;

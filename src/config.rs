@@ -21,17 +21,24 @@ use std::io::{Read, Write};
 use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
 
+/// The default path of the configuration file
 static CONFIG_PATH: &str = "/etc/rudo.conf";
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+/// UserConfig structure is the representation of the data of a part of the configuration file
 pub struct UserConfig {
+    /// The Unix username of an authorized user
     pub username: String,
+    /// The group the user must be a member to have authorization to use Rudo
     pub group: String,
+    /// A Boolean to determine if the user must give is password or not
     pub password: bool,
+    /// A Boolean to determine if the user want to be salute every time Rudo is invoke
     pub greeting: bool,
 }
 
 impl UserConfig {
+    /// Function to update the greeting Boolean if the "-g" option was given
     pub fn update(mut self, matches: &ArgMatches<'_>) -> Self {
         // Update greeting value if CLI option is present
         if matches.is_present("greeting") {
@@ -54,7 +61,9 @@ impl Default for UserConfig {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+/// RudoConfig is where the program stock is configuration
 pub struct RudoConfig {
+    /// impuser is the Unix name of the user you want to impersonate
     pub impuser: String,
 }
 
@@ -67,12 +76,16 @@ impl Default for RudoConfig {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+/// Config is the sum of UserConfig and RudoConfig as represent in the configuration file
 pub struct Config {
+    /// rudo is where the program stock is configuration
     pub rudo: RudoConfig,
+    /// user is where a vector of user configuration is stock to permit multiple user configuration
     pub user: Vec<UserConfig>,
 }
 
 impl Config {
+    /// Function to create the configuration file with the right permissions and it's data
     fn create_config_file(&self) -> Result<(), Box<dyn Error>> {
         // Create the path for the configuration
         let config_path = Path::new(CONFIG_PATH);
@@ -97,6 +110,7 @@ impl Config {
 
         Ok(())
     }
+    /// Function to read the configuration file and extract it's data
     fn read_config_file(&self) -> Result<Self, Box<dyn Error>> {
         // Create the path for the configuration
         let config_path = Path::new(CONFIG_PATH);
@@ -113,6 +127,7 @@ impl Config {
         // Return the configuration
         Ok(config)
     }
+    /// Function to update the name of the impersonate user with the value give in the command-line
     pub fn update(mut self, matches: &ArgMatches<'_>) -> Self {
         // Update user value if CLI option is present
         if matches.value_of("user").is_some() {
@@ -131,7 +146,7 @@ impl Default for Config {
         }
     }
 }
-// Initialize the configuration
+/// Function to initialize the configuration with the default data if necessary
 pub fn init_conf() -> Result<Config, Box<dyn Error>> {
     // Initialize configuration with defaults
     debug!("Begin initializing default configuration");
@@ -176,8 +191,8 @@ pub fn init_conf() -> Result<Config, Box<dyn Error>> {
     Ok(conf)
 }
 
-// Extract from the vector of UserConfig of rudo.conf the user presently accessing Rudo
-// Pass all the information associate with it after
+/// Extract, from the vector of UserConfig of the configuration file, the user presently accessing Rudo,
+/// and pass all the information associate with it for later use
 pub fn extract_userconf(
     conf: Vec<UserConfig>,
     username: &str,

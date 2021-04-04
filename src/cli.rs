@@ -19,7 +19,8 @@ use clap::{
     ArgMatches,
 };
 
-// Initialize the CLI and take the argument supply by the user
+/// Function to initialize the command-line interface with all it's option,
+/// and pass these to the rest of the program
 pub fn init_cli() -> ArgMatches<'static> {
     let matches = app_from_crate!()
         .setting(AppSettings::ArgRequiredElseHelp) // Show help by default

@@ -18,6 +18,7 @@ use log::LevelFilter;
 use std::error::Error;
 use systemd::journal;
 
+/// Function to decide of the maximum level of logging with the user supply option
 pub fn log_journald(debug: bool) -> Result<(), Box<dyn Error>> {
     // Initialize Logs with journald
     if let Ok(()) = journal::JournalLog::init() {

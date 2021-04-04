@@ -22,20 +22,27 @@ use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
 use std::time::SystemTime;
 
+/// The amount of time the session stay valid
 static DEFAULT_SESSION_TIMEOUT: u64 = 600;
+/// The beginning of the path where the session token will be written
 static SESSION_DIR: &str = "/run/rudo/";
 
-// Create a structure to contain the UUID of the terminal and the timestamp to determine
-// if the session is valid for further use
+/// Create a structure to contain the UUID of the terminal and the timestamp to determine
+/// if the session is valid for later use
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Token {
+    /// Name of the TTY
     tty_name: String,
+    /// UUID of the TTY
     tty_uuid: String,
+    /// The timestamp determine at the creation of the token
     timestamp: SystemTime,
+    /// The timestamp plus the DEFAULT_SESSION_TIMEOUT to determine the maximum validity of the session
     final_timestamp: SystemTime,
 }
 
 impl Token {
+    /// Create the token and all it's parameter
     pub fn new(tty_name: String, tty_uuid: String) -> Self {
         debug!("Create the timestamp");
         let timestamp = SystemTime::now();
@@ -50,7 +57,7 @@ impl Token {
             final_timestamp,
         }
     }
-    // Create the file that will contain the token
+    /// Create the file that will contain the token if it doesn't exist
     pub fn create_token_file(&self, username: &str) -> Result<(), Box<dyn Error>> {
         // Create the path of the file with the name of the program, the username to distinguish user
         // and the name of TTY to let user have multiple session, on multiple terminal
@@ -123,7 +130,7 @@ impl Token {
         }
         Ok(())
     }
-    // Verify that the token is valid to decide if we must reuse the session
+    /// Verify that the token is valid to decide if we must reuse the session or not
     pub fn verify_token(&self, tty_name: &str, tty_uuid: String) -> Result<(), Box<dyn Error>> {
         let clock = SystemTime::now();
         if self.final_timestamp <= clock {
@@ -142,7 +149,7 @@ impl Token {
     }
 }
 
-// Create the directory containing the file to facilitate further use
+/// Create the full path of the directory containing the token file
 pub fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
     // Create the first part of the path
     let run_path = Path::new(SESSION_DIR);
@@ -200,7 +207,7 @@ pub fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
 
     Ok(())
 }
-// Extract the token from the file with serde_yaml
+/// Function to extract the token from it's file with serde_yaml
 pub fn read_token_file(token_path: &str) -> Result<Token, Box<dyn Error>> {
     // Open the file and extract it's contents in a buffer
     debug!(

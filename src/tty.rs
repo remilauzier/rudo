@@ -45,12 +45,12 @@ pub fn get_tty_name() -> Result<String, Box<dyn Error>> {
     }
 }
 
-// WINDOWID is the least trust because of is small size and don't change for different tabs
-// It only change the last five number most of the time
-// But it is used by st, xterm, sakura, kitty, xfce terminal, mate terminal and terminology
-// Rox terminal use a value that change only the last six number but change for tabs
-// Qterminal is insecure as it put 0 in WINDOWID
-// Guake, lxterminal, elementary terminal and deepin terminal as no UUID to use
+/// WINDOWID is the least trust because of is small size and don't change for different tabs.
+/// It only change the last five number most of the time.
+/// But it is used by st, xterm, sakura, kitty, xfce terminal, mate terminal and terminology.
+/// Rox terminal use a value that change only the last six number but change for tabs.
+/// Qterminal is insecure as it put 0 in WINDOWID and Rudo will refuse to consider it.
+/// Guake, lxterminal, elementary terminal and deepin terminal as no UUID to use for now.
 pub fn tty_uuid() -> Result<String, Box<dyn Error>> {
     if env::var("GNOME_TERMINAL_SCREEN").is_ok() {
         let uuid = env::var("GNOME_TERMINAL_SCREEN")?;

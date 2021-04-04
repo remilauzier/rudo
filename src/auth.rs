@@ -25,9 +25,10 @@ use std::error::Error;
 use std::fs;
 use std::path::Path;
 
+/// The beginning of the path of the token file
 static SESSION_DIR: &str = "/run/rudo/";
 
-// Verify if the user is authorized before using Pam
+/// Function to verify if the user is authorized before using Pam
 pub fn authentification(
     userconf: &config::UserConfig,
     userdata: &user::User,
@@ -44,7 +45,7 @@ pub fn authentification(
     Ok(())
 }
 
-// Verify that the user is authorized with pam and if a precedent session is valid
+/// Function to verify that the user is authorized to run Rudo with Pam and if a precedent session is valid
 pub fn auth_pam(
     conf: &config::Config,
     userconf: &config::UserConfig,

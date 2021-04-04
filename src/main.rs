@@ -19,27 +19,42 @@ to authorized a user to have privilege access with a few verification
 like group membership and validity of the account
 */
 #![deny(missing_docs, rustdoc, warnings)]
-#![deny(clippy::all, clippy::clippy::wildcard_dependencies)]
+#![deny(
+    clippy::all,
+    clippy::clippy::wildcard_dependencies,
+    clippy::missing_docs_in_private_items
+)]
 #[macro_use]
 extern crate log;
 #[macro_use]
 extern crate serde;
 
+/// Module to authenticate the Unix user with the provide configuration
 mod auth;
+/// Module to instantiate the command-line interface and it's options
 mod cli;
+/// Module to extract the command and it's arguments when user provide one
 mod command;
+/// Module that manage the configuration file and it's options
 mod config;
+/// Module that manage the logs that Rudo create
 mod journal;
+/// Module that take care of running Rudo
 mod run;
+/// Module that manage the session and it's validity for the user
 mod session;
+/// Module to extract the name of the TTY and to verify it's existence
 mod tty;
+/// Module that create user information and all the function with it
 mod user;
 
 use std::error::Error;
 use std::path::Path;
 
+/// Define the path to journald file to verify it's existence
 static JOURNALD_PATH: &str = "/run/systemd/journal/";
 
+/// Main function of the program
 fn main() -> Result<(), Box<dyn Error>> {
     // Initialize the CLI interface with clap
     let matches = cli::init_cli();
