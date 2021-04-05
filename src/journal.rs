@@ -24,7 +24,7 @@ use systemd::journal;
 #[cfg(features = "syslogging")]
 use syslog::{Logger, Facility, Formatter5424};
 
-#[cfg(target_os = "macos")]
+#[cfg(features = "macos")]
 use oslog;
 
 #[cfg(features = "journald")]
@@ -66,7 +66,7 @@ pub fn log_syslog(debug: bool) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-#[cfg(target_os = "macos")]
+#[cfg(features = "macos")]
 pub fn log_oslog(debug: bool) -> Result<(), Box<dyn Error>> {
     if debug {
     OsLogger::new("com.github.rudo")
@@ -95,7 +95,7 @@ mod tests {
     fn test_syslog() -> Result<(), Box<dyn Error>> {
         log_syslog(false)
     }
-    #[cfg(target_os = "macos")]
+    #[cfg(features = "macos")]
     #[test]
     fn test_oslog() -> Result<(), Box<dyn Error>> {
         log_oslog(false)?;
