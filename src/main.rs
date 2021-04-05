@@ -23,7 +23,6 @@ like group membership and validity of the account
     explicit_outlives_requirements,
     missing_docs,
     rustdoc,
-    warnings
 )]
 #![deny(
     clippy::all,
@@ -58,7 +57,6 @@ mod tty;
 mod user;
 
 use std::error::Error;
-#[cfg(features = "journald")]
 use std::path::Path;
 
 /// Define the path to journald file to verify it's existence
@@ -74,7 +72,7 @@ pub static CONFIG_PATH: &str = "/etc/rudo.conf";
 fn main() -> Result<(), Box<dyn Error>> {
     // Initialize the CLI interface with clap
     let matches = cli::init_cli();
-    #[cfg(features = "journald")]
+
     // Extract debug logging variable for further use
     let debug = matches.is_present("debug");
 
@@ -86,6 +84,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     } else {
         eprintln!("Journald file not found");
     }
+
+    #[cfg(features = "syslogging")]
+    log_syslog(debug)?;
 
     debug!("Begin of run function");
     run::run(matches)?;

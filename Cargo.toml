@@ -18,6 +18,7 @@ serde_yaml = "0.8"
 libc = "0.2"
 clap = "2.33"
 log = "0.4"
+syslog = {version = "5.0", optional = true}
 
 [target.'cfg(target_os = "linux")'.dependencies]
 systemd = {version = "0.8", optional = true}
@@ -29,3 +30,4 @@ pam-client = "0.2"
 [features]
 default = ["journald"]
 journald = ["systemd"]
+syslogging = ["syslog"]

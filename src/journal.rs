@@ -15,15 +15,17 @@
 //    with this program; if not, write to the Free Software Foundation, Inc.,
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-#[cfg(features = "journald")]
-use log::LevelFilter;
-#[cfg(features = "journald")]
+use log::{LevelFilter, SetLoggerError};
 use std::error::Error;
+
 #[cfg(features = "journald")]
 use systemd::journal;
 
+#[cfg(features = "syslogging")]
+use syslog::{Logger, Facility, Formatter5424};
+
 #[cfg(features = "journald")]
-/// Function to decide of the maximum level of logging with the user supply option
+/// Function to decide the maximum level of logging that journald will receive with the user supply option
 pub fn log_journald(debug: bool) -> Result<(), Box<dyn Error>> {
     // Initialize Logs with journald
     if let Ok(()) = journal::JournalLog::init() {
@@ -41,14 +43,38 @@ pub fn log_journald(debug: bool) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+#[cfg(features = "syslogging")]
+/// Function to decide the maximum level of logging that syslog server will receive with the user supply option
+pub fn log_syslog(debug: bool) -> Result<(), Box<dyn Error>> {
+    let formatter = Formatter5424 {
+        facility: Facility::LOG_AUTH,
+        hostname: None,
+        process: "rudo".into(),
+        pid: 0,
+    };
+    let logger = syslog::unix(&formatter)?;
+    if !debug {
+        log::set_boxed_logger(Box::new(Logger::new(logger, formatter)))
+            .map(|()| log::set_max_level(LevelFilter::Info));
+    } else {
+        log::set_boxed_logger(Box::new(Logger::new(logger, formatter)))
+            .map(|()| log::set_max_level(LevelFilter::Debug));
+    }
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
-    #[cfg(features = "journald")]
     use super::*;
 
-    #[test]
     #[cfg(features = "journald")]
+    #[test]
     fn test_journald() -> Result<(), Box<dyn Error>> {
         log_journald(false)
+    }
+    #[cfg(features = "syslogging")]
+    #[test]
+    fn test_syslog() -> Result<(), Box<dyn Error>> {
+        log_syslog(false)
     }
 }
