@@ -14,10 +14,15 @@
 //    You should have received a copy of the GNU General Public License along
 //    with this program; if not, write to the Free Software Foundation, Inc.,
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+#[cfg(features = "journald")]
 use log::LevelFilter;
+#[cfg(features = "journald")]
 use std::error::Error;
+#[cfg(features = "journald")]
 use systemd::journal;
 
+#[cfg(features = "journald")]
 /// Function to decide of the maximum level of logging with the user supply option
 pub fn log_journald(debug: bool) -> Result<(), Box<dyn Error>> {
     // Initialize Logs with journald
@@ -38,9 +43,11 @@ pub fn log_journald(debug: bool) -> Result<(), Box<dyn Error>> {
 
 #[cfg(test)]
 mod tests {
+    #[cfg(features = "journald")]
     use super::*;
 
     #[test]
+    #[cfg(features = "journald")]
     fn test_journald() -> Result<(), Box<dyn Error>> {
         log_journald(false)
     }
