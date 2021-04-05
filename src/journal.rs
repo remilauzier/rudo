@@ -24,6 +24,9 @@ use systemd::journal;
 #[cfg(features = "syslogging")]
 use syslog::{Logger, Facility, Formatter5424};
 
+#[cfg(target_os = "macos")]
+use oslog;
+
 #[cfg(features = "journald")]
 /// Function to decide the maximum level of logging that journald will receive with the user supply option
 pub fn log_journald(debug: bool) -> Result<(), Box<dyn Error>> {
@@ -63,6 +66,21 @@ pub fn log_syslog(debug: bool) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+#[cfg(target_os = "macos")]
+pub fn log_oslog(debug: bool) -> Result<(), Box<dyn Error>> {
+    if debug {
+    OsLogger::new("com.github.rudo")
+        .level_filter(LevelFilter::Debug)
+        .category_level_filter("Settings", LevelFilter::Debug)
+        .init()?;
+        } else {
+        OsLogger::new("com.github.rudo")
+        .level_filter(LevelFilter::Info)
+        .category_level_filter("Settings", LevelFilter::Info)
+        .init()?;
+        }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -76,5 +94,10 @@ mod tests {
     #[test]
     fn test_syslog() -> Result<(), Box<dyn Error>> {
         log_syslog(false)
+    }
+    #[cfg(target_os = "macos")]
+    #[test]
+    fn test_oslog() -> Result<(), Box<dyn Error>> {
+        log_oslog(false)?;
     }
 }

@@ -27,7 +27,11 @@ systemd = {version = "0.8", optional = true}
 users = "0.11"
 pam-client = "0.2"
 
+[target.'cfg(target_os = "macos")'.dependencies]
+oslog = {version = "0.1", optional = true}
+
 [features]
 default = ["journald"]
 journald = ["systemd"]
 syslogging = ["syslog"]
+macos = ["oslog"]
