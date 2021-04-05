@@ -22,7 +22,7 @@ like group membership and validity of the account
     elided_lifetimes_in_paths,
     explicit_outlives_requirements,
     missing_docs,
-    rustdoc,
+    rustdoc
 )]
 #![deny(
     clippy::all,

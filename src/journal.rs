@@ -22,7 +22,7 @@ use std::error::Error;
 use systemd::journal;
 
 #[cfg(features = "syslogging")]
-use syslog::{Logger, Facility, Formatter5424};
+use syslog::{Facility, Formatter5424, Logger};
 
 #[cfg(features = "macos")]
 use oslog;
@@ -69,16 +69,16 @@ pub fn log_syslog(debug: bool) -> Result<(), Box<dyn Error>> {
 #[cfg(features = "macos")]
 pub fn log_oslog(debug: bool) -> Result<(), Box<dyn Error>> {
     if debug {
-    OsLogger::new("com.github.rudo")
-        .level_filter(LevelFilter::Debug)
-        .category_level_filter("Settings", LevelFilter::Debug)
-        .init()?;
-        } else {
         OsLogger::new("com.github.rudo")
-        .level_filter(LevelFilter::Info)
-        .category_level_filter("Settings", LevelFilter::Info)
-        .init()?;
-        }
+            .level_filter(LevelFilter::Debug)
+            .category_level_filter("Settings", LevelFilter::Debug)
+            .init()?;
+    } else {
+        OsLogger::new("com.github.rudo")
+            .level_filter(LevelFilter::Info)
+            .category_level_filter("Settings", LevelFilter::Info)
+            .init()?;
+    }
 }
 
 #[cfg(test)]
