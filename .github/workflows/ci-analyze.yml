@@ -18,7 +18,9 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install dependency
       run: sudo apt install libpam0g-dev libsystemd-dev
-    - uses: actions-rs/clippy-check@v1
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        args: --all-features --all-targets --verbose
+    - name: cargo clippy
+      run: cargo clippy --all-features --all-targets --verbobe
+    #- uses: actions-rs/clippy-check@v1
+      #with:
+        #token: ${{ secrets.GITHUB_TOKEN }}
+        #args: --all-features --all-targets --verbose
