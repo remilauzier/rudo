@@ -16,9 +16,6 @@ Source:         %{crates_source}
 
 ExclusiveArch:  %{rust_arches}
 
-Requires: pam
-Requires: systemd-libs
-
 BuildRequires:  rust-packaging
 
 %global _description %{expand:
@@ -28,6 +25,7 @@ Utility to gain privilege access on Unix system with Pam.}
 
 %package     -n %{crate}
 Summary:        %{summary}
+Requires:       pam
 
 %description -n %{crate} %{_description}
 
@@ -43,29 +41,23 @@ Summary:        %{summary}
 %prep
 %autosetup -n %{crate}-%{version_no_tilde} -p1
 %cargo_prep
-cp conf/rudo ~/
-cp conf/rudo.conf ~/
-cp man/rudo.1 ~/
-cp man/rudo.conf.5 ~/
 
 %generate_buildrequires
 %cargo_generate_buildrequires
-echo "pam-devel"
-echo "systemd-devel"
 
 %build
 %cargo_build
 
 %install
 %cargo_install
-mkdir -p %{buildroot}/etc/
-mkdir -p %{buildroot}/etc/pam.d/
+mkdir -p %{buildroot}%{_sysconfdir}
+mkdir -p %{buildroot}%{_sysconfdir}/pam.d/
 mkdir -p %{buildroot}%{_mandir}/man1
 mkdir -p %{buildroot}%{_mandir}/man5
-install -m 0640 ~/rudo.conf %{buildroot}/etc/rudo.conf
-install -m 0644 ~/rudo %{buildroot}/etc/pam.d/rudo
-install -m 0644 ~/rudo.1 %{buildroot}%{_mandir}/man1/rudo.1
-install -m 0644 ~/rudo.conf.5 %{buildroot}%{_mandir}/man5/rudo.conf.5
+install -pm 0640 conf/rudo.conf %{buildroot}%{_sysconfdir}/rudo.conf
+install -pm 0644 conf/rudo %{buildroot}%{_sysconfdir}/pam.d/rudo
+install -pm 0644 man/rudo.1 %{buildroot}%{_mandir}/man1/rudo.1
+install -pm 0644 man/rudo.conf.5 %{buildroot}%{_mandir}/man5/rudo.conf.5
 
 %if %{with check}
 %check
