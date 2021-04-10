@@ -51,7 +51,7 @@ pub fn get_tty_name() -> Result<String, Box<dyn Error>> {
 /// Rox terminal use a value that change only the last six number but change for tabs.
 /// Qterminal is insecure as it put 0 in WINDOWID and Rudo will refuse to consider it.
 /// Guake, lxterminal, elementary terminal and deepin terminal as no UUID to use for now.
-pub fn tty_uuid() -> Result<String, Box<dyn Error>> {
+pub fn terminal_uuid() -> Result<String, Box<dyn Error>> {
     if env::var("GNOME_TERMINAL_SCREEN").is_ok() {
         let uuid = env::var("GNOME_TERMINAL_SCREEN")?;
         debug!("GNOME_TERMINAL_SCREEN: {}", uuid);
@@ -93,7 +93,7 @@ mod tests {
     #[test]
     fn test_ttyuuid() -> Result<(), Box<dyn Error>> {
         env::set_var("WINDOWID", "325768");
-        let ttyuuid = tty_uuid()?;
+        let ttyuuid = terminal_uuid()?;
         if ttyuuid.is_empty() {
             Err(From::from("ttyuuid shouldn't be empty"))
         } else if ttyuuid == "325768" {

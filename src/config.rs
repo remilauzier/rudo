@@ -24,8 +24,8 @@ use std::path::Path;
 use crate::CONFIG_PATH;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-/// UserConfig structure is the representation of the data of a part of the configuration file
-pub struct UserConfig {
+/// `UserConf` structure is the representation of the data of a part of the configuration file
+pub struct UserConf {
     /// The Unix username of an authorized user
     pub username: String,
     /// The group the user must be a member to have authorization to use Rudo
@@ -36,7 +36,7 @@ pub struct UserConfig {
     pub greeting: bool,
 }
 
-impl UserConfig {
+impl UserConf {
     /// Function to update the greeting Boolean if the "-g" option was given
     pub fn update(mut self, matches: &ArgMatches<'_>) -> Self {
         // Update greeting value if CLI option is present
@@ -48,7 +48,7 @@ impl UserConfig {
     }
 }
 
-impl Default for UserConfig {
+impl Default for UserConf {
     fn default() -> Self {
         Self {
             username: String::from("root"),
@@ -60,13 +60,13 @@ impl Default for UserConfig {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-/// RudoConfig is where the program stock is configuration
-pub struct RudoConfig {
+/// `RudoConf` is where the program stock is configuration
+pub struct RudoConf {
     /// impuser is the Unix name of the user you want to impersonate
     pub impuser: String,
 }
 
-impl Default for RudoConfig {
+impl Default for RudoConf {
     fn default() -> Self {
         Self {
             impuser: String::from("root"),
@@ -75,12 +75,12 @@ impl Default for RudoConfig {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-/// Config is the sum of UserConfig and RudoConfig as represent in the configuration file
+/// Config is the sum of `UserConf` and `RudoConf` as represent in the configuration file
 pub struct Config {
     /// rudo is where the program stock is configuration
-    pub rudo: RudoConfig,
+    pub rudo: RudoConf,
     /// user is where a vector of user configuration is stock to permit multiple user configuration
-    pub user: Vec<UserConfig>,
+    pub user: Vec<UserConf>,
 }
 
 impl Config {
@@ -109,19 +109,6 @@ impl Config {
 
         Ok(())
     }
-    /// Function to read the configuration file and extract it's data
-    fn read_config_file(&self) -> Result<Self, Box<dyn Error>> {
-        // Create the path for the configuration
-        let config_path = Path::new(CONFIG_PATH);
-        // Open the existing configuration file
-        debug!("Opening configuration file at {}", CONFIG_PATH);
-        let buffer = fs::read_to_string(config_path)?;
-        // transform data to structure with serde
-        debug!("Transform data to a structure with serde");
-        let config: Config = serde_yaml::from_str(&buffer)?;
-        // Return the configuration
-        Ok(config)
-    }
     /// Function to update the name of the impersonate user with the value give in the command-line
     pub fn update(mut self, matches: &ArgMatches<'_>) -> Self {
         // Update user value if CLI option is present
@@ -136,8 +123,8 @@ impl Config {
 impl Default for Config {
     fn default() -> Self {
         Self {
-            rudo: RudoConfig::default(),
-            user: vec![UserConfig::default()],
+            rudo: RudoConf::default(),
+            user: vec![UserConf::default()],
         }
     }
 }
@@ -154,7 +141,7 @@ pub fn init_conf() -> Result<Config, Box<dyn Error>> {
     if path.exists() && path.is_file() {
         // Load the file and verify it's validity
         debug!("Loading {}", CONFIG_PATH);
-        let result = conf.read_config_file();
+        let result = read_config_file();
         if let Err(err) = result {
             eprintln!("{}", err);
             error!("{}", err);
@@ -165,11 +152,11 @@ pub fn init_conf() -> Result<Config, Box<dyn Error>> {
             info!("Creating new file with defaults at {:?}", path);
             conf.create_config_file()?;
             return Ok(conf);
-        } else {
-            // Return the valid data of the configuration file
-            debug!("Returning the content of the configuration file");
-            conf = result.unwrap();
         }
+        // Return the valid data of the configuration file
+        debug!("Returning the content of the configuration file");
+        conf = result.unwrap();
+
         debug!("Finish loading configuration");
     } else if path.exists() && path.is_dir() {
         // Error if it's a directory and let the user decide what to do
@@ -186,13 +173,24 @@ pub fn init_conf() -> Result<Config, Box<dyn Error>> {
     Ok(conf)
 }
 
-/// Extract, from the vector of UserConfig of the configuration file, the user presently accessing Rudo,
+/// Function to read the configuration file and extract it's data
+pub fn read_config_file() -> Result<Config, Box<dyn Error>> {
+    // Create the path for the configuration
+    let config_path = Path::new(CONFIG_PATH);
+    // Open the existing configuration file
+    debug!("Opening configuration file at {}", CONFIG_PATH);
+    let buffer = fs::read_to_string(config_path)?;
+    // transform data to structure with serde
+    debug!("Transform data to a structure with serde");
+    let config: Config = serde_yaml::from_str(&buffer)?;
+    // Return the configuration
+    Ok(config)
+}
+
+/// Extract, from the vector of `UserConf` of the configuration file, the user presently accessing Rudo,
 /// and pass all the information associate with it for later use
-pub fn extract_userconf(
-    conf: Vec<UserConfig>,
-    username: &str,
-) -> Result<UserConfig, Box<dyn Error>> {
-    let mut user = UserConfig::default();
+pub fn extract_userconf(conf: Vec<UserConf>, username: &str) -> Result<UserConf, Box<dyn Error>> {
+    let mut user = UserConf::default();
     for cf in conf {
         if cf.username == username {
             user = cf;
@@ -207,7 +205,7 @@ mod tests {
 
     #[test]
     fn test_extract_userconf() -> Result<(), Box<dyn Error>> {
-        let conf = UserConfig::default();
+        let conf = UserConf::default();
         let conf = vec![conf];
         if extract_userconf(conf, "root").is_ok() {
             Ok(())

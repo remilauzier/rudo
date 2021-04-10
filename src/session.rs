@@ -68,7 +68,34 @@ impl Token {
         );
 
         // Verify the existence of the path to act accordingly
-        if !token_path.exists() {
+        if token_path.exists() {
+            // Erase the ancient file and create new one
+            debug!("Token_path exist will erase it");
+            fs::remove_file(token_path)?;
+
+            // Put the token data in a string of YAML
+            debug!("Put Token in a string");
+            let token_file = serde_yaml::to_string(&self)?;
+
+            // Creating the file for the token
+            debug!("Creating the token file");
+            let mut file = File::create(token_path)?;
+
+            // Write the token data in the file
+            debug!("Write the string in the file");
+            file.write_all(&token_file.as_bytes())?;
+
+            // Sync data to be sure everything is writing on drive
+            debug!("Syncing data on drive");
+            file.sync_all()?;
+
+            // Put file permission to 600 to restraint access
+            debug!("Set file permission to 600");
+            let mut perms = file.metadata()?.permissions();
+            perms.set_mode(0o600);
+            file.set_permissions(perms)?;
+            debug!("File permission has been set");
+        } else {
             debug!("Token_path doesn't exist, will create it");
             let path = token_path.parent().unwrap();
 
@@ -98,38 +125,11 @@ impl Token {
             perms.set_mode(0o600);
             file.set_permissions(perms)?;
             debug!("File permission has been set");
-        } else {
-            // Erase the ancient file and create new one
-            debug!("Token_path exist will erase it");
-            fs::remove_file(token_path)?;
-
-            // Put the token data in a string of YAML
-            debug!("Put Token in a string");
-            let token_file = serde_yaml::to_string(&self)?;
-
-            // Creating the file for the token
-            debug!("Creating the token file");
-            let mut file = File::create(token_path)?;
-
-            // Write the token data in the file
-            debug!("Write the string in the file");
-            file.write_all(&token_file.as_bytes())?;
-
-            // Sync data to be sure everything is writing on drive
-            debug!("Syncing data on drive");
-            file.sync_all()?;
-
-            // Put file permission to 600 to restraint access
-            debug!("Set file permission to 600");
-            let mut perms = file.metadata()?.permissions();
-            perms.set_mode(0o600);
-            file.set_permissions(perms)?;
-            debug!("File permission has been set");
         }
         Ok(())
     }
     /// Verify that the token is valid to decide if we must reuse the session or not
-    pub fn verify_token(&self, tty_name: &str, tty_uuid: String) -> Result<(), Box<dyn Error>> {
+    pub fn verify_token(&self, tty_name: &str, tty_uuid: &str) -> Result<(), Box<dyn Error>> {
         let clock = SystemTime::now();
         if self.final_timestamp <= clock {
             debug!("Session has expired");
@@ -205,7 +205,7 @@ pub fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
 
     Ok(())
 }
-/// Function to extract the token from it's file with serde_yaml
+/// Function to extract the token from it's file with `serde_yaml`
 pub fn read_token_file(token_path: &str) -> Result<Token, Box<dyn Error>> {
     // Open the file and extract it's contents in a buffer
     debug!(

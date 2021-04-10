@@ -29,7 +29,7 @@ use std::process::Command;
 /// Run function of Rudo.
 /// It take the result of the command-line interface to decide
 /// if it most create a login shell or to pass a command or to invocate the editor
-pub fn run(matches: ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
+pub fn run(matches: &ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
     // Initialize configuration
     debug!("Start configuration initialization");
     let conf = config::init_conf()?;
@@ -47,7 +47,7 @@ pub fn run(matches: ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
 
     // Update configuration if necessary, as CLI as the priority
     debug!("Update configuration with CLI option");
-    let userconf = config::UserConfig::update(userconf, &matches);
+    let userconf = config::UserConf::update(userconf, &matches);
     debug!("Configuration has been update");
 
     // Update configuration if necessary, as CLI as the priority
@@ -60,7 +60,7 @@ pub fn run(matches: ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
     let impuser =
         users::get_user_by_name(&conf.rudo.impuser).expect("Please give rudo a real unix username");
     let impuser_uid = impuser.uid();
-    let impuser_gid = impuser.primary_group_id();
+    let impuser_group_id = impuser.primary_group_id();
     debug!("Extraction finish");
 
     // Greet the user if the configuration said so
@@ -77,7 +77,7 @@ pub fn run(matches: ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
 
     // Create the Pam context and authenticate the user with Pam
     debug!("Pam context initialization and identification of user");
-    let mut context = auth::auth_pam(&conf, &userconf, &userdata)?;
+    let mut context = auth::authentification_pam(&conf, &userconf, &userdata)?;
     debug!("Pam context create and user authenticate");
 
     // Open session with Pam credentials
@@ -105,7 +105,7 @@ pub fn run(matches: ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
             .args(data.args)
             .envs(session.envlist().iter_tuples()) // Pass the Pam session to the new process
             .uid(impuser_uid) // Necessary to have full access
-            .gid(impuser_gid) // Necessary to have full access
+            .gid(impuser_group_id) // Necessary to have full access
             .spawn()?;
 
         // Wait for the command to finish or the program end before the command
@@ -125,7 +125,7 @@ pub fn run(matches: ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
             .arg("-l") // Login shell
             .envs(session.envlist().iter_tuples()) // Pass the Pam session to the new process
             .uid(impuser_uid) // Necessary to have full access
-            .gid(impuser_gid) // Necessary to have full access
+            .gid(impuser_group_id) // Necessary to have full access
             .spawn()?;
 
         // Wait for the shell to finish or the program end before the shell
@@ -152,7 +152,7 @@ pub fn run(matches: ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
             .arg(arg)
             .envs(session.envlist().iter_tuples()) // Pass the Pam session to the new process
             .uid(impuser_uid) // Necessary to have full access
-            .gid(impuser_gid) // Necessary to have full access
+            .gid(impuser_group_id) // Necessary to have full access
             .spawn()?;
 
         // Wait for the editor to finish or the program will end before the editor

@@ -29,7 +29,7 @@ use crate::SESSION_DIR;
 
 /// Function to verify if the user is authorized before using Pam
 pub fn authentification(
-    userconf: &config::UserConfig,
+    userconf: &config::UserConf,
     userdata: &user::User,
 ) -> Result<(), Box<dyn Error>> {
     // Verify that the user is authorize to run Rudo
@@ -45,9 +45,9 @@ pub fn authentification(
 }
 
 /// Function to verify that the user is authorized to run Rudo with Pam and if a precedent session is valid
-pub fn auth_pam(
+pub fn authentification_pam(
     conf: &config::Config,
-    userconf: &config::UserConfig,
+    userconf: &config::UserConf,
     userdata: &user::User,
 ) -> Result<Context<Conversation>, Box<dyn Error>> {
     // Create the Pam context
@@ -76,7 +76,7 @@ pub fn auth_pam(
     if token_path.exists() && token_path.is_file() {
         // extract the UUID of the terminal for later use
         debug!("Will determine UUID of the terminal");
-        let tty_uuid = tty::tty_uuid()?;
+        let tty_uuid = tty::terminal_uuid()?;
         debug!("Terminal UUID is {}", tty_uuid);
 
         // Read the token file
@@ -86,7 +86,7 @@ pub fn auth_pam(
         // Verify if the token was valid and act accordingly
         if let Ok(token) = token {
             debug!("Token has been read from file");
-            result = match token.verify_token(&tty_name, tty_uuid) {
+            result = match token.verify_token(&tty_name, &tty_uuid) {
                 Ok(()) => true,
                 Err(err) => {
                     info!("{}", err);
@@ -138,7 +138,7 @@ pub fn auth_pam(
 
         // Extract the UUID of the terminal
         debug!("Will determine UUID of the terminal");
-        let tty_uuid = tty::tty_uuid()?;
+        let tty_uuid = tty::terminal_uuid()?;
         debug!("Terminal UUID is {}", tty_uuid);
 
         // Create token with all the necessary information

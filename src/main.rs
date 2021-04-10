@@ -14,21 +14,25 @@
 //    You should have received a copy of the GNU General Public License along
 //    with this program; if not, write to the Free Software Foundation, Inc.,
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
 /*! Rudo is a program that permit a system administrator
 to authorized a user to have privilege access with a few verification
 like group membership and validity of the account
 */
 #![deny(
-    elided_lifetimes_in_paths,
-    explicit_outlives_requirements,
-    missing_docs,
-    rustdoc
+    rustdoc,
+    future_incompatible,
+    nonstandard_style,
+    rust_2018_compatibility,
+    rust_2018_idioms,
+    missing_docs
 )]
 #![deny(
     clippy::all,
+    clippy::pedantic,
     clippy::wildcard_dependencies,
-    clippy::missing_docs_in_private_items,
     clippy::cargo_common_metadata,
+    clippy::missing_docs_in_private_items,
     clippy::create_dir,
     clippy::verbose_file_reads
 )]
@@ -71,7 +75,7 @@ pub static CONFIG_PATH: &str = "/etc/rudo.conf";
 /// Main function of the program
 fn main() -> Result<(), Box<dyn Error>> {
     // Initialize the CLI interface with clap
-    let matches = cli::init_cli();
+    let matches = cli::init_command_line();
 
     // Extract debug logging variable for further use
     let debug = matches.is_present("debug");
@@ -89,7 +93,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     log_syslog(debug)?;
 
     debug!("Begin of run function");
-    run::run(matches)?;
+    run::run(&matches)?;
     debug!("End of run function");
 
     Ok(())

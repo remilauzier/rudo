@@ -29,7 +29,11 @@ impl<'a> Command<'a> {
     pub fn new(mut command: Vec<&'a str>) -> Result<Self, Box<dyn Error>> {
         // Verify that it's not empty
         debug!("Verifying that command is not empty");
-        if !command.is_empty() {
+        if command.is_empty() {
+            // Error if the command is empty
+            error!("Command is empty");
+            Err(From::from("Command is empty"))
+        } else {
             debug!("command is not empty, proceeding");
             let mut program = String::new();
             // Extract the first word then remove it
@@ -39,10 +43,6 @@ impl<'a> Command<'a> {
             let args = command;
             debug!("Return Command structure");
             Ok(Self { program, args })
-        } else {
-            // Error if the command is empty
-            error!("Command is empty");
-            Err(From::from("Command is empty"))
         }
     }
 }

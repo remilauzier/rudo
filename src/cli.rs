@@ -21,7 +21,7 @@ use clap::{
 
 /// Function to initialize the command-line interface with all it's option,
 /// and pass these to the rest of the program
-pub fn init_cli() -> ArgMatches<'static> {
+pub fn init_command_line() -> ArgMatches<'static> {
     let matches = app_from_crate!()
         .setting(AppSettings::ArgRequiredElseHelp) // Show help by default
         .setting(AppSettings::AllowLeadingHyphen) // Authorize "-" in command
