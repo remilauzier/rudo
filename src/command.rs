@@ -49,7 +49,7 @@ impl<'a> Command<'a> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use super::{Command, Error};
 
     #[test]
     fn test_command_new() -> Result<(), Box<dyn Error>> {

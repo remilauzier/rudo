@@ -86,7 +86,7 @@ impl User {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use super::{Error, User};
 
     #[test]
     fn test_verify_group() -> Result<(), Box<dyn Error>> {

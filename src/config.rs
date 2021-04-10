@@ -201,7 +201,7 @@ pub fn extract_userconf(conf: Vec<UserConf>, username: &str) -> Result<UserConf,
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use super::{extract_userconf, Error, UserConf};
 
     #[test]
     fn test_extract_userconf() -> Result<(), Box<dyn Error>> {

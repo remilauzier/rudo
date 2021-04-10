@@ -88,7 +88,7 @@ pub fn terminal_uuid() -> Result<String, Box<dyn Error>> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use super::{env, terminal_uuid, Error};
 
     #[test]
     fn test_ttyuuid() -> Result<(), Box<dyn Error>> {

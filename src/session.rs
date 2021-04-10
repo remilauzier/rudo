@@ -222,7 +222,7 @@ pub fn read_token_file(token_path: &str) -> Result<Token, Box<dyn Error>> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use super::{Error, Token, DEFAULT_SESSION_TIMEOUT};
 
     #[test]
     fn test_timestamp() -> Result<(), Box<dyn Error>> {
