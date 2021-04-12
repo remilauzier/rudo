@@ -36,7 +36,7 @@ impl User {
         let userscache = UsersCache::new();
         let uid = userscache.get_current_uid();
         let user = userscache.get_user_by_uid(uid).unwrap();
-        let username = user.name().to_str().unwrap().to_string();
+        let username = user.name().to_str().unwrap().to_owned();
         let group = user.groups().unwrap();
         debug!("User has been create");
         User {
