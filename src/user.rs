@@ -14,10 +14,10 @@
 //    You should have received a copy of the GNU General Public License along
 //    with this program; if not, write to the Free Software Foundation, Inc.,
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+use log::{debug, error, info};
 use std::error::Error;
 use std::sync::Arc;
 use users::{Group, Users, UsersCache};
-use log::{debug, error, info};
 
 /// Put the data of the actual user in a structure for later use
 pub(crate) struct User {

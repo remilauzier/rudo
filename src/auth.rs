@@ -19,12 +19,12 @@ use crate::session;
 use crate::tty;
 use crate::user;
 
+use log::{debug, error, info};
 use pam_client::conv_cli::Conversation;
 use pam_client::{Context, Flag};
 use std::error::Error;
 use std::fs;
 use std::path::Path;
-use log::{debug, error, info};
 
 use crate::SESSION_DIR;
 

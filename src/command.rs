@@ -14,8 +14,8 @@
 //    You should have received a copy of the GNU General Public License along
 //    with this program; if not, write to the Free Software Foundation, Inc.,
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-use std::error::Error;
 use log::{debug, error};
+use std::error::Error;
 
 /// Structure to keep the result of the extraction of the command give in the command-line interface
 pub(crate) struct Command<'a> {

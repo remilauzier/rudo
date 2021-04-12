@@ -28,7 +28,9 @@ like group membership and validity of the account
     unused,
     missing_docs,
     unreachable_pub,
-    macro_use_extern_crate
+    macro_use_extern_crate,
+    single_use_lifetimes,
+    unused_lifetimes
 )]
 #![deny(
     clippy::all,
@@ -70,8 +72,8 @@ mod tty;
 /// Module that create user information and all the function with it
 mod user;
 
-use std::error::Error;
 use log::debug;
+use std::error::Error;
 
 #[cfg(features = "journald")]
 use std::path::Path;

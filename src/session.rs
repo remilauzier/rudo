@@ -14,6 +14,8 @@
 //    You should have received a copy of the GNU General Public License along
 //    with this program; if not, write to the Free Software Foundation, Inc.,
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+use log::{debug, error, info};
+use serde::{Deserialize, Serialize};
 use std::error::Error;
 use std::fs::{self, DirBuilder, File};
 use std::io::Write;
@@ -21,8 +23,6 @@ use std::os::unix::fs::DirBuilderExt;
 use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
 use std::time::SystemTime;
-use log::{debug, error, info};
-use serde::{Serialize, Deserialize};
 
 use crate::DEFAULT_SESSION_TIMEOUT;
 use crate::SESSION_DIR;
@@ -131,7 +131,11 @@ impl Token {
         Ok(())
     }
     /// Verify that the token is valid to decide if we must reuse the session or not
-    pub(crate) fn verify_token(&self, tty_name: &str, tty_uuid: &str) -> Result<(), Box<dyn Error>> {
+    pub(crate) fn verify_token(
+        &self,
+        tty_name: &str,
+        tty_uuid: &str,
+    ) -> Result<(), Box<dyn Error>> {
         let clock = SystemTime::now();
         if self.final_timestamp <= clock {
             debug!("Session has expired");

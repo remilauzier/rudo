@@ -15,10 +15,10 @@
 //    with this program; if not, write to the Free Software Foundation, Inc.,
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 use libc::{isatty, ttyname};
+use log::{debug, error};
 use std::env;
 use std::error::Error;
 use std::ffi::CStr;
-use log::{debug, error};
 
 /// Safe wrapper to get the name of the current TTY
 /// and return it as a Rust string for further use
