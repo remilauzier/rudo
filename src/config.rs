@@ -114,7 +114,7 @@ impl Config {
         // Update user value if CLI option is present
         if matches.value_of("user").is_some() {
             debug!("User value will be update");
-            self.rudo.impuser = matches.value_of("user").unwrap().to_string();
+            self.rudo.impuser = matches.value_of("user").unwrap().to_owned();
         }
         self
     }
@@ -163,7 +163,7 @@ pub fn init_conf() -> Result<Config, Box<dyn Error>> {
         let err = format!("Error: {} is a directory", CONFIG_PATH);
         error!("{}", err);
         return Err(From::from(err));
-    } else if !path.exists() {
+    } else {
         // Create a configuration file if it doesn't exist
         info!("{} doesn't exist! Creating it", CONFIG_PATH);
         eprintln!("{} doesn't exist! Creating it", CONFIG_PATH);
