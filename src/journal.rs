@@ -19,6 +19,8 @@
 use log::{LevelFilter, SetLoggerError};
 #[cfg(features = "journald")]
 use std::error::Error;
+#[cfg(features = "journald")]
+use log::info;
 
 #[cfg(features = "syslogging")]
 use log::{LevelFilter, SetLoggerError};

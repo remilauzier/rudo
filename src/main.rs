@@ -27,7 +27,8 @@ like group membership and validity of the account
     warnings,
     unused,
     missing_docs,
-    unreachable_pub
+    unreachable_pub,
+    macro_use_extern_crate
 )]
 #![deny(
     clippy::all,
@@ -49,10 +50,6 @@ like group membership and validity of the account
     clippy::useless_let_if_seq,
     clippy::useless_transmute
 )]
-#[macro_use]
-extern crate log;
-#[macro_use]
-extern crate serde;
 
 /// Module to authenticate the Unix user with the provide configuration
 mod auth;
@@ -74,6 +71,7 @@ mod tty;
 mod user;
 
 use std::error::Error;
+use log::debug;
 
 #[cfg(features = "journald")]
 use std::path::Path;

@@ -25,6 +25,7 @@ use std::env;
 use std::error::Error;
 use std::os::unix::process::CommandExt;
 use std::process::Command;
+use log::{debug, error, info};
 
 /// Run function of Rudo.
 /// It take the result of the command-line interface to decide

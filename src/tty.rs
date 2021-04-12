@@ -18,6 +18,7 @@ use libc::{isatty, ttyname};
 use std::env;
 use std::error::Error;
 use std::ffi::CStr;
+use log::{debug, error};
 
 /// Safe wrapper to get the name of the current TTY
 /// and return it as a Rust string for further use

@@ -17,6 +17,7 @@
 use std::error::Error;
 use std::sync::Arc;
 use users::{Group, Users, UsersCache};
+use log::{debug, error, info};
 
 /// Put the data of the actual user in a structure for later use
 pub(crate) struct User {
