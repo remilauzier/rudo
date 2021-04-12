@@ -15,7 +15,14 @@
 //    with this program; if not, write to the Free Software Foundation, Inc.,
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+#[cfg(features = "journald")]
 use log::{LevelFilter, SetLoggerError};
+#[cfg(features = "journald")]
+use std::error::Error;
+
+#[cfg(features = "syslogging")]
+use log::{LevelFilter, SetLoggerError};
+#[cfg(features = "syslogging")]
 use std::error::Error;
 
 #[cfg(features = "journald")]
@@ -83,6 +90,11 @@ pub fn log_oslog(debug: bool) -> Result<(), Box<dyn Error>> {
 
 #[cfg(test)]
 mod tests {
+    #[cfg(features = "journald")]
+    use super::*;
+    #[cfg(features = "syslogging")]
+    use super::*;
+    #[cfg(features = "macos")]
     use super::*;
 
     #[cfg(features = "journald")]
