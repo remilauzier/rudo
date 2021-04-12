@@ -98,6 +98,8 @@ pub fn authentification_pam(
         // Erase the path if it's a directory
         error!("token_path is a directory and will be erase");
         fs::remove_dir(token_path)?;
+    } else {
+        debug!("No token found");
     }
 
     // If the token was invalid ask for the password
