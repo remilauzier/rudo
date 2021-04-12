@@ -191,18 +191,18 @@ pub fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
         error!("Error: {:?} is not a directory", user_path);
         let err = format!("Error: {:?} is not a directory", user_path);
         return Err(From::from(err));
+    } else {
+        // Extract permissions from the directory for further use
+        let metadata = fs::metadata(user_path)?;
+        let mut perms = metadata.permissions();
+        // Verifying if the permission of the directory and act accordingly
+        debug!("Verifying user_path permissions");
+        if perms.mode() != 0o600 {
+            debug!("Permissions are incorrect, adjusting it");
+            perms.set_mode(0o600);
+            fs::set_permissions(user_path, perms)?;
+        }
     }
-    // Extract permissions from the directory for further use
-    let metadata = fs::metadata(user_path)?;
-    let mut perms = metadata.permissions();
-    // Verifying if the permission of the directory and act accordingly
-    debug!("Verifying user_path permissions");
-    if perms.mode() != 0o600 {
-        debug!("Permissions are incorrect, adjusting it");
-        perms.set_mode(0o600);
-        fs::set_permissions(user_path, perms)?;
-    }
-
     Ok(())
 }
 /// Function to extract the token from it's file with `serde_yaml`
