@@ -14,7 +14,6 @@
 //    You should have received a copy of the GNU General Public License along
 //    with this program; if not, write to the Free Software Foundation, Inc.,
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
 /*! Rudo is a program that permit a system administrator
 to authorized a user to have privilege access with a few verification
 like group membership and validity of the account
@@ -25,6 +24,8 @@ like group membership and validity of the account
     nonstandard_style,
     rust_2018_compatibility,
     rust_2018_idioms,
+    warnings,
+    unused,
     missing_docs
 )]
 #![deny(
@@ -34,7 +35,8 @@ like group membership and validity of the account
     clippy::cargo_common_metadata,
     clippy::missing_docs_in_private_items,
     clippy::create_dir,
-    clippy::verbose_file_reads
+    clippy::verbose_file_reads,
+    clippy::str_to_string
 )]
 #[macro_use]
 extern crate log;
@@ -61,6 +63,8 @@ mod tty;
 mod user;
 
 use std::error::Error;
+
+#[cfg(features = "journald")]
 use std::path::Path;
 
 /// Define the path to journald file to verify it's existence
@@ -78,19 +82,19 @@ fn main() -> Result<(), Box<dyn Error>> {
     let matches = cli::init_command_line();
 
     // Extract debug logging variable for further use
-    let debug = matches.is_present("debug");
+    let _debug = matches.is_present("debug");
 
     #[cfg(features = "journald")]
     // Verify that journald file exist
     if Path::new(JOURNALD_PATH).exists() {
         // Use journald for logging
-        journal::log_journald(debug)?;
+        journal::log_journald(_debug)?;
     } else {
-        eprintln!("Journald file not found");
+        return Err(From::from("Journald file not found"));
     }
 
     #[cfg(features = "syslogging")]
-    log_syslog(debug)?;
+    log_syslog(_debug)?;
 
     debug!("Begin of run function");
     run::run(&matches)?;
