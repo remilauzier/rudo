@@ -83,7 +83,7 @@ impl Token {
 
             // Write the token data in the file
             debug!("Write the string in the file");
-            file.write_all(&token_file.as_bytes())?;
+            file.write_all(token_file.as_bytes())?;
 
             // Sync data to be sure everything is writing on drive
             debug!("Syncing data on drive");
@@ -113,7 +113,7 @@ impl Token {
 
             // Write the token data in the file
             debug!("write the string in the file");
-            file.write_all(&token_file.as_bytes())?;
+            file.write_all(token_file.as_bytes())?;
 
             // Sync data to be sure everything is writing on drive
             debug!("Syncing data on drive");

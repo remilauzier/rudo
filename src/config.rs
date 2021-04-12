@@ -96,7 +96,7 @@ impl Config {
         let mut file = File::create(config_path)?;
         // Write data in the file
         debug!("Writing to file");
-        file.write_all(&config_file.as_bytes())?;
+        file.write_all(config_file.as_bytes())?;
         // Sync data to drive
         debug!("Syncing data to drive");
         file.sync_all()?;

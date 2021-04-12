@@ -30,7 +30,7 @@ pub struct User {
 
 impl User {
     /// Function to create the user structure with all it's data
-    pub fn new() -> User {
+    pub fn new() -> Self {
         // Create the user and it's data for later use
         debug!("Begin user creation");
         let userscache = UsersCache::new();
@@ -39,7 +39,7 @@ impl User {
         let username = user.name().to_str().unwrap().to_owned();
         let group = user.groups().unwrap();
         debug!("User has been create");
-        User {
+        Self {
             user,
             username,
             group,

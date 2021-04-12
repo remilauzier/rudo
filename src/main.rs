@@ -36,7 +36,17 @@ like group membership and validity of the account
     clippy::missing_docs_in_private_items,
     clippy::create_dir,
     clippy::verbose_file_reads,
-    clippy::str_to_string
+    clippy::str_to_string,
+    clippy::pattern_type_mismatch,
+    clippy::string_add,
+    clippy::string_to_string,
+    clippy::use_debug,
+    clippy::wrong_pub_self_convention,
+    clippy::fallible_impl_from,
+    clippy::needless_borrow,
+    clippy::use_self,
+    clippy::useless_let_if_seq,
+    clippy::useless_transmute
 )]
 #[macro_use]
 extern crate log;

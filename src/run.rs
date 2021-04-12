@@ -47,12 +47,12 @@ pub fn run(matches: &ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
 
     // Update configuration if necessary, as CLI as the priority
     debug!("Update configuration with CLI option");
-    let userconf = config::UserConf::update(userconf, &matches);
+    let userconf = config::UserConf::update(userconf, matches);
     debug!("Configuration has been update");
 
     // Update configuration if necessary, as CLI as the priority
     debug!("Update configuration with CLI option");
-    let conf = config::Config::update(conf, &matches);
+    let conf = config::Config::update(conf, matches);
     debug!("Configuration has been update");
 
     // Get the UID and GID of the impersonate user for further use
