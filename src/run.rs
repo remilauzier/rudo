@@ -158,6 +158,9 @@ pub fn run(matches: &ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
         // Wait for the editor to finish or the program will end before the editor
         child.wait()?;
         debug!("End of the editor");
+    } else {
+        error!("Error: No command receive");
+        return Err(From::from("Error: No command receive"));
     }
 
     Ok(())
