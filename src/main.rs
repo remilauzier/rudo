@@ -26,7 +26,8 @@ like group membership and validity of the account
     rust_2018_idioms,
     warnings,
     unused,
-    missing_docs
+    missing_docs,
+    unreachable_pub
 )]
 #![deny(
     clippy::all,

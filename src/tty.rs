@@ -21,7 +21,7 @@ use std::ffi::CStr;
 
 /// Safe wrapper to get the name of the current TTY
 /// and return it as a Rust string for further use
-pub fn get_tty_name() -> Result<String, Box<dyn Error>> {
+pub(crate) fn get_tty_name() -> Result<String, Box<dyn Error>> {
     unsafe {
         // Verify that we are indeed in a terminal
         if isatty(0) == 0 {
@@ -51,7 +51,7 @@ pub fn get_tty_name() -> Result<String, Box<dyn Error>> {
 /// Rox terminal use a value that change only the last six number but change for tabs.
 /// Qterminal is insecure as it put 0 in WINDOWID and Rudo will refuse to consider it.
 /// Guake, lxterminal, elementary terminal and deepin terminal as no UUID to use for now.
-pub fn terminal_uuid() -> Result<String, Box<dyn Error>> {
+pub(crate) fn terminal_uuid() -> Result<String, Box<dyn Error>> {
     if env::var("GNOME_TERMINAL_SCREEN").is_ok() {
         let uuid = env::var("GNOME_TERMINAL_SCREEN")?;
         debug!("GNOME_TERMINAL_SCREEN: {}", uuid);

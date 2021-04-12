@@ -29,7 +29,7 @@ use std::process::Command;
 /// Run function of Rudo.
 /// It take the result of the command-line interface to decide
 /// if it most create a login shell or to pass a command or to invocate the editor
-pub fn run(matches: &ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
+pub(crate) fn run(matches: &ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
     // Initialize configuration
     debug!("Start configuration initialization");
     let conf = config::init_conf()?;
@@ -42,7 +42,7 @@ pub fn run(matches: &ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
 
     // Extract the information from rudo.conf that is tie to the actual user
     debug!("Extraction of the vector of UserConf in rudo.conf");
-    let userconf = config::extract_userconf(conf.user.clone(), &userdata.username)?;
+    let userconf = config::extract_userconf(conf.user.clone(), &userdata.username);
     debug!("Extraction has been done");
 
     // Update configuration if necessary, as CLI as the priority

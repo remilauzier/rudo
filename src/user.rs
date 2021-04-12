@@ -19,18 +19,18 @@ use std::sync::Arc;
 use users::{Group, Users, UsersCache};
 
 /// Put the data of the actual user in a structure for later use
-pub struct User {
+pub(crate) struct User {
     /// Contain the user structure in a arc
-    pub user: Arc<users::User>,
+    pub(crate) user: Arc<users::User>,
     /// The Unix username of the actual user
-    pub username: String,
+    pub(crate) username: String,
     /// The Unix groups the user is part of
     group: Vec<Group>,
 }
 
 impl User {
     /// Function to create the user structure with all it's data
-    pub fn new() -> Self {
+    pub(crate) fn new() -> Self {
         // Create the user and it's data for later use
         debug!("Begin user creation");
         let userscache = UsersCache::new();
@@ -46,7 +46,7 @@ impl User {
         }
     }
     /// Function that verify that the user is part of the list of authorized users as defined in the configuration file
-    pub fn verify_user(&self, username: &str) -> Result<(), Box<dyn Error>> {
+    pub(crate) fn verify_user(&self, username: &str) -> Result<(), Box<dyn Error>> {
         debug!("Begin to verify if user is authorized");
         let actualuser = self.user.name().to_str().unwrap();
         if actualuser == username {
@@ -58,7 +58,7 @@ impl User {
     }
     /// Function that take the vector containing the list of groups the user is a member,
     /// and search for the group supply in the configuration to determine the authorization of the user
-    pub fn verify_group(&self, arggroup: &str) -> Result<(), Box<dyn Error>> {
+    pub(crate) fn verify_group(&self, arggroup: &str) -> Result<(), Box<dyn Error>> {
         debug!("Beginning group verification");
         let group = &self.group;
         let mut count = 0;

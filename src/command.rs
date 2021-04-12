@@ -17,16 +17,16 @@
 use std::error::Error;
 
 /// Structure to keep the result of the extraction of the command give in the command-line interface
-pub struct Command<'a> {
+pub(crate) struct Command<'a> {
     /// Name of the program
-    pub program: String,
+    pub(crate) program: String,
     /// The arguments of the program
-    pub args: Vec<&'a str>,
+    pub(crate) args: Vec<&'a str>,
 }
 
 impl<'a> Command<'a> {
     /// Create the new Command with the command supply by the user with the command-line interface
-    pub fn new(mut command: Vec<&'a str>) -> Result<Self, Box<dyn Error>> {
+    pub(crate) fn new(mut command: Vec<&'a str>) -> Result<Self, Box<dyn Error>> {
         // Verify that it's not empty
         debug!("Verifying that command is not empty");
         if command.is_empty() {

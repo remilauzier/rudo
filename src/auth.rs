@@ -28,7 +28,7 @@ use std::path::Path;
 use crate::SESSION_DIR;
 
 /// Function to verify if the user is authorized before using Pam
-pub fn authentification(
+pub(crate) fn authentification(
     userconf: &config::UserConf,
     userdata: &user::User,
 ) -> Result<(), Box<dyn Error>> {
@@ -45,7 +45,7 @@ pub fn authentification(
 }
 
 /// Function to verify that the user is authorized to run Rudo with Pam and if a precedent session is valid
-pub fn authentification_pam(
+pub(crate) fn authentification_pam(
     conf: &config::Config,
     userconf: &config::UserConf,
     userdata: &user::User,

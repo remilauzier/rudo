@@ -28,7 +28,7 @@ use crate::SESSION_DIR;
 /// Create a structure to contain the UUID of the terminal and the timestamp to determine
 /// if the session is valid for later use
 #[derive(Serialize, Deserialize, Debug)]
-pub struct Token {
+pub(crate) struct Token {
     /// Name of the TTY
     tty_name: String,
     /// UUID of the TTY
@@ -41,7 +41,7 @@ pub struct Token {
 
 impl Token {
     /// Create the token and all it's parameter
-    pub fn new(tty_name: String, tty_uuid: String) -> Self {
+    pub(crate) fn new(tty_name: String, tty_uuid: String) -> Self {
         debug!("Create the timestamp");
         let timestamp = SystemTime::now();
         // Create the timestamp where the session become invalid
@@ -56,7 +56,7 @@ impl Token {
         }
     }
     /// Create the file that will contain the token if it doesn't exist
-    pub fn create_token_file(&self, username: &str) -> Result<(), Box<dyn Error>> {
+    pub(crate) fn create_token_file(&self, username: &str) -> Result<(), Box<dyn Error>> {
         // Create the path of the file with the name of the program, the username to distinguish user
         // and the name of TTY to let user have multiple session, on multiple terminal
         debug!("Creating token_path");
@@ -129,7 +129,7 @@ impl Token {
         Ok(())
     }
     /// Verify that the token is valid to decide if we must reuse the session or not
-    pub fn verify_token(&self, tty_name: &str, tty_uuid: &str) -> Result<(), Box<dyn Error>> {
+    pub(crate) fn verify_token(&self, tty_name: &str, tty_uuid: &str) -> Result<(), Box<dyn Error>> {
         let clock = SystemTime::now();
         if self.final_timestamp <= clock {
             debug!("Session has expired");
@@ -148,7 +148,7 @@ impl Token {
 }
 
 /// Create the full path of the directory containing the token file
-pub fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
+pub(crate) fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
     // Create the first part of the path
     let run_path = Path::new(SESSION_DIR);
 
@@ -206,7 +206,7 @@ pub fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 /// Function to extract the token from it's file with `serde_yaml`
-pub fn read_token_file(token_path: &str) -> Result<Token, Box<dyn Error>> {
+pub(crate) fn read_token_file(token_path: &str) -> Result<Token, Box<dyn Error>> {
     // Open the file and extract it's contents in a buffer
     debug!(
         "Open the file at {} and put it's content in a buffer",

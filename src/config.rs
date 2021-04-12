@@ -25,20 +25,20 @@ use crate::CONFIG_PATH;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 /// `UserConf` structure is the representation of the data of a part of the configuration file
-pub struct UserConf {
+pub(crate) struct UserConf {
     /// The Unix username of an authorized user
-    pub username: String,
+    pub(crate) username: String,
     /// The group the user must be a member to have authorization to use Rudo
-    pub group: String,
+    pub(crate) group: String,
     /// A Boolean to determine if the user must give is password or not
-    pub password: bool,
+    pub(crate) password: bool,
     /// A Boolean to determine if the user want to be salute every time Rudo is invoke
-    pub greeting: bool,
+    pub(crate) greeting: bool,
 }
 
 impl UserConf {
     /// Function to update the greeting Boolean if the "-g" option was given
-    pub fn update(mut self, matches: &ArgMatches<'_>) -> Self {
+    pub(crate) fn update(mut self, matches: &ArgMatches<'_>) -> Self {
         // Update greeting value if CLI option is present
         if matches.is_present("greeting") {
             debug!("Greeting value will be update");
@@ -61,9 +61,9 @@ impl Default for UserConf {
 
 #[derive(Serialize, Deserialize, Debug)]
 /// `RudoConf` is where the program stock is configuration
-pub struct RudoConf {
+pub(crate) struct RudoConf {
     /// impuser is the Unix name of the user you want to impersonate
-    pub impuser: String,
+    pub(crate) impuser: String,
 }
 
 impl Default for RudoConf {
@@ -76,11 +76,11 @@ impl Default for RudoConf {
 
 #[derive(Serialize, Deserialize, Debug)]
 /// Config is the sum of `UserConf` and `RudoConf` as represent in the configuration file
-pub struct Config {
+pub(crate) struct Config {
     /// rudo is where the program stock is configuration
-    pub rudo: RudoConf,
+    pub(crate) rudo: RudoConf,
     /// user is where a vector of user configuration is stock to permit multiple user configuration
-    pub user: Vec<UserConf>,
+    pub(crate) user: Vec<UserConf>,
 }
 
 impl Config {
@@ -110,7 +110,7 @@ impl Config {
         Ok(())
     }
     /// Function to update the name of the impersonate user with the value give in the command-line
-    pub fn update(mut self, matches: &ArgMatches<'_>) -> Self {
+    pub(crate) fn update(mut self, matches: &ArgMatches<'_>) -> Self {
         // Update user value if CLI option is present
         if matches.value_of("user").is_some() {
             debug!("User value will be update");
@@ -129,7 +129,7 @@ impl Default for Config {
     }
 }
 /// Function to initialize the configuration with the default data if necessary
-pub fn init_conf() -> Result<Config, Box<dyn Error>> {
+pub(crate) fn init_conf() -> Result<Config, Box<dyn Error>> {
     // Initialize configuration with defaults
     debug!("Begin initializing default configuration");
     let mut conf = Config::default();
@@ -174,7 +174,7 @@ pub fn init_conf() -> Result<Config, Box<dyn Error>> {
 }
 
 /// Function to read the configuration file and extract it's data
-pub fn read_config_file() -> Result<Config, Box<dyn Error>> {
+pub(crate) fn read_config_file() -> Result<Config, Box<dyn Error>> {
     // Create the path for the configuration
     let config_path = Path::new(CONFIG_PATH);
     // Open the existing configuration file
@@ -189,14 +189,14 @@ pub fn read_config_file() -> Result<Config, Box<dyn Error>> {
 
 /// Extract, from the vector of `UserConf` of the configuration file, the user presently accessing Rudo,
 /// and pass all the information associate with it for later use
-pub fn extract_userconf(conf: Vec<UserConf>, username: &str) -> Result<UserConf, Box<dyn Error>> {
+pub(crate) fn extract_userconf(conf: Vec<UserConf>, username: &str) -> UserConf {
     let mut user = UserConf::default();
     for cf in conf {
         if cf.username == username {
             user = cf;
         }
     }
-    Ok(user)
+    user
 }
 
 #[cfg(test)]
@@ -207,7 +207,7 @@ mod tests {
     fn test_extract_userconf() -> Result<(), Box<dyn Error>> {
         let conf = UserConf::default();
         let conf = vec![conf];
-        if extract_userconf(conf, "root").is_ok() {
+        if extract_userconf(conf, "root").username == "root" {
             Ok(())
         } else {
             Err(From::from("Test failed when extracting the usersonf"))
