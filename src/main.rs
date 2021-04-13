@@ -107,6 +107,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     #[cfg(features = "syslogging")]
     log_syslog(_debug)?;
 
+    #[cfg(features = "macos")]
+    log_oslog(_debug)?;
+
     debug!("Begin of run function");
     run::run(&matches)?;
     debug!("End of run function");
