@@ -75,15 +75,6 @@ mod user;
 use log::debug;
 use std::error::Error;
 
-#[cfg(features = "journald")]
-use std::path::Path;
-#[cfg(features = "syslogging")]
-use std::path::Path;
-
-/// Define the path to journald file to verify it's existence
-pub static JOURNALD_PATH: &str = "/run/systemd/journal/";
-/// Define the path to syslog file to verify it's existence
-pub static SYSLOG_PATH: &str = "/var/log/messages";
 /// The amount of time the session stay valid
 pub static DEFAULT_SESSION_TIMEOUT: u64 = 600;
 /// The beginning of the path where the session token will be written
@@ -100,23 +91,16 @@ fn main() -> Result<(), Box<dyn Error>> {
     let _debug = matches.is_present("debug");
 
     #[cfg(features = "journald")]
-    // Verify that journald file exist
-    if Path::new(JOURNALD_PATH).exists() {
-        // Use journald for logging
-        journal::log_journald(_debug)?;
-    } else {
-        return Err(From::from("Journald file not found"));
-    }
+    // Use journald for logging
+    journal::log_journald(_debug)?;
 
     #[cfg(features = "syslogging")]
-    if Path::new(SYSLOG_PATH).exists() {
-    log_syslog(_debug)?;
-    } else {
-        return Err(From::from("Syslog file not found"));
-    }
+    // Use syslog for logging
+    journal::log_syslog(_debug)?;
 
     #[cfg(features = "macos")]
-    log_oslog(_debug)?;
+    // Use oslog for logging
+    journal::log_oslog(_debug)?;
 
     debug!("Begin of run function");
     run::run(&matches)?;
