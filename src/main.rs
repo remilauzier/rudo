@@ -76,11 +76,11 @@ use log::debug;
 use std::error::Error;
 
 /// The amount of time the session stay valid
-pub static DEFAULT_SESSION_TIMEOUT: u64 = 600;
+pub(crate) static DEFAULT_SESSION_TIMEOUT: u64 = 600;
 /// The beginning of the path where the session token will be written
-pub static SESSION_DIR: &str = "/run/rudo/";
+pub(crate) static SESSION_DIR: &str = "/run/rudo/";
 /// The default path of the configuration file
-pub static CONFIG_PATH: &str = "/etc/rudo.conf";
+pub(crate) static CONFIG_PATH: &str = "/etc/rudo.conf";
 
 /// Main function of the program
 fn main() -> Result<(), Box<dyn Error>> {
