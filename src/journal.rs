@@ -21,24 +21,30 @@ use log::info;
 use log::{LevelFilter, SetLoggerError};
 #[cfg(features = "journald")]
 use std::error::Error;
+#[cfg(features = "journald")]
+use systemd::journal;
 
 #[cfg(features = "syslogging")]
 use log::{LevelFilter, SetLoggerError};
 #[cfg(features = "syslogging")]
 use std::error::Error;
-
-#[cfg(features = "journald")]
-use systemd::journal;
-
 #[cfg(features = "syslogging")]
 use syslog::{Facility, Formatter5424, Logger};
+#[cfg(features = "syslogging")]
+use log::info;
 
 #[cfg(features = "macos")]
 use oslog;
+#[cfg(features = "macos")]
+use log::info;
+#[cfg(features = "macos")]
+use std::error::Error;
+#[cfg(features = "macos")]
+use log::{LevelFilter, SetLoggerError};
 
 #[cfg(features = "journald")]
 /// Function to decide the maximum level of logging that journald will receive with the user supply option
-pub fn log_journald(debug: bool) -> Result<(), Box<dyn Error>> {
+pub(crate) fn log_journald(debug: bool) -> Result<(), Box<dyn Error>> {
     // Initialize Logs with journald
     if let Ok(()) = journal::JournalLog::init() {
         // Determine the maximum level of log the user want
@@ -57,7 +63,7 @@ pub fn log_journald(debug: bool) -> Result<(), Box<dyn Error>> {
 
 #[cfg(features = "syslogging")]
 /// Function to decide the maximum level of logging that syslog server will receive with the user supply option
-pub fn log_syslog(debug: bool) -> Result<(), Box<dyn Error>> {
+pub(crate) fn log_syslog(debug: bool) -> Result<(), Box<dyn Error>> {
     let formatter = Formatter5424 {
         facility: Facility::LOG_AUTH,
         hostname: None,
@@ -65,29 +71,35 @@ pub fn log_syslog(debug: bool) -> Result<(), Box<dyn Error>> {
         pid: 0,
     };
     let logger = syslog::unix(&formatter)?;
-    if !debug {
-        log::set_boxed_logger(Box::new(Logger::new(logger, formatter)))
-            .map(|()| log::set_max_level(LevelFilter::Info));
-    } else {
+    if debug {
         log::set_boxed_logger(Box::new(Logger::new(logger, formatter)))
             .map(|()| log::set_max_level(LevelFilter::Debug));
+            info!("Starting Debug logs");
+    } else {
+        log::set_boxed_logger(Box::new(Logger::new(logger, formatter)))
+            .map(|()| log::set_max_level(LevelFilter::Info));
+            info!("Starting logs");
     }
     Ok(())
 }
 
 #[cfg(features = "macos")]
-pub fn log_oslog(debug: bool) -> Result<(), Box<dyn Error>> {
+/// Function to decide the maximum level of logging that oslog server will receive with the user supply option
+pub(crate) fn log_oslog(debug: bool) -> Result<(), Box<dyn Error>> {
     if debug {
         OsLogger::new("com.github.rudo")
             .level_filter(LevelFilter::Debug)
             .category_level_filter("Settings", LevelFilter::Debug)
             .init()?;
+            info!("Starting Debug logs");
     } else {
         OsLogger::new("com.github.rudo")
             .level_filter(LevelFilter::Info)
             .category_level_filter("Settings", LevelFilter::Info)
             .init()?;
+            info!("Starting logs");
     }
+    Ok()
 }
 
 #[cfg(test)]
