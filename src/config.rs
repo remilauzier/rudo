@@ -56,12 +56,12 @@ impl Default for UserConf {
             username: String::from("root"),
             group: String::from("wheel"),
             password: true,
-            greeting: true,
+            greeting: false,
         }
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 /// `RudoConf` is where the program stock is configuration
 pub(crate) struct RudoConf {
     /// impuser is the Unix name of the user you want to impersonate
@@ -76,7 +76,7 @@ impl Default for RudoConf {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 /// Config is the sum of `UserConf` and `RudoConf` as represent in the configuration file
 pub(crate) struct Config {
     /// rudo is where the program stock is configuration

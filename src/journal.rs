@@ -16,9 +16,7 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 #[cfg(features = "journald")]
-use log::info;
-#[cfg(features = "journald")]
-use log::{LevelFilter, SetLoggerError};
+use log::{LevelFilter, info};
 #[cfg(features = "journald")]
 use std::error::Error;
 #[cfg(features = "journald")]
