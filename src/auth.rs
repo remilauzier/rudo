@@ -15,6 +15,7 @@
 //    with this program; if not, write to the Free Software Foundation, Inc.,
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 use crate::config;
+use crate::pwd;
 use crate::session;
 use crate::tty;
 use crate::user;
@@ -103,27 +104,13 @@ pub(crate) fn authentification_pam(
         debug!("No token found");
     }
 
-    // If the token was invalid ask for the password
     debug!("Asking for password if token is invalid");
     if !result {
         info!("{} demand authorization to use Rudo", userdata.username);
-        // Don't ask for password if false in the configuration
-        if userconf.password {
-            // Authenticate the user (ask for password, 2nd-factor token, fingerprint, etc.)
-            debug!("Password will be ask");
-            let mut count = 0;
-            while count < 3 {
-                match context.authenticate(Flag::DISALLOW_NULL_AUTHTOK) {
-                    Ok(()) => break,
-                    Err(err) => {
-                        error!("Password was incorrect");
-                        eprintln!("Error: {}", err);
-                        count += 1
-                    }
-                }
-            }
-            info!("Password was given and validate");
-        }
+
+        pwd::password_input(userconf.password, &mut context)?;
+        info!("Password was given and validate by pam");
+
         // Validate the account (is not locked, expired, etc.)
         debug!("Validate the account");
         context.acct_mgmt(Flag::DISALLOW_NULL_AUTHTOK)?;

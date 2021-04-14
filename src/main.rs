@@ -63,6 +63,8 @@ mod command;
 mod config;
 /// Module that manage the logs that Rudo create
 mod journal;
+/// Module that ask for the user password to authenticate him
+mod pwd;
 /// Module that take care of running Rudo
 mod run;
 /// Module that manage the session and it's validity for the user
