@@ -20,8 +20,9 @@ use crate::config;
 use crate::user;
 
 use clap::ArgMatches;
-use log::{debug, error, info};
-use pam_client::Flag;
+use log::{debug, info};
+use pam_client::conv_cli::Conversation;
+use pam_client::{Flag, Session};
 use std::env;
 use std::error::Error;
 use std::os::unix::process::CommandExt;
@@ -86,6 +87,18 @@ pub(crate) fn run(matches: &ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
     let session = context.open_session(Flag::NONE)?;
     debug!("Session has been create");
 
+    run_command(matches, &session, impuser_uid, impuser_group_id, &userdata)?;
+
+    Ok(())
+}
+/// `run_command` is a function that run the precise command the user demand
+fn run_command(
+    matches: &ArgMatches<'_>,
+    session: &Session<'_, Conversation>,
+    uid: u32,
+    group_id: u32,
+    userdata: &user::User,
+) -> Result<(), Box<dyn Error>> {
     // Verify the option the user as pass and act accordingly
     if matches.is_present("command") {
         // Extract the command in two part. First the name of the program then it's arguments.
@@ -105,8 +118,8 @@ pub(crate) fn run(matches: &ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
         let mut child = Command::new(data.program)
             .args(data.args)
             .envs(session.envlist().iter_tuples()) // Pass the Pam session to the new process
-            .uid(impuser_uid) // Necessary to have full access
-            .gid(impuser_group_id) // Necessary to have full access
+            .uid(uid) // Necessary to have full access
+            .gid(group_id) // Necessary to have full access
             .spawn()?;
 
         // Wait for the command to finish or the program end before the command
@@ -125,8 +138,8 @@ pub(crate) fn run(matches: &ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
         let mut child = Command::new(shell)
             .arg("-l") // Login shell
             .envs(session.envlist().iter_tuples()) // Pass the Pam session to the new process
-            .uid(impuser_uid) // Necessary to have full access
-            .gid(impuser_group_id) // Necessary to have full access
+            .uid(uid) // Necessary to have full access
+            .gid(group_id) // Necessary to have full access
             .spawn()?;
 
         // Wait for the shell to finish or the program end before the shell
@@ -152,17 +165,13 @@ pub(crate) fn run(matches: &ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
         let mut child = Command::new(editor)
             .arg(arg)
             .envs(session.envlist().iter_tuples()) // Pass the Pam session to the new process
-            .uid(impuser_uid) // Necessary to have full access
-            .gid(impuser_group_id) // Necessary to have full access
+            .uid(uid) // Necessary to have full access
+            .gid(group_id) // Necessary to have full access
             .spawn()?;
 
         // Wait for the editor to finish or the program will end before the editor
         child.wait()?;
         debug!("End of the editor");
-    } else {
-        error!("Error: No command receive");
-        return Err(From::from("Error: No command receive"));
     }
-
     Ok(())
 }
