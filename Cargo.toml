@@ -35,3 +35,12 @@ default = ["journald"]
 journald = ["systemd"]
 syslogging = ["syslog"]
 macos = ["oslog"]
+
+[profile.dev]
+lto = true
+
+[profile.release]
+lto = true
+
+[profile.test]
+lto = true
