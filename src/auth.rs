@@ -66,6 +66,11 @@ pub(crate) fn authentification_pam(
     let tty_name = tty::get_tty_name()?;
     debug!("TTY name has been extract: {}", tty_name);
 
+    // extract the UUID of the terminal for later use
+    debug!("Will determine UUID of the terminal");
+    let tty_uuid = tty::terminal_uuid()?;
+    debug!("Terminal UUID is {}", tty_uuid);
+
     // Create the token path with the base, the username and the ttyname
     debug!("token_path will be create");
     let token_path = format!("{}{}{}", SESSION_DIR, &userdata.username, tty_name);
@@ -76,11 +81,6 @@ pub(crate) fn authentification_pam(
     let mut result = false;
     debug!("Verifying if token_path exist");
     if token_path.exists() && token_path.is_file() {
-        // extract the UUID of the terminal for later use
-        debug!("Will determine UUID of the terminal");
-        let tty_uuid = tty::terminal_uuid()?;
-        debug!("Terminal UUID is {}", tty_uuid);
-
         // Read the token file
         debug!("Token will be read from file");
         let token = session::read_token_file(token_path.to_str().unwrap());
@@ -120,16 +120,6 @@ pub(crate) fn authentification_pam(
         debug!("Creating run directory");
         session::create_dir_run(&userdata.username)?;
         debug!("Run directory has been create");
-
-        // Extract the ttyname with libc
-        debug!("Getting TTY name");
-        let tty_name = tty::get_tty_name()?;
-        debug!("TTY name was get: {}", tty_name);
-
-        // Extract the UUID of the terminal
-        debug!("Will determine UUID of the terminal");
-        let tty_uuid = tty::terminal_uuid()?;
-        debug!("Terminal UUID is {}", tty_uuid);
 
         // Create token with all the necessary information
         debug!("Creating a new Token");
