@@ -50,7 +50,8 @@ like group membership and validity of the account
     clippy::needless_borrow,
     clippy::use_self,
     clippy::useless_let_if_seq,
-    clippy::useless_transmute
+    clippy::useless_transmute,
+    clippy::cognitive_complexity
 )]
 
 /// Module to authenticate the Unix user with the provide configuration
