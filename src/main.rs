@@ -69,6 +69,8 @@ mod pwd;
 mod run;
 /// Module that manage the session and it's validity for the user
 mod session;
+/// Module to verify that the token path exist and return a bool wrap in a result
+mod token;
 /// Module to extract the name of the TTY and to verify it's existence
 mod tty;
 /// Module that create user information and all the function with it

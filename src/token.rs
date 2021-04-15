@@ -1,0 +1,36 @@
+use crate::session;
+
+use log::{debug, error};
+use std::error::Error;
+use std::fs;
+use std::path::Path;
+
+/// `verify_path` analyze if the token exist and it's valid, then it return a bool for the result.
+pub(crate) fn verify_path(
+    token_path: &str,
+    tty_name: &str,
+    tty_uuid: &str,
+) -> Result<bool, Box<dyn Error>> {
+    let token_path = Path::new(&token_path);
+
+    // Verify if a token exist and act accordingly
+    debug!("Verifying if token_path exist and is a directory");
+    if token_path.exists() && token_path.is_dir() {
+        // Erase the path if it's a directory
+        error!("token_path is a directory and will be erase");
+        fs::remove_dir(token_path)?;
+        return Ok(false);
+    } else if token_path.exists() && token_path.is_file() {
+        // Read the token file
+        debug!("Token will be read from file");
+        let token = session::read_token_file(token_path.to_str().unwrap());
+        if token.is_err() {
+            return Ok(false);
+        }
+        if token.unwrap().verify_token(tty_name, tty_uuid).is_err() {
+            return Ok(false);
+        }
+        return Ok(true);
+    }
+    Ok(false)
+}
