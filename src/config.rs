@@ -56,7 +56,7 @@ impl Default for UserConf {
             username: String::from("root"),
             group: String::from("wheel"),
             password: true,
-            greeting: false,
+            greeting: true,
         }
     }
 }
