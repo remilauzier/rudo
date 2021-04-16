@@ -34,3 +34,18 @@ pub(crate) fn verify_path(
     }
     Ok(false)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::{Error, verify_path};
+
+    #[test]
+    fn test_verify_path_non_existent() -> Result<(), Box<dyn Error>> {
+        let result = verify_path("/run/rudo/pts/0", "pts/0/", "964045904534593458953")?;
+        if result {
+            Err(From::from("Test failed"))
+        } else {
+            Ok(())
+        }
+    }
+}
