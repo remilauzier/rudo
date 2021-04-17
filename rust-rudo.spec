@@ -65,5 +65,5 @@ install -pm 0644 man/rudo.conf.5 %{buildroot}%{_mandir}/man5/rudo.conf.5
 %endif
 
 %changelog
-* Sun Apr 17 17:12:24 EDT 2021 Rémi Lauzier <remilauzier@protonmail.com> - 0.8.0-1
+* Sat Apr 17 17:12:24 EDT 2021 Rémi Lauzier <remilauzier@protonmail.com> - 0.8.0-1
 - Initial package
