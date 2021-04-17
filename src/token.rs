@@ -21,7 +21,7 @@ pub(crate) fn verify_path(
         fs::remove_dir(token_path)?;
         return Ok(false);
     } else if token_path.exists() && token_path.is_file() {
-        // Read the token file
+        // Read the token file and return false if invalid or expired
         debug!("Token will be read from file");
         let token = session::read_token_file(token_path.to_str().unwrap());
         if token.is_err() {
@@ -37,7 +37,7 @@ pub(crate) fn verify_path(
 
 #[cfg(test)]
 mod tests {
-    use super::{Error, verify_path};
+    use super::{verify_path, Error};
 
     #[test]
     fn test_verify_path_non_existent() -> Result<(), Box<dyn Error>> {

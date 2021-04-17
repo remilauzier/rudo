@@ -75,12 +75,17 @@ pub(crate) fn authentification_pam(
     let token_path = format!("{}{}{}", SESSION_DIR, &userdata.username, tty_name);
     debug!("token_path has been create: {:?}", token_path);
 
+    // Verify that token_path is valid and that the session is not expired,
+    // then pass the result.
+    debug!("Verifying token_path validity and extracting result");
     let result = token::verify_path(&token_path, &tty_name, &tty_uuid)?;
+    debug!("Result has been extract");
 
     debug!("Asking for password if token is invalid");
     if !result {
         info!("{} demand authorization to use Rudo", userdata.username);
-
+        // Password will be ask to validate the authorization
+        debug!("Password will be ask to validate the authorization");
         pwd::password_input(userconf.password, &mut context)?;
         info!("Password was given and validate by pam");
 

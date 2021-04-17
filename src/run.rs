@@ -87,7 +87,10 @@ pub(crate) fn run(matches: &ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
     let session = context.open_session(Flag::NONE)?;
     debug!("Session has been create");
 
+    // Run the command the user as choose
+    debug!("Run the command the user as choose");
     run_command(matches, &session, impuser_uid, impuser_group_id, &userdata)?;
+    debug!("Command as been run");
 
     Ok(())
 }

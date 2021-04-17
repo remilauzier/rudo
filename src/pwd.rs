@@ -12,7 +12,7 @@ pub(crate) fn password_input(
     // Don't ask for password if false in the configuration
     if password {
         // Authenticate the user (ask for password, 2nd-factor token, fingerprint, etc.)
-        debug!("Password will be ask");
+        debug!("Password will be ask a maximum of 3 time");
         let mut count = 0;
         while count < 3 {
             match context.authenticate(Flag::DISALLOW_NULL_AUTHTOK) {
