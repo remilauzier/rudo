@@ -18,19 +18,19 @@ jobs:
     strategy:
       matrix:
         rust: [1.43, stable, beta, nightly]
-        os: [ubuntu-18.04, macos-10.15]
+        os: [ubuntu-20.04, macos-10.15]
 
     steps:
     - uses: actions/checkout@v2
     - name: Install dependency
-      if: matrix.os == 'ubuntu-18.04'
+      if: matrix.os == 'ubuntu-20.04'
       run: sudo apt install libpam0g-dev libsystemd-dev
     - uses: actions-rs/toolchain@v1
       with:
         profile: minimal
         toolchain: ${{ matrix.rust }}
     - name: Run ubuntu cargo build
-      if: matrix.os == 'ubuntu-18.04'
+      if: matrix.os == 'ubuntu-20.04'
       uses: actions-rs/cargo@v1
       with:
         command: build
@@ -42,7 +42,7 @@ jobs:
         command: build
         args: --release --all-targets --no-default-features --features macos --verbose
     - name: Run ubuntu cargo tests
-      if: matrix.os == 'ubuntu-18.04'
+      if: matrix.os == 'ubuntu-20.04'
       uses: actions-rs/cargo@v1
       with:
         command: test
