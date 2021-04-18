@@ -99,29 +99,3 @@ pub(crate) fn log_oslog(debug: bool) -> Result<(), Box<dyn Error>> {
     }
     Ok()
 }
-
-#[cfg(test)]
-mod tests {
-    #[cfg(features = "journald")]
-    use super::*;
-    #[cfg(features = "syslogging")]
-    use super::*;
-    #[cfg(features = "macos")]
-    use super::*;
-
-    #[cfg(features = "journald")]
-    #[test]
-    fn test_journald() -> Result<(), Box<dyn Error>> {
-        log_journald(false)
-    }
-    #[cfg(features = "syslogging")]
-    #[test]
-    fn test_syslog() -> Result<(), Box<dyn Error>> {
-        log_syslog(false)
-    }
-    #[cfg(features = "macos")]
-    #[test]
-    fn test_oslog() -> Result<(), Box<dyn Error>> {
-        log_oslog(false)?
-    }
-}

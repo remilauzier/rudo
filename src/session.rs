@@ -14,7 +14,7 @@
 //    You should have received a copy of the GNU General Public License along
 //    with this program; if not, write to the Free Software Foundation, Inc.,
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-use log::{debug, error, info};
+use log::{debug, error, info, warn};
 use serde::{Deserialize, Serialize};
 use std::error::Error;
 use std::fs::{self, DirBuilder, File};
@@ -44,10 +44,10 @@ pub(crate) struct Token {
 impl Token {
     /// Create the token and all it's parameter
     pub(crate) fn new(tty_name: String, tty_uuid: String) -> Self {
-        debug!("Create the timestamp");
+        debug!("Create the timestamp of the token");
         let timestamp = SystemTime::now();
         // Create the timestamp where the session become invalid
-        debug!("Create the final timestamp to determine the mas duration of the session");
+        debug!("Create the final timestamp to determine the maximum validity of the session");
         let duration = std::time::Duration::from_secs(DEFAULT_SESSION_TIMEOUT);
         let final_timestamp = timestamp.checked_add(duration).unwrap();
         Self {
@@ -61,18 +61,17 @@ impl Token {
     pub(crate) fn create_token_file(&self, username: &str) -> Result<(), Box<dyn Error>> {
         // Create the path of the file with the name of the program, the username to distinguish user
         // and the name of TTY to let user have multiple session, on multiple terminal
-        debug!("Creating token_path");
         let token_path = format!("{}{}{}", SESSION_DIR, username, self.tty_name);
         let token_path = Path::new(&token_path);
         debug!(
-            "Token_path has been create, will verify if it exist : {:?}",
+            "token_path has been create, will verify if it exist : {:?}",
             token_path
         );
 
         // Verify the existence of the path to act accordingly
         if token_path.exists() {
             // Erase the ancient file and create new one
-            debug!("Token_path exist will erase it");
+            debug!("token_path exist will be erase and replace");
             fs::remove_file(token_path)?;
 
             // Put the token data in a string of YAML
@@ -92,17 +91,19 @@ impl Token {
             file.sync_all()?;
 
             // Put file permission to 600 to restraint access
-            debug!("Set file permission to 600");
+            debug!("Set file permission to 600 to restrict access");
             let mut perms = file.metadata()?.permissions();
             perms.set_mode(0o600);
             file.set_permissions(perms)?;
-            debug!("File permission has been set");
         } else {
-            debug!("Token_path doesn't exist, will create it");
+            debug!("token_path doesn't exist, will create it");
             let path = token_path.parent().unwrap();
 
             // Create the directory with mode 600 to restraint access
-            debug!("Create directory: {:?}", path);
+            debug!(
+                "Create directory: {:?} with mode 600 to restreint access",
+                path
+            );
             DirBuilder::new().mode(0o600).recursive(true).create(path)?;
 
             // Put the token data in a string of YAML
@@ -122,11 +123,10 @@ impl Token {
             file.sync_all()?;
 
             // Put file permission to 600 to restraint access
-            debug!("Set file permission to 600");
+            debug!("Set file permission to 600 to restrict access");
             let mut perms = file.metadata()?.permissions();
             perms.set_mode(0o600);
             file.set_permissions(perms)?;
-            debug!("File permission has been set");
         }
         Ok(())
     }
@@ -159,9 +159,12 @@ pub(crate) fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
     let run_path = Path::new(SESSION_DIR);
 
     // Verify that the first part of the path exist first
-    debug!("Verify that {:?} exist", run_path);
+    debug!("Verify that {} exist", SESSION_DIR);
     if !run_path.exists() {
-        info!("{:?} doesn't exist, creating it", run_path);
+        info!(
+            "{} doesn't exist, creating it with mode 600 to restreint access",
+            SESSION_DIR
+        );
         // Create the path with permissions of 600 to restraint access
         DirBuilder::new()
             .mode(0o600)
@@ -173,9 +176,9 @@ pub(crate) fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
     let mut perms = metadata.permissions();
 
     // Verify the permissions of the directory and act accordingly
-    debug!("Verifying permission on {:?}", run_path);
+    debug!("Verifying permission on {}", SESSION_DIR);
     if perms.mode() != 0o600 {
-        info!("Permissions are incorrect and will be adjust");
+        warn!("Permissions are incorrect and will be adjust to 600");
         perms.set_mode(0o600);
         fs::set_permissions(SESSION_DIR, perms)?;
     }
@@ -187,7 +190,10 @@ pub(crate) fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
     // Verifying if the path exist and act accordingly
     debug!("Verifying that user_path exist: {:?}", user_path);
     if !user_path.exists() {
-        info!("{:?} doesn't exist, creating it", user_path);
+        info!(
+            "{:?} doesn't exist, creating it with mode 600 to restreint access",
+            user_path
+        );
         // Create the path with permissions of 600 to restraint access
         DirBuilder::new()
             .mode(0o600)
@@ -202,9 +208,9 @@ pub(crate) fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
         let metadata = fs::metadata(user_path)?;
         let mut perms = metadata.permissions();
         // Verifying if the permission of the directory and act accordingly
-        debug!("Verifying user_path permissions");
+        debug!("Verifying {:?} permissions", user_path);
         if perms.mode() != 0o600 {
-            debug!("Permissions are incorrect, adjusting it");
+            warn!("Permissions are incorrect, adjusting it to 600 to restreint access");
             perms.set_mode(0o600);
             fs::set_permissions(user_path, perms)?;
         }
@@ -237,7 +243,7 @@ mod tests {
         if token.final_timestamp - duration == token.timestamp {
             Ok(())
         } else {
-            Err(From::from("Test failed"))
+            Err(From::from("Test failed: timestamp creation got wrong"))
         }
     }
 }

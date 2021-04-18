@@ -33,64 +33,65 @@ use std::process::Command;
 /// if it most create a login shell or to pass a command or to invocate the editor
 pub(crate) fn run(matches: &ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
     // Initialize configuration
-    debug!("Start configuration initialization");
+    debug!("Starting configuration initialization");
     let conf = config::init_conf()?;
-    debug!("Configuration has been initialize");
 
     // Create the user data for later use
-    debug!("User information extraction");
+    debug!("Starting extraction of User information");
     let userdata = user::User::new();
-    debug!("User extraction finish");
 
     // Extract the information from rudo.conf that is tie to the actual user
-    debug!("Extraction of the vector of UserConf in rudo.conf");
+    debug!(
+        "Starting extraction of the vector of UserConf tie to {} in rudo.conf",
+        &userdata.username
+    );
     let userconf = config::extract_userconf(conf.user.clone(), &userdata.username);
-    debug!("Extraction has been done");
 
     // Update configuration if necessary, as CLI as the priority
-    debug!("Update configuration with CLI option");
+    debug!("Update configuration with CLI option as it as the priority");
     let userconf = config::UserConf::update(userconf, matches);
-    debug!("Configuration has been update");
-
-    // Update configuration if necessary, as CLI as the priority
-    debug!("Update configuration with CLI option");
     let conf = config::Config::update(conf, matches);
-    debug!("Configuration has been update");
 
     // Get the UID and GID of the impersonate user for further use
-    debug!("Extract UID and GID of the impersonate user");
+    debug!(
+        "Extract UID and GID of the impersonate user {}",
+        &conf.rudo.impuser
+    );
     let impuser =
         users::get_user_by_name(&conf.rudo.impuser).expect("Please give rudo a real unix username");
     let impuser_uid = impuser.uid();
     let impuser_group_id = impuser.primary_group_id();
-    debug!("Extraction finish");
 
     // Greet the user if the configuration said so
     if userconf.greeting {
-        debug!("Start user greeting");
-        println!("Hello {}!", userdata.username);
-        debug!("User greeting finish");
+        debug!("Start user greeting messages and disclaimer");
+        println!(
+            "Hello {}! Think carefully before using Rudo.",
+            userdata.username
+        );
     }
 
     // Authenticate the user with the list of authorized user and group
-    debug!("Authenticate the user");
+    debug!(
+        "Authenticate {} with the list in rudo.conf",
+        userdata.username
+    );
     auth::authentification(&userconf, &userdata)?;
-    debug!("User has been authenticate");
 
     // Create the Pam context and authenticate the user with Pam
-    debug!("Pam context initialization and identification of user");
+    debug!(
+        "Pam context initialization and identification of {}",
+        userdata.username
+    );
     let mut context = auth::authentification_pam(&conf, &userconf, &userdata)?;
-    debug!("Pam context create and user authenticate");
 
     // Open session with Pam credentials
     debug!("Session initialize with Pam credential");
     let session = context.open_session(Flag::NONE)?;
-    debug!("Session has been create");
 
     // Run the command the user as choose
-    debug!("Run the command the user as choose");
+    debug!("Run the command {} as choose", userdata.username);
     run_command(matches, &session, impuser_uid, impuser_group_id, &userdata)?;
-    debug!("Command as been run");
 
     Ok(())
 }
@@ -108,7 +109,6 @@ fn run_command(
         debug!("Extracting the supply command for further use");
         let command: Vec<&str> = matches.values_of("command").unwrap().collect();
         let data = command::Command::new(command).unwrap();
-        debug!("Extraction has finish");
 
         // Log the user and it's command for further audit by system administrator
         info!(
@@ -127,7 +127,6 @@ fn run_command(
 
         // Wait for the command to finish or the program end before the command
         child.wait()?;
-        debug!("End of the supply command");
     } else if matches.is_present("shell") {
         // Extraction of the shell environment variable
         debug!("Extracting shell environment variable");
@@ -137,7 +136,7 @@ fn run_command(
         info!("{} has been authorized to use {}", userdata.username, shell);
 
         // Creation and ignition of the new shell
-        debug!("Starting the shell");
+        debug!("Starting {}", shell);
         let mut child = Command::new(shell)
             .arg("-l") // Login shell
             .envs(session.envlist().iter_tuples()) // Pass the Pam session to the new process
@@ -147,7 +146,6 @@ fn run_command(
 
         // Wait for the shell to finish or the program end before the shell
         child.wait()?;
-        debug!("End of the shell");
     } else if matches.is_present("edit") {
         // Extraction of the editor environment variable
         debug!("Extracting editor environment variable");
@@ -164,7 +162,7 @@ fn run_command(
         );
 
         // Creation and ignition of the new editor
-        debug!("Starting the editor");
+        debug!("Starting {}", editor);
         let mut child = Command::new(editor)
             .arg(arg)
             .envs(session.envlist().iter_tuples()) // Pass the Pam session to the new process
@@ -174,7 +172,6 @@ fn run_command(
 
         // Wait for the editor to finish or the program will end before the editor
         child.wait()?;
-        debug!("End of the editor");
     }
     Ok(())
 }

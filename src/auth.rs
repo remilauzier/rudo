@@ -34,14 +34,16 @@ pub(crate) fn authentification(
     userdata: &user::User,
 ) -> Result<(), Box<dyn Error>> {
     // Verify that the user is authorize to run Rudo
-    debug!("User verification begin");
+    debug!("Starting verification of {}", &userconf.username);
     userdata.verify_user(&userconf.username)?;
-    debug!("User verification finish");
 
     // Verify that the user is a member of the privilege group for privilege access
-    debug!("Group verification begin");
-    userdata.verify_group(userconf.group.as_str())?;
-    debug!("Group verification finish");
+    debug!(
+        "User was approuve, starting group verification of {}",
+        userconf.group
+    );
+    userdata.verify_group(&userconf.group)?;
+
     Ok(())
 }
 
@@ -52,68 +54,63 @@ pub(crate) fn authentification_pam(
     userdata: &user::User,
 ) -> Result<Context<Conversation>, Box<dyn Error>> {
     // Create the Pam context
-    debug!("Pam context creation");
+    debug!("Creating Pam context for Rudo");
     let mut context = Context::new(
         "rudo",
-        Some(userdata.username.as_str()), // Give the name of the actual user
+        Some(&userdata.username), // Give the name of the actual user
         Conversation::new(),
     )?;
-    debug!("Pam context create");
 
     // Extract the ttyname with libc
-    debug!("extract tty name");
     let tty_name = tty::get_tty_name()?;
     debug!("TTY name has been extract: {}", tty_name);
 
     // extract the UUID of the terminal for later use
-    debug!("Will determine UUID of the terminal");
     let tty_uuid = tty::terminal_uuid()?;
     debug!("Terminal UUID is {}", tty_uuid);
 
     // Create the token path with the base, the username and the ttyname
-    debug!("token_path will be create");
     let token_path = format!("{}{}{}", SESSION_DIR, &userdata.username, tty_name);
-    debug!("token_path has been create: {:?}", token_path);
+    debug!("token_path has been create: {}", token_path);
 
     // Verify that token_path is valid and that the session is not expired,
     // then pass the result.
     debug!("Verifying token_path validity and extracting result");
     let result = token::verify_path(&token_path, &tty_name, &tty_uuid)?;
-    debug!("Result has been extract");
 
-    debug!("Asking for password if token is invalid");
+    debug!("Asking for password if token is invalid or non-existent");
     if !result {
-        info!("{} demand authorization to use Rudo", userdata.username);
+        info!(
+            "{} demand authorization to use Rudo, password will be ask",
+            userdata.username
+        );
         // Password will be ask to validate the authorization
-        debug!("Password will be ask to validate the authorization");
         pwd::password_input(userconf.password, &mut context)?;
-        info!("Password was given and validate by pam");
+        info!(
+            "{} has given is password that was validate by Pam",
+            userdata.username
+        );
 
         // Validate the account (is not locked, expired, etc.)
-        debug!("Validate the account");
+        debug!("Validate the account of {}", userdata.username);
         context.acct_mgmt(Flag::DISALLOW_NULL_AUTHTOK)?;
-        debug!("Account validate");
 
         // Create the run directory where the token will be write
-        debug!("Creating run directory");
+        debug!("Creating the directory of the token in /run");
         session::create_dir_run(&userdata.username)?;
-        debug!("Run directory has been create");
 
         // Create token with all the necessary information
-        debug!("Creating a new Token");
-        let token = session::Token::new(tty_name, tty_uuid);
-        debug!("Token was create");
+        let token = session::Token::new(tty_name.clone(), tty_uuid.clone());
+        debug!("Token was create for {} with UUID: {}", tty_name, tty_uuid);
 
         // Write the token to file
-        debug!("Token will be writing to file");
+        debug!("Token will be write to {}", token_path);
         token.create_token_file(&userdata.username)?;
-        debug!("Token was writing to file");
     }
 
     // Change the user to have privilege access accordingly to the configuration of the user
-    debug!("Change the user as demand");
     context.set_user(Some(conf.rudo.impuser.as_str()))?;
-    info!("User change to: {}", conf.rudo.impuser);
+    info!("User was change to: {}", conf.rudo.impuser);
 
     Ok(context)
 }

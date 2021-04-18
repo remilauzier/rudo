@@ -22,16 +22,20 @@ pub(crate) fn verify_path(
         return Ok(false);
     } else if token_path.exists() && token_path.is_file() {
         // Read the token file and return false if invalid or expired
-        debug!("Token will be read from file");
+        debug!("Token will be read from file and validate");
         let token = session::read_token_file(token_path.to_str().unwrap());
         if token.is_err() {
+            debug!("Token was invalid");
             return Ok(false);
         }
         if token.unwrap().verify_token(tty_name, tty_uuid).is_err() {
+            debug!("Token was invalid");
             return Ok(false);
         }
+        debug!("Token was valid");
         return Ok(true);
     }
+    debug!("Tokent was non-existent");
     Ok(false)
 }
 
@@ -43,7 +47,7 @@ mod tests {
     fn test_verify_path_non_existent() -> Result<(), Box<dyn Error>> {
         let result = verify_path("/run/rudo/pts/0", "pts/0/", "964045904534593458953")?;
         if result {
-            Err(From::from("Test failed"))
+            Err(From::from("Test failed: the path should not be valid"))
         } else {
             Ok(())
         }

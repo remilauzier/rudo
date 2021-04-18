@@ -50,7 +50,8 @@ like group membership and validity of the account
     clippy::needless_borrow,
     clippy::use_self,
     clippy::useless_let_if_seq,
-    clippy::useless_transmute
+    clippy::useless_transmute,
+    clippy::cognitive_complexity
 )]
 
 /// Module to authenticate the Unix user with the provide configuration
@@ -76,7 +77,6 @@ mod tty;
 /// Module that create user information and all the function with it
 mod user;
 
-use log::debug;
 use std::error::Error;
 
 /// The amount of time the session stay valid
@@ -106,9 +106,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Use oslog for logging
     journal::log_oslog(_debug)?;
 
-    debug!("Begin of run function");
+    // Principal function of Rudo
     run::run(&matches)?;
-    debug!("End of run function");
 
     Ok(())
 }

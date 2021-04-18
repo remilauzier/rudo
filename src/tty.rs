@@ -41,7 +41,7 @@ pub(crate) fn get_tty_name() -> Result<String, Box<dyn Error>> {
         }
         // Transform the c_char to a rust string
         let ttyname_rust = CStr::from_ptr(ttyname_c).to_string_lossy().into_owned();
-        debug!("Terminal: {}", ttyname_rust);
+        debug!("Terminal: {} is use", ttyname_rust);
         Ok(ttyname_rust)
     }
 }
@@ -100,7 +100,9 @@ mod tests {
         } else if ttyuuid == "325768" {
             Ok(())
         } else {
-            Err(From::from("Test Failed"))
+            Err(From::from(
+                "Test Failed: should have been the same number as give to WINDOWID",
+            ))
         }
     }
 }

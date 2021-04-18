@@ -48,4 +48,4 @@ You need to change the owner of the binary to root for now to make it work, exce
 **GPLv2 or later**
 
 # Warning
-**No guaranty of security for now**
+**No security audit was perform on Rudo**

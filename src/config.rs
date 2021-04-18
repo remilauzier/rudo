@@ -15,7 +15,7 @@
 //    with this program; if not, write to the Free Software Foundation, Inc.,
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 use clap::ArgMatches;
-use log::{debug, error, info};
+use log::{debug, error, info, warn};
 use serde::{Deserialize, Serialize};
 use std::error::Error;
 use std::fs::{self, File};
@@ -97,17 +97,16 @@ impl Config {
         debug!("Creating configuration file at {}", CONFIG_PATH);
         let mut file = File::create(config_path)?;
         // Write data in the file
-        debug!("Writing to file");
+        debug!("Writing data to file");
         file.write_all(config_file.as_bytes())?;
         // Sync data to drive
         debug!("Syncing data to drive");
         file.sync_all()?;
         // Set permissions of 640 to restraint access
-        debug!("Set file permission");
+        debug!("Set file permission to 640 to restreint access");
         let mut perms = file.metadata()?.permissions();
         perms.set_mode(0o640);
         file.set_permissions(perms)?;
-        debug!("File permission has been set");
 
         Ok(())
     }
@@ -133,9 +132,8 @@ impl Default for Config {
 /// Function to initialize the configuration with the default data if necessary
 pub(crate) fn init_conf() -> Result<Config, Box<dyn Error>> {
     // Initialize configuration with defaults
-    debug!("Begin initializing default configuration");
+    debug!("Begin initializing default configuration for further use");
     let mut conf = Config::default();
-    debug!("Finish initializing default configuration");
 
     // Verify that the file is there or write to it with the defaults
     let path = Path::new(CONFIG_PATH);
@@ -148,18 +146,16 @@ pub(crate) fn init_conf() -> Result<Config, Box<dyn Error>> {
             eprintln!("{}", err);
             error!("{}", err);
             // Remove invalid file
-            info!("Removing invalid file");
+            warn!("Removing invalid file");
             fs::remove_file(path)?;
             // Create new file with defaults
-            info!("Creating new file with defaults at {:?}", path);
+            info!("Creating new file with defaults at {}", CONFIG_PATH);
             conf.create_config_file()?;
             return Ok(conf);
         }
         // Return the valid data of the configuration file
         debug!("Returning the content of the configuration file");
         conf = result.unwrap();
-
-        debug!("Finish loading configuration");
     } else if path.exists() && path.is_dir() {
         // Error if it's a directory and let the user decide what to do
         let err = format!("Error: {} is a directory", CONFIG_PATH);
@@ -167,10 +163,9 @@ pub(crate) fn init_conf() -> Result<Config, Box<dyn Error>> {
         return Err(From::from(err));
     } else {
         // Create a configuration file if it doesn't exist
-        info!("{} doesn't exist! Creating it", CONFIG_PATH);
+        warn!("{} doesn't exist! Creating it", CONFIG_PATH);
         eprintln!("{} doesn't exist! Creating it", CONFIG_PATH);
         conf.create_config_file()?;
-        debug!("Creation has finish");
     }
     Ok(conf)
 }

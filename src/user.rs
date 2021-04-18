@@ -16,13 +16,10 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 use log::{debug, error, info};
 use std::error::Error;
-use std::sync::Arc;
 use users::{Group, Users, UsersCache};
 
 /// Put the data of the actual user in a structure for later use
 pub(crate) struct User {
-    /// Contain the user structure in a arc
-    pub(crate) user: Arc<users::User>,
     /// The Unix username of the actual user
     pub(crate) username: String,
     /// The Unix groups the user is part of
@@ -33,34 +30,40 @@ impl User {
     /// Function to create the user structure with all it's data
     pub(crate) fn new() -> Self {
         // Create the user and it's data for later use
-        debug!("Begin user creation");
+        debug!("Begin user data creation");
         let userscache = UsersCache::new();
         let uid = userscache.get_current_uid();
         let user = userscache.get_user_by_uid(uid).unwrap();
         let username = user.name().to_str().unwrap().to_owned();
         let group = user.groups().unwrap();
-        debug!("User has been create");
-        Self {
-            user,
-            username,
-            group,
-        }
+        Self { username, group }
     }
     /// Function that verify that the user is part of the list of authorized users as defined in the configuration file
     pub(crate) fn verify_user(&self, username: &str) -> Result<(), Box<dyn Error>> {
-        debug!("Begin to verify if user is authorized");
-        let actualuser = self.user.name().to_str().unwrap();
+        debug!(
+            "Begin to verify if {} is authorized to use Rudo",
+            &self.username
+        );
+        let actualuser = &self.username;
         if actualuser == username {
+            debug!("{} has been authorized", actualuser);
             Ok(())
         } else {
-            error!("User is not authorized");
-            Err(From::from("User is not authorized"))
+            let err = format!(
+                "{} is not authorized to use Rudo! Will be reportto administrator!",
+                actualuser
+            );
+            error!("{}", err);
+            Err(From::from(err))
         }
     }
     /// Function that take the vector containing the list of groups the user is a member,
     /// and search for the group supply in the configuration to determine the authorization of the user
     pub(crate) fn verify_group(&self, arggroup: &str) -> Result<(), Box<dyn Error>> {
-        debug!("Beginning group verification");
+        debug!(
+            "Beginning to verify if the user is a member of {}",
+            arggroup
+        );
         let group = &self.group;
         let mut count = 0;
 
@@ -74,12 +77,12 @@ impl User {
             info!("User is a member of the authorized group: {}", arggroup);
             Ok(())
         } else if count >= 2 {
-            error!("{} is list multiple time", arggroup);
             let err = format!("{} is list multiple time", arggroup);
+            error!("{}", err);
             Err(From::from(err))
         } else {
-            error!("User is not a member of the authorized group: {}", arggroup);
             let error = format!("User is not a member of the authorized group: {}", arggroup);
+            error!("{}", error);
             Err(From::from(error))
         }
     }

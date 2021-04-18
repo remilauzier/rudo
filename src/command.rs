@@ -35,14 +35,14 @@ impl<'a> Command<'a> {
             error!("Command is empty");
             Err(From::from("Command is empty"))
         } else {
-            debug!("command is not empty, proceeding");
+            debug!("command is not empty, proceeding to extraction");
             let mut program = String::new();
             // Extract the first word then remove it
             program.push_str(command[0]);
             command.remove(0);
             // Copy the rest of the value and return it
             let args = command;
-            debug!("Return Command structure");
+            debug!("Return the new Command structure");
             Ok(Self { program, args })
         }
     }
