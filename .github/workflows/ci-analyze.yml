@@ -24,11 +24,11 @@ jobs:
         run: sudo apt install libpam0g-dev libsystemd-dev syslog-ng
       - name: cargo clippy ubuntu
         if: matrix.os == 'ubuntu-20.04'
-        run: cargo clippy --all-features --verbose
+        run: cargo clippy --release --all-features --verbose
       - name: cargo clippy macos
         if: matrix.os == 'macos-10.15'
-        run: cargo clippy --all-features --verbose
-          #- uses: actions-rs/clippy-check@v1
+        run: cargo clippy --release --all-features --verbose
+        #- uses: actions-rs/clippy-check@v1
         #with:
         #token: ${{ secrets.GITHUB_TOKEN }}
         #args: --all-features --all-targets --verbose

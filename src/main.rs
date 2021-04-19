@@ -95,13 +95,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Extract debug logging variable for further use
     let debug = matches.is_present("debug");
 
-    #[cfg(not(feature = "syslog3164"))]
+    #[cfg(target_os = "linux")]
     // Use journald for logging
     journal::log_journald(debug)?;
-
-    #[cfg(feature = "syslog3164")]
-    // Use syslog for logging
-    journal::log_syslog(debug)?;
 
     #[cfg(target_os = "macos")]
     // Use oslog for logging

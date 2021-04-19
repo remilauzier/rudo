@@ -20,12 +20,10 @@ use std::error::Error;
 use log::{info, LevelFilter};
 #[cfg(target_os = "macos")]
 use oslog::OsLogger;
-#[cfg(feature = "syslog3164")]
-use syslog::{BasicLogger, Facility, Formatter3164};
-#[cfg(not(feature = "syslog3164"))]
+#[cfg(target_os = "linux")]
 use systemd::journal;
 
-#[cfg(not(feature = "syslog3164"))]
+#[cfg(target_os = "linux")]
 /// Function to decide the maximum level of logging that journald will receive with the user supply option
 pub(crate) fn log_journald(debug: bool) -> Result<(), Box<dyn Error>> {
     // Initialize Logs with journald
@@ -40,28 +38,6 @@ pub(crate) fn log_journald(debug: bool) -> Result<(), Box<dyn Error>> {
         }
     } else if journal::JournalLog::init().is_err() {
         return Err(From::from("Error can't initialize logging with journald"));
-    }
-    Ok(())
-}
-
-#[cfg(feature = "syslog3164")]
-/// Function to decide the maximum level of logging that syslog server will receive with the user supply option
-pub(crate) fn log_syslog(debug: bool) -> Result<(), Box<dyn Error>> {
-    let formatter = Formatter3164 {
-        facility: Facility::LOG_AUTH,
-        hostname: None,
-        process: "rudo".into(),
-        pid: 0,
-    };
-    let logger = syslog::unix(formatter)?;
-    if debug {
-        log::set_boxed_logger(Box::new(BasicLogger::new(logger)))
-            .map(|()| log::set_max_level(LevelFilter::Debug))?;
-        info!("Starting Debug logs");
-    } else {
-        log::set_boxed_logger(Box::new(BasicLogger::new(logger)))
-            .map(|()| log::set_max_level(LevelFilter::Info))?;
-        info!("Starting logs");
     }
     Ok(())
 }
@@ -87,24 +63,16 @@ pub(crate) fn log_oslog(debug: bool) -> Result<(), Box<dyn Error>> {
 
 #[cfg(test)]
 mod tests {
-    #[cfg(not(feature = "syslog3164"))]
+    #[cfg(target_os = "linux")]
     use super::log_journald;
     #[cfg(target_os = "macos")]
     use super::log_oslog;
-    #[cfg(feature = "syslog3164")]
-    use super::log_syslog;
     use super::Error;
 
-    #[cfg(not(feature = "syslog3164"))]
+    #[cfg(target_os = "linux")]
     #[test]
     fn test_journald() -> Result<(), Box<dyn Error>> {
         log_journald(false)
-    }
-
-    #[cfg(feature = "syslog3164")]
-    #[test]
-    fn test_syslog() -> Result<(), Box<dyn Error>> {
-        log_syslog(false)
     }
 
     #[cfg(target_os = "macos")]
