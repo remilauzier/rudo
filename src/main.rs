@@ -92,13 +92,16 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Initialize the CLI interface with clap
     let matches = cli::init_command_line();
 
-    #[cfg(feature = "journald")]
     // Extract debug logging variable for further use
     let debug = matches.is_present("debug");
 
     #[cfg(feature = "journald")]
     // Use journald for logging
     journal::log_journald(debug)?;
+
+    #[cfg(feature = "syslog3164")]
+    // Use syslog for logging
+    journal::log_syslog(debug)?;
 
     // Principal function of Rudo
     run::run(&matches)?;

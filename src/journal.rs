@@ -15,12 +15,11 @@
  *    with this program; if not, write to the Free Software Foundation, Inc.,
  *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-#[cfg(feature = "journald")]
 use std::error::Error;
 
-#[cfg(feature = "journald")]
 use log::{info, LevelFilter};
+#[cfg(feature = "syslog3164")]
+use syslog::{BasicLogger, Facility, Formatter3164};
 #[cfg(feature = "journald")]
 use systemd::journal;
 
@@ -43,14 +42,45 @@ pub(crate) fn log_journald(debug: bool) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+#[cfg(feature = "syslog3164")]
+/// Function to decide the maximum level of logging that syslog server will receive with the user supply option
+pub(crate) fn log_syslog(debug: bool) -> Result<(), Box<dyn Error>> {
+    let formatter = Formatter3164 {
+        facility: Facility::LOG_AUTH,
+        hostname: None,
+        process: "rudo".into(),
+        pid: 0,
+    };
+    let logger = syslog::unix(formatter)?;
+    if debug {
+        log::set_boxed_logger(Box::new(BasicLogger::new(logger)))
+            .map(|()| log::set_max_level(LevelFilter::Debug))?;
+        info!("Starting Debug logs");
+    } else {
+        log::set_boxed_logger(Box::new(BasicLogger::new(logger)))
+            .map(|()| log::set_max_level(LevelFilter::Info))?;
+        info!("Starting logs");
+    }
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     #[cfg(feature = "journald")]
-    use super::{log_journald, Error};
+    use super::log_journald;
+    #[cfg(feature = "syslog3164")]
+    use super::log_syslog;
+    use super::Error;
 
     #[cfg(feature = "journald")]
     #[test]
     fn test_journald() -> Result<(), Box<dyn Error>> {
         log_journald(false)
+    }
+
+    #[cfg(feature = "syslog3164")]
+    #[test]
+    fn test_syslog() -> Result<(), Box<dyn Error>> {
+        log_syslog(false)
     }
 }
