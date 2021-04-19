@@ -41,3 +41,14 @@ pub(crate) fn log_journald(debug: bool) -> Result<(), Box<dyn Error>> {
     }
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::{Error, log_journald};
+
+    #[cfg(feature = "journald")]
+    #[test]
+    fn test_journald() -> Result<(), Box<dyn Error>> {
+        log_journald(false)
+    }
+}
