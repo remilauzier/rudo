@@ -31,8 +31,8 @@ use crate::config;
 use crate::user;
 
 /// Run function of Rudo.
-/// It take the result of the command-line interface to decide
-/// if it most create a login shell or to pass a command or to invocate the editor
+/// It takes the result of the command-line interface to decide
+/// if it will create a login shell or to pass a command or to invoke the editor
 pub(crate) fn run(matches: &ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
     // Initialize configuration
     debug!("Starting configuration initialization");
@@ -54,9 +54,9 @@ pub(crate) fn run(matches: &ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
     let userconf = config::UserConf::update(userconf, matches);
     let conf = config::Config::update(conf, matches);
 
-    // Get the UID and GID of the impersonate user for further use
+    // Get the UID and GID of the impersonated user for further use
     debug!(
-        "Extract UID and GID of the impersonate user {}",
+        "Extract UID and GID of the impersonated user {}",
         &conf.rudo.impuser
     );
     let impuser =
@@ -112,7 +112,7 @@ fn run_command(
         let command: Vec<&str> = matches.values_of("command").unwrap().collect();
         let data = command::Command::new(command).unwrap();
 
-        // Log the user and it's command for further audit by system administrator
+        // Log the user, and it's command for further audit by system administrator
         info!(
             "{} has been authorized. Command: {} {:?}",
             userdata.username, data.program, data.args
@@ -127,14 +127,14 @@ fn run_command(
             .gid(group_id) // Necessary to have full access
             .spawn()?;
 
-        // Wait for the command to finish or the program end before the command
+        // Wait for the command to finish, or the program end before the command
         child.wait()?;
     } else if matches.is_present("shell") {
         // Extraction of the shell environment variable
         debug!("Extracting shell environment variable");
         let shell = env::var("SHELL").unwrap_or_else(|_| String::from("/bin/sh"));
 
-        // Log the user and it's shell for further audit by system administrator
+        // Log the user, and it's shell for further audit by system administrator
         info!("{} has been authorized to use {}", userdata.username, shell);
 
         // Creation and ignition of the new shell
@@ -146,7 +146,7 @@ fn run_command(
             .gid(group_id) // Necessary to have full access
             .spawn()?;
 
-        // Wait for the shell to finish or the program end before the shell
+        // Wait for the shell to finish, or the program end before the shell
         child.wait()?;
     } else if matches.is_present("edit") {
         // Extraction of the editor environment variable
@@ -157,7 +157,7 @@ fn run_command(
         debug!("Extracting arguments and file path give to the editor");
         let arg = matches.value_of("edit").unwrap();
 
-        // Log the user, it's editor and it's arguments for further audit by system administrator
+        // Log the user, it's editor, and it's arguments for further audit by system administrator
         info!(
             "{} has been authorized to use {} {}",
             userdata.username, editor, arg
@@ -172,7 +172,7 @@ fn run_command(
             .gid(group_id) // Necessary to have full access
             .spawn()?;
 
-        // Wait for the editor to finish or the program will end before the editor
+        // Wait for the editor to finish, or the program will end before the editor
         child.wait()?;
     }
     Ok(())

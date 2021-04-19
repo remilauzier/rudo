@@ -23,7 +23,7 @@ use log::{debug, error};
 
 use crate::session;
 
-/// `verify_path` analyze if the token exist and it's valid, then it return a bool for the result.
+/// `verify_path` analyze if the token exist, and it's valid, then it returns a bool for the result.
 pub(crate) fn verify_path(
     token_path: &str,
     tty_name: &str,
@@ -35,7 +35,7 @@ pub(crate) fn verify_path(
     debug!("Verifying if token_path exist and is a directory");
     if token_path.exists() && token_path.is_dir() {
         // Erase the path if it's a directory
-        error!("token_path is a directory and will be erase");
+        error!("token_path is a directory and will be erased");
         fs::remove_dir(token_path)?;
         return Ok(false);
     } else if token_path.exists() && token_path.is_file() {
@@ -53,7 +53,7 @@ pub(crate) fn verify_path(
         debug!("Token was valid");
         return Ok(true);
     }
-    debug!("Tokent was non-existent");
+    debug!("Token was non-existent");
     Ok(false)
 }
 

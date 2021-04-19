@@ -37,8 +37,8 @@ pub(crate) fn init_command_line() -> ArgMatches<'static> {
                 .required_unless("shell")
                 .conflicts_with("edit")
                 .required_unless("edit")
-                .index(1) // Be sure that the command is the first so we don't have to write "-c" to take a command
-                .multiple(true) // To be able to have the command and it's list of argument
+                .index(1) // Be sure that the command is the first, so we don't have to write "-c" to take a command
+                .multiple(true) // To be able to have the command, and it's list of argument
                 .allow_hyphen_values(true) // Should authorize "-" in command
                 .takes_value(true),
         )

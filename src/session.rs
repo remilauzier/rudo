@@ -29,7 +29,7 @@ use serde::{Deserialize, Serialize};
 use crate::DEFAULT_SESSION_TIMEOUT;
 use crate::SESSION_DIR;
 
-/// Create a structure to contain the UUID of the terminal and the timestamp to determine
+/// Create a structure to contain the UUID of the terminal, and the timestamp to determine
 /// if the session is valid for later use
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub(crate) struct Token {
@@ -66,14 +66,14 @@ impl Token {
         let token_path = format!("{}{}{}", SESSION_DIR, username, self.tty_name);
         let token_path = Path::new(&token_path);
         debug!(
-            "token_path has been create, will verify if it exist : {:?}",
+            "token_path has been created, will verify if it exists : {:?}",
             token_path
         );
 
         // Verify the existence of the path to act accordingly
         if token_path.exists() {
             // Erase the ancient file and create new one
-            debug!("token_path exist will be erase and replace");
+            debug!("token_path exist will be erased and replace");
             fs::remove_file(token_path)?;
 
             // Put the token data in a string of YAML
@@ -93,7 +93,7 @@ impl Token {
             file.sync_all()?;
 
             // Put file permission to 600 to restraint access
-            debug!("Set file permission to 600 to restrict access");
+            debug!("Set file permission to 600 to restraint access");
             let mut perms = file.metadata()?.permissions();
             perms.set_mode(0o600);
             file.set_permissions(perms)?;
@@ -103,7 +103,7 @@ impl Token {
 
             // Create the directory with mode 600 to restraint access
             debug!(
-                "Create directory: {:?} with mode 600 to restreint access",
+                "Create directory: {:?} with mode 600 to restraint access",
                 path
             );
             DirBuilder::new().mode(0o600).recursive(true).create(path)?;
@@ -125,7 +125,7 @@ impl Token {
             file.sync_all()?;
 
             // Put file permission to 600 to restraint access
-            debug!("Set file permission to 600 to restrict access");
+            debug!("Set file permission to 600 to restraint access");
             let mut perms = file.metadata()?.permissions();
             perms.set_mode(0o600);
             file.set_permissions(perms)?;
@@ -164,7 +164,7 @@ pub(crate) fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
     debug!("Verify that {} exist", SESSION_DIR);
     if !run_path.exists() {
         info!(
-            "{} doesn't exist, creating it with mode 600 to restreint access",
+            "{} doesn't exist, creating it with mode 600 to restraint access",
             SESSION_DIR
         );
         // Create the path with permissions of 600 to restraint access
@@ -180,7 +180,7 @@ pub(crate) fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
     // Verify the permissions of the directory and act accordingly
     debug!("Verifying permission on {}", SESSION_DIR);
     if perms.mode() != 0o600 {
-        warn!("Permissions are incorrect and will be adjust to 600");
+        warn!("Permissions are incorrect and will be adjusted to 600");
         perms.set_mode(0o600);
         fs::set_permissions(SESSION_DIR, perms)?;
     }
@@ -193,7 +193,7 @@ pub(crate) fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
     debug!("Verifying that user_path exist: {:?}", user_path);
     if !user_path.exists() {
         info!(
-            "{:?} doesn't exist, creating it with mode 600 to restreint access",
+            "{:?} doesn't exist, creating it with mode 600 to restraint access",
             user_path
         );
         // Create the path with permissions of 600 to restraint access
@@ -212,16 +212,17 @@ pub(crate) fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
         // Verifying if the permission of the directory and act accordingly
         debug!("Verifying {:?} permissions", user_path);
         if perms.mode() != 0o600 {
-            warn!("Permissions are incorrect, adjusting it to 600 to restreint access");
+            warn!("Permissions are incorrect, adjusting it to 600 to restraint access");
             perms.set_mode(0o600);
             fs::set_permissions(user_path, perms)?;
         }
     }
     Ok(())
 }
-/// Function to extract the token from it's file with `serde_yaml`
+
+/// Function to extract the token from its file with `serde_yaml`
 pub(crate) fn read_token_file(token_path: &str) -> Result<Token, Box<dyn Error>> {
-    // Open the file and extract it's contents in a buffer
+    // Open the file and extract its contents in a buffer
     debug!(
         "Open the file at {} and put it's content in a buffer",
         token_path

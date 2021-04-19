@@ -49,7 +49,7 @@ pub(crate) fn get_tty_name() -> Result<String, Box<dyn Error>> {
 }
 
 /// WINDOWID is the least trust because of is small size and don't change for different tabs.
-/// It only change the last five number most of the time.
+/// It only changes the last five number most of the time,
 /// But it is used by st, xterm, sakura, kitty, xfce terminal, mate terminal and terminology.
 /// Rox terminal use a value that change only the last six number but change for tabs.
 /// Qterminal is insecure as it put 0 in WINDOWID and Rudo will refuse to consider it.
@@ -103,7 +103,7 @@ mod tests {
             Ok(())
         } else {
             Err(From::from(
-                "Test Failed: should have been the same number as give to WINDOWID",
+                "Test Failed: should have been the same number as WINDOWID",
             ))
         }
     }

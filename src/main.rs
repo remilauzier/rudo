@@ -16,7 +16,7 @@
  *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 /*! Rudo is a program that permit a system administrator
-to authorized a user to have privilege access with a few verification
+to authorize a user to have privilege access with verification
 like group membership and validity of the account
 */
 #![deny(
@@ -57,13 +57,13 @@ like group membership and validity of the account
 
 use std::error::Error;
 
-/// Module to authenticate the Unix user with the provide configuration
+/// Module to authenticate the Unix user with the provided configuration
 mod auth;
-/// Module to instantiate the command-line interface and it's options
+/// Module to instantiate the command-line interface, and it's options
 mod cli;
-/// Module to extract the command and it's arguments when user provide one
+/// Module to extract the command, and it's arguments when user provide one
 mod command;
-/// Module that manage the configuration file and it's options
+/// Module that manage the configuration file, and it's options
 mod config;
 /// Module that manage the logs that Rudo create
 mod journal;
@@ -71,11 +71,11 @@ mod journal;
 mod pwd;
 /// Module that take care of running Rudo
 mod run;
-/// Module that manage the session and it's validity for the user
+/// Module that manage the session, and it's validity for the user
 mod session;
 /// Module to verify that the token path exist and return a bool wrap in a result
 mod token;
-/// Module to extract the name of the TTY and to verify it's existence
+/// Module to extract the name of the TTY and to verify its existence
 mod tty;
 /// Module that create user information and all the function with it
 mod user;

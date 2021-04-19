@@ -31,7 +31,7 @@ pub(crate) struct User {
 impl User {
     /// Function to create the user structure with all it's data
     pub(crate) fn new() -> Self {
-        // Create the user and it's data for later use
+        // Create the user, and it's data for later use
         debug!("Begin user data creation");
         let userscache = UsersCache::new();
         let uid = userscache.get_current_uid();
@@ -52,7 +52,7 @@ impl User {
             Ok(())
         } else {
             let err = format!(
-                "{} is not authorized to use Rudo! Will be reportto administrator!",
+                "{} is not authorized to use Rudo! Will be report to administrator!",
                 actualuser
             );
             error!("{}", err);

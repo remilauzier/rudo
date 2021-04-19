@@ -34,13 +34,13 @@ pub(crate) fn authentification(
     userconf: &config::UserConf,
     userdata: &user::User,
 ) -> Result<(), Box<dyn Error>> {
-    // Verify that the user is authorize to run Rudo
+    // Verify that the user is authorized to run Rudo
     debug!("Starting verification of {}", &userconf.username);
     userdata.verify_user(&userconf.username)?;
 
     // Verify that the user is a member of the privilege group for privilege access
     debug!(
-        "User was approuve, starting group verification of {}",
+        "User was approved, starting group verification of {}",
         userconf.group
     );
     userdata.verify_group(&userconf.group)?;
@@ -62,7 +62,7 @@ pub(crate) fn authentification_pam(
         Conversation::new(),
     )?;
 
-    // Extract the ttyname with libc
+    // Extract the TTY name with libc
     let tty_name = tty::get_tty_name()?;
     debug!("TTY name has been extract: {}", tty_name);
 
@@ -70,9 +70,9 @@ pub(crate) fn authentification_pam(
     let tty_uuid = tty::terminal_uuid()?;
     debug!("Terminal UUID is {}", tty_uuid);
 
-    // Create the token path with the base, the username and the ttyname
+    // Create the token path with the base, the username and the TTY name
     let token_path = format!("{}{}{}", SESSION_DIR, &userdata.username, tty_name);
-    debug!("token_path has been create: {}", token_path);
+    debug!("token_path has been created: {}", token_path);
 
     // Verify that token_path is valid and that the session is not expired,
     // then pass the result.
@@ -85,10 +85,10 @@ pub(crate) fn authentification_pam(
             "{} demand authorization to use Rudo, password will be ask",
             userdata.username
         );
-        // Password will be ask to validate the authorization
+        // Password will be asked to validate the authorization
         pwd::password_input(userconf.password, &mut context)?;
         info!(
-            "{} has given is password that was validate by Pam",
+            "{} has given is password that was validated by Pam",
             userdata.username
         );
 
@@ -96,16 +96,16 @@ pub(crate) fn authentification_pam(
         debug!("Validate the account of {}", userdata.username);
         context.acct_mgmt(Flag::DISALLOW_NULL_AUTHTOK)?;
 
-        // Create the run directory where the token will be write
+        // Create the run directory where the token will be written
         debug!("Creating the directory of the token in /run");
         session::create_dir_run(&userdata.username)?;
 
         // Create token with all the necessary information
         let token = session::Token::new(tty_name.clone(), tty_uuid.clone());
-        debug!("Token was create for {} with UUID: {}", tty_name, tty_uuid);
+        debug!("Token was created for {} with UUID: {}", tty_name, tty_uuid);
 
         // Write the token to file
-        debug!("Token will be write to {}", token_path);
+        debug!("Token will be written to {}", token_path);
         token.create_token_file(&userdata.username)?;
     }
 

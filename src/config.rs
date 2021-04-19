@@ -36,7 +36,7 @@ pub(crate) struct UserConf {
     pub(crate) group: String,
     /// A Boolean to determine if the user must give is password or not
     pub(crate) password: bool,
-    /// A Boolean to determine if the user want to be salute every time Rudo is invoke
+    /// A Boolean to determine if the user want to be saluted every time Rudo is invoked
     pub(crate) greeting: bool,
 }
 
@@ -88,7 +88,7 @@ pub(crate) struct Config {
 }
 
 impl Config {
-    /// Function to create the configuration file with the right permissions and it's data
+    /// Function to create the configuration file with the right permissions, and it's data
     fn create_config_file(&self) -> Result<(), Box<dyn Error>> {
         // Create the path for the configuration
         let config_path = Path::new(CONFIG_PATH);
@@ -112,7 +112,7 @@ impl Config {
 
         Ok(())
     }
-    /// Function to update the name of the impersonate user with the value give in the command-line
+    /// Function to update the name of the impersonated user with the value give in the command-line
     pub(crate) fn update(mut self, matches: &ArgMatches<'_>) -> Self {
         // Update user value if CLI option is present
         if matches.value_of("user").is_some() {
@@ -141,7 +141,7 @@ pub(crate) fn init_conf() -> Result<Config, Box<dyn Error>> {
     let path = Path::new(CONFIG_PATH);
     debug!("Verifying that {} exist", CONFIG_PATH);
     if path.exists() && path.is_file() {
-        // Load the file and verify it's validity
+        // Load the file and verify its validity
         debug!("Loading {}", CONFIG_PATH);
         let result = read_config_file();
         if let Err(err) = result {
@@ -172,7 +172,7 @@ pub(crate) fn init_conf() -> Result<Config, Box<dyn Error>> {
     Ok(conf)
 }
 
-/// Function to read the configuration file and extract it's data
+/// Function to read the configuration file and extract its data
 pub(crate) fn read_config_file() -> Result<Config, Box<dyn Error>> {
     // Create the path for the configuration
     let config_path = Path::new(CONFIG_PATH);
@@ -209,7 +209,7 @@ mod tests {
         if extract_userconf(conf, "root").username == "root" {
             Ok(())
         } else {
-            Err(From::from("Test failed when extracting the usersonf"))
+            Err(From::from("Test failed when extracting the userconf"))
         }
     }
 }
