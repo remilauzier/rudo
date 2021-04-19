@@ -25,7 +25,7 @@ https://copr.fedorainfracloud.org/coprs/remilauzier/rudo/
   or `rudo --edit some-document`
 * You can log debug journal with `rudo -d` or `rudo --debug`
 * You can start the user greeting with `rudo -g` or `rudo --greeting`
-* You can log debug or info messages to ``journald``
+* You can log debug or info messages to ``journald`` on **Linux** or to `oslog` on **macOS**
 
 # Configuration
 
