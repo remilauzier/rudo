@@ -1,19 +1,20 @@
-//    Rudo is a program to get privilege access on unix system
-//    Copyright (C) 2021  Rémi Lauzier <remilauzier@protonmail.com>
-//
-//    This program is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License along
-//    with this program; if not, write to the Free Software Foundation, Inc.,
-//    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+/*    Rudo is a program to get privilege access on unix system
+ *    Copyright (C) 2021  Rémi Lauzier <remilauzier@protonmail.com>
+ *
+ *    This program is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 2 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License along
+ *    with this program; if not, write to the Free Software Foundation, Inc.,
+ *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 /*! Rudo is a program that permit a system administrator
 to authorized a user to have privilege access with a few verification
 like group membership and validity of the account
@@ -54,6 +55,8 @@ like group membership and validity of the account
     clippy::cognitive_complexity
 )]
 
+use std::error::Error;
+
 /// Module to authenticate the Unix user with the provide configuration
 mod auth;
 /// Module to instantiate the command-line interface and it's options
@@ -76,8 +79,6 @@ mod token;
 mod tty;
 /// Module that create user information and all the function with it
 mod user;
-
-use std::error::Error;
 
 /// The amount of time the session stay valid
 pub(crate) static DEFAULT_SESSION_TIMEOUT: u64 = 600;

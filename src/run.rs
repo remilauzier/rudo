@@ -1,32 +1,34 @@
-//    Rudo is a program to get privilege access on unix system
-//    Copyright (C) 2021  Rémi Lauzier <remilauzier@protonmail.com>
-//
-//    This program is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License along
-//    with this program; if not, write to the Free Software Foundation, Inc.,
-//    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-use crate::auth;
-use crate::command;
-use crate::config;
-use crate::user;
+/*    Rudo is a program to get privilege access on unix system
+ *    Copyright (C) 2021  Rémi Lauzier <remilauzier@protonmail.com>
+ *
+ *    This program is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 2 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License along
+ *    with this program; if not, write to the Free Software Foundation, Inc.,
+ *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+use std::env;
+use std::error::Error;
+use std::os::unix::process::CommandExt;
+use std::process::Command;
 
 use clap::ArgMatches;
 use log::{debug, info};
 use pam_client::conv_cli::Conversation;
 use pam_client::{Flag, Session};
-use std::env;
-use std::error::Error;
-use std::os::unix::process::CommandExt;
-use std::process::Command;
+
+use crate::auth;
+use crate::command;
+use crate::config;
+use crate::user;
 
 /// Run function of Rudo.
 /// It take the result of the command-line interface to decide

@@ -1,21 +1,20 @@
-//    Rudo is a program to get privilege access on unix system
-//    Copyright (C) 2021  Rémi Lauzier <remilauzier@protonmail.com>
-//
-//    This program is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License along
-//    with this program; if not, write to the Free Software Foundation, Inc.,
-//    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-use log::{debug, error, info, warn};
-use serde::{Deserialize, Serialize};
+/*    Rudo is a program to get privilege access on unix system
+ *    Copyright (C) 2021  Rémi Lauzier <remilauzier@protonmail.com>
+ *
+ *    This program is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 2 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License along
+ *    with this program; if not, write to the Free Software Foundation, Inc.,
+ *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 use std::error::Error;
 use std::fs::{self, DirBuilder, File};
 use std::io::Write;
@@ -23,6 +22,9 @@ use std::os::unix::fs::DirBuilderExt;
 use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
 use std::time::SystemTime;
+
+use log::{debug, error, info, warn};
+use serde::{Deserialize, Serialize};
 
 use crate::DEFAULT_SESSION_TIMEOUT;
 use crate::SESSION_DIR;
