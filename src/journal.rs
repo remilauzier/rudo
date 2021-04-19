@@ -18,6 +18,8 @@
 use std::error::Error;
 
 use log::{info, LevelFilter};
+#[cfg(any(feature = "macos", target_os = "macos"))]
+use oslog::OsLogger;
 #[cfg(feature = "syslog3164")]
 use syslog::{BasicLogger, Facility, Formatter3164};
 #[cfg(feature = "journald")]
@@ -64,10 +66,31 @@ pub(crate) fn log_syslog(debug: bool) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+#[cfg(any(feature = "macos", target_os = "macos"))]
+/// Function to decide the maximum level of logging that oslog server will receive with the user supply option
+pub(crate) fn log_oslog(debug: bool) -> Result<(), Box<dyn Error>> {
+    if debug {
+        OsLogger::new("com.github.rudo")
+            .level_filter(LevelFilter::Debug)
+            .category_level_filter("Settings", LevelFilter::Debug)
+            .init()?;
+        info!("Starting Debug logs");
+    } else {
+        OsLogger::new("com.github.rudo")
+            .level_filter(LevelFilter::Info)
+            .category_level_filter("Settings", LevelFilter::Info)
+            .init()?;
+        info!("Starting logs");
+    }
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     #[cfg(feature = "journald")]
     use super::log_journald;
+    #[cfg(any(feature = "macos", target_os = "macos"))]
+    use super::log_oslog;
     #[cfg(feature = "syslog3164")]
     use super::log_syslog;
     use super::Error;
@@ -82,5 +105,11 @@ mod tests {
     #[test]
     fn test_syslog() -> Result<(), Box<dyn Error>> {
         log_syslog(false)
+    }
+
+    #[cfg(any(feature = "macos", target_os = "macos"))]
+    #[test]
+    fn test_oslog() -> Result<(), Box<dyn Error>> {
+        log_oslog(false)
     }
 }
