@@ -27,8 +27,8 @@ jobs:
         run: cargo clippy --all-features --all-targets --verbose
       - name: cargo clippy macos
         if: matrix.os == 'macos-10.15'
-        run: cargo clippy --no-default-features --all-targets --verbose
+        run: cargo clippy --all-targets --verbose
           #- uses: actions-rs/clippy-check@v1
           #with:
-          #token: ${{ secrets.GITHUB_TOKEN }}
+        #token: ${{ secrets.GITHUB_TOKEN }}
         #args: --all-features --all-targets --verbose
