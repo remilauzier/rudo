@@ -91,6 +91,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Initialize the CLI interface with clap
     let matches = cli::init_command_line();
 
+    #[cfg(feature = "journald")]
     // Extract debug logging variable for further use
     let debug = matches.is_present("debug");
 
