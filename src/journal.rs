@@ -18,7 +18,7 @@
 use std::error::Error;
 
 use log::{info, LevelFilter};
-#[cfg(any(feature = "macos", target_os = "macos"))]
+#[cfg(target_os = "macos")]
 use oslog::OsLogger;
 #[cfg(feature = "syslog3164")]
 use syslog::{BasicLogger, Facility, Formatter3164};
@@ -66,7 +66,7 @@ pub(crate) fn log_syslog(debug: bool) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-#[cfg(any(feature = "macos", target_os = "macos"))]
+#[cfg(target_os = "macos")]
 /// Function to decide the maximum level of logging that oslog server will receive with the user supply option
 pub(crate) fn log_oslog(debug: bool) -> Result<(), Box<dyn Error>> {
     if debug {
@@ -89,7 +89,7 @@ pub(crate) fn log_oslog(debug: bool) -> Result<(), Box<dyn Error>> {
 mod tests {
     #[cfg(feature = "journald")]
     use super::log_journald;
-    #[cfg(any(feature = "macos", target_os = "macos"))]
+    #[cfg(target_os = "macos")]
     use super::log_oslog;
     #[cfg(feature = "syslog3164")]
     use super::log_syslog;
@@ -107,7 +107,7 @@ mod tests {
         log_syslog(false)
     }
 
-    #[cfg(any(feature = "macos", target_os = "macos"))]
+    #[cfg(target_os = "macos")]
     #[test]
     fn test_oslog() -> Result<(), Box<dyn Error>> {
         log_oslog(false)

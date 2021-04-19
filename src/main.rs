@@ -103,7 +103,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Use syslog for logging
     journal::log_syslog(debug)?;
 
-    #[cfg(any(feature = "macos", target_os = "macos"))]
+    #[cfg(target_os = "macos")]
     // Use oslog for logging
     journal::log_oslog(debug)?;
 
