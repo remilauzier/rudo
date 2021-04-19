@@ -24,7 +24,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install dependency
       if: matrix.os == 'ubuntu-20.04'
-      run: sudo apt install libpam0g-dev libsystemd-dev
+      run: sudo apt install libpam0g-dev libsystemd-dev syslog-ng
     - uses: actions-rs/toolchain@v1
       with:
         profile: minimal
