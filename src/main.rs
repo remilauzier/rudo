@@ -95,7 +95,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Extract debug logging variable for further use
     let debug = matches.is_present("debug");
 
-    #[cfg(feature = "journald")]
+    #[cfg(not(feature = "syslog3164"))]
     // Use journald for logging
     journal::log_journald(debug)?;
 

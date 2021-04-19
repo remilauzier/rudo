@@ -22,10 +22,10 @@ use log::{info, LevelFilter};
 use oslog::OsLogger;
 #[cfg(feature = "syslog3164")]
 use syslog::{BasicLogger, Facility, Formatter3164};
-#[cfg(feature = "journald")]
+#[cfg(not(feature = "syslog3164"))]
 use systemd::journal;
 
-#[cfg(feature = "journald")]
+#[cfg(not(feature = "syslog3164"))]
 /// Function to decide the maximum level of logging that journald will receive with the user supply option
 pub(crate) fn log_journald(debug: bool) -> Result<(), Box<dyn Error>> {
     // Initialize Logs with journald
@@ -87,7 +87,7 @@ pub(crate) fn log_oslog(debug: bool) -> Result<(), Box<dyn Error>> {
 
 #[cfg(test)]
 mod tests {
-    #[cfg(feature = "journald")]
+    #[cfg(not(feature = "syslog3164"))]
     use super::log_journald;
     #[cfg(target_os = "macos")]
     use super::log_oslog;
@@ -95,7 +95,7 @@ mod tests {
     use super::log_syslog;
     use super::Error;
 
-    #[cfg(feature = "journald")]
+    #[cfg(not(feature = "syslog3164"))]
     #[test]
     fn test_journald() -> Result<(), Box<dyn Error>> {
         log_journald(false)
