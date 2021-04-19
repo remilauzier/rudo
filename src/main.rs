@@ -92,19 +92,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     let matches = cli::init_command_line();
 
     // Extract debug logging variable for further use
-    let _debug = matches.is_present("debug");
+    let debug = matches.is_present("debug");
 
-    #[cfg(features = "journald")]
+    #[cfg(feature = "journald")]
     // Use journald for logging
-    journal::log_journald(_debug)?;
-
-    #[cfg(features = "syslogging")]
-    // Use syslog for logging
-    journal::log_syslog(_debug)?;
-
-    #[cfg(features = "macos")]
-    // Use oslog for logging
-    journal::log_oslog(_debug)?;
+    journal::log_journald(debug)?;
 
     // Principal function of Rudo
     run::run(&matches)?;
