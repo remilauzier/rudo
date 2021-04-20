@@ -95,7 +95,7 @@ mod tests {
 
     #[test]
     fn test_ttyuuid() -> Result<(), Box<dyn Error>> {
-        env::set_var("WINDOWID", "325768");
+        env::set_var("GNOME_TERMINAL_SCREEN", "325768");
         let ttyuuid = terminal_uuid()?;
         if ttyuuid.is_empty() {
             Err(From::from("ttyuuid shouldn't be empty"))
