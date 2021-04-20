@@ -40,7 +40,7 @@ pub(crate) fn run(matches: &ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
 
     // Create the user data for later use
     debug!("Starting extraction of User information");
-    let userdata = user::User::new();
+    let userdata = user::User::new()?;
 
     // Extract the information from rudo.conf that is tie to the actual user
     debug!(
@@ -52,15 +52,17 @@ pub(crate) fn run(matches: &ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
     // Update configuration if necessary, as CLI as the priority
     debug!("Update configuration with CLI option as it as the priority");
     let userconf = config::UserConf::update(userconf, matches);
-    let conf = config::Config::update(conf, matches);
+    let conf = config::Config::update(conf, matches)?;
 
     // Get the UID and GID of the impersonated user for further use
     debug!(
         "Extract UID and GID of the impersonated user {}",
         &conf.rudo.impuser
     );
-    let impuser =
-        users::get_user_by_name(&conf.rudo.impuser).expect("Please give rudo a real unix username");
+    let impuser = match users::get_user_by_name(&conf.rudo.impuser) {
+        Some(impuser) => impuser,
+        None => return Err(From::from("Please give Rudo a real unix username")),
+    };
     let impuser_uid = impuser.uid();
     let impuser_group_id = impuser.primary_group_id();
 
@@ -109,8 +111,15 @@ fn run_command(
     if matches.is_present("command") {
         // Extract the command in two part. First the name of the program then it's arguments.
         debug!("Extracting the supply command for further use");
-        let command: Vec<&str> = matches.values_of("command").unwrap().collect();
-        let data = command::Command::new(command).unwrap();
+        let command: Vec<&str> = match matches.values_of("command") {
+            Some(command) => command.collect(),
+            None => {
+                return Err(From::from(
+                    "Command couldn't be converted to a vector of &str",
+                ))
+            }
+        };
+        let data = command::Command::new(command)?;
 
         // Log the user, and it's command for further audit by system administrator
         info!(
@@ -155,7 +164,10 @@ fn run_command(
 
         // Extraction of the arguments and file path for the editor
         debug!("Extracting arguments and file path give to the editor");
-        let arg = matches.value_of("edit").unwrap();
+        let arg = match matches.value_of("edit") {
+            Some(arg) => arg,
+            None => return Err(From::from("Error couldn't pass value of edit to a &str")),
+        };
 
         // Log the user, it's editor, and it's arguments for further audit by system administrator
         info!(

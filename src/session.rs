@@ -45,19 +45,22 @@ pub(crate) struct Token {
 
 impl Token {
     /// Create the token and all it's parameter
-    pub(crate) fn new(tty_name: String, tty_uuid: String) -> Self {
+    pub(crate) fn new(tty_name: String, tty_uuid: String) -> Result<Self, Box<dyn Error>> {
         debug!("Create the timestamp of the token");
         let timestamp = SystemTime::now();
         // Create the timestamp where the session become invalid
         debug!("Create the final timestamp to determine the maximum validity of the session");
         let duration = std::time::Duration::from_secs(DEFAULT_SESSION_TIMEOUT);
-        let final_timestamp = timestamp.checked_add(duration).unwrap();
-        Self {
+        let final_timestamp = match timestamp.checked_add(duration) {
+            Some(time) => time,
+            None => return Err(From::from("Couldn't create final timestamp")),
+        };
+        Ok(Self {
             tty_name,
             tty_uuid,
             timestamp,
             final_timestamp,
-        }
+        })
     }
     /// Create the file that will contain the token if it doesn't exist
     pub(crate) fn create_token_file(&self, username: &str) -> Result<(), Box<dyn Error>> {
@@ -99,7 +102,11 @@ impl Token {
             file.set_permissions(perms)?;
         } else {
             debug!("token_path doesn't exist, will create it");
-            let path = token_path.parent().unwrap();
+
+            let path = match token_path.parent() {
+                Some(path) => path,
+                None => return Err(From::from("Error in token_path! Unable to give the parent")),
+            };
 
             // Create the directory with mode 600 to restraint access
             debug!(

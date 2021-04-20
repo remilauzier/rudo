@@ -30,15 +30,28 @@ pub(crate) struct User {
 
 impl User {
     /// Function to create the user structure with all it's data
-    pub(crate) fn new() -> Self {
+    pub(crate) fn new() -> Result<Self, Box<dyn Error>> {
         // Create the user, and it's data for later use
         debug!("Begin user data creation");
         let userscache = UsersCache::new();
         let uid = userscache.get_current_uid();
-        let user = userscache.get_user_by_uid(uid).unwrap();
-        let username = user.name().to_str().unwrap().to_owned();
-        let group = user.groups().unwrap();
-        Self { username, group }
+        let user = match userscache.get_user_by_uid(uid) {
+            Some(user) => user,
+            None => return Err(From::from("Couldn't extract user from its UID")),
+        };
+        let username = match user.name().to_str() {
+            Some(name) => name.to_owned(),
+            None => return Err(From::from("Couldn't convert &str to string")),
+        };
+        let group = match user.groups() {
+            Some(group) => group,
+            None => {
+                return Err(From::from(
+                    "Couldn't extract group membership from user data",
+                ))
+            }
+        };
+        Ok(Self { username, group })
     }
     /// Function that verify that the user is part of the list of authorized users as defined in the configuration file
     pub(crate) fn verify_user(&self, username: &str) -> Result<(), Box<dyn Error>> {

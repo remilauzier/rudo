@@ -78,7 +78,7 @@ pub(crate) fn terminal_uuid() -> Result<String, Box<dyn Error>> {
     } else if env::var("WINDOWID").is_ok() {
         let uuid = env::var("WINDOWID")?;
         debug!("WINDOWID: {}", uuid);
-        if uuid.parse::<u32>().unwrap() == 0 {
+        if uuid.parse::<u32>()? == 0 {
             error!("Error: terminal has a UUID of zero");
             return Err(From::from("Error: terminal has a UUID of zero"));
         }

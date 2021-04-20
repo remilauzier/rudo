@@ -106,7 +106,7 @@ pub(crate) fn authentification_pam(
 
         // Write the token to file
         debug!("Token will be written to {}", token_path);
-        token.create_token_file(&userdata.username)?;
+        token?.create_token_file(&userdata.username)?;
     }
 
     // Change the user to have privilege access accordingly to the configuration of the user

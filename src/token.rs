@@ -25,11 +25,11 @@ use crate::session;
 
 /// `verify_path` analyze if the token exist, and it's valid, then it returns a bool for the result.
 pub(crate) fn verify_path(
-    token_path: &str,
+    token_path_str: &str,
     tty_name: &str,
     tty_uuid: &str,
 ) -> Result<bool, Box<dyn Error>> {
-    let token_path = Path::new(&token_path);
+    let token_path = Path::new(&token_path_str);
 
     // Verify if a token exist and act accordingly
     debug!("Verifying if token_path exist and is a directory");
@@ -41,12 +41,12 @@ pub(crate) fn verify_path(
     } else if token_path.exists() && token_path.is_file() {
         // Read the token file and return false if invalid or expired
         debug!("Token will be read from file and validate");
-        let token = session::read_token_file(token_path.to_str().unwrap());
+        let token = session::read_token_file(token_path_str);
         if token.is_err() {
             debug!("Token was invalid");
             return Ok(false);
         }
-        if token.unwrap().verify_token(tty_name, tty_uuid).is_err() {
+        if token?.verify_token(tty_name, tty_uuid).is_err() {
             debug!("Token was invalid");
             return Ok(false);
         }

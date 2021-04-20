@@ -113,13 +113,16 @@ impl Config {
         Ok(())
     }
     /// Function to update the name of the impersonated user with the value give in the command-line
-    pub(crate) fn update(mut self, matches: &ArgMatches<'_>) -> Self {
+    pub(crate) fn update(mut self, matches: &ArgMatches<'_>) -> Result<Self, Box<dyn Error>> {
         // Update user value if CLI option is present
-        if matches.value_of("user").is_some() {
+        if matches.is_present("user") {
             debug!("User value will be update");
-            self.rudo.impuser = matches.value_of("user").unwrap().to_owned();
+            self.rudo.impuser = match matches.value_of("user") {
+                Some(user) => user.to_owned(),
+                None => return Err(From::from("user value couldn't be converted to a string")),
+            };
         }
-        self
+        Ok(self)
     }
 }
 // Default value for configuration
@@ -157,7 +160,7 @@ pub(crate) fn init_conf() -> Result<Config, Box<dyn Error>> {
         }
         // Return the valid data of the configuration file
         debug!("Returning the content of the configuration file");
-        conf = result.unwrap();
+        conf = result?;
     } else if path.exists() && path.is_dir() {
         // Error if it's a directory and let the user decide what to do
         let err = format!("Error: {} is a directory", CONFIG_PATH);

@@ -52,6 +52,15 @@ like group membership and validity of the account
     clippy::use_self,
     clippy::useless_let_if_seq,
     clippy::useless_transmute,
+    clippy::unnecessary_unwrap,
+    clippy::panicking_unwrap,
+    clippy::fallible_impl_from,
+    clippy::expect_used,
+    clippy::filetype_is_file,
+    clippy::get_unwrap,
+    clippy::unwrap_in_result,
+    clippy::unwrap_used,
+    clippy::let_underscore_must_use,
     clippy::cognitive_complexity
 )]
 
