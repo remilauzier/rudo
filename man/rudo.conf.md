@@ -1,6 +1,6 @@
-# rudo.conf 5 2021-04-18 0.8.1 "Rudo User manual"
+# rudo.conf 5 2021-04-19 0.8.2 "Rudo User manual"
 
-# NAME
+#  NAME
 rudo.conf - Configuration file for Rudo
 
 # SYNOPSIS
