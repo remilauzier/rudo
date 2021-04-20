@@ -248,7 +248,7 @@ mod tests {
 
     #[test]
     fn test_timestamp() -> Result<(), Box<dyn Error>> {
-        let token = Token::new(String::from("name"), String::from("1234"));
+        let token = Token::new(String::from("name"), String::from("1234"))?;
         let duration = std::time::Duration::from_secs(DEFAULT_SESSION_TIMEOUT);
         if token.final_timestamp - duration == token.timestamp {
             Ok(())

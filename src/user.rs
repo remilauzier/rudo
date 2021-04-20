@@ -109,7 +109,7 @@ mod tests {
 
     #[test]
     fn test_verify_group() -> Result<(), Box<dyn Error>> {
-        let userdata = User::new();
+        let userdata = User::new()?;
         if userdata.verify_group("test").is_err() {
             Ok(())
         } else {
@@ -118,7 +118,7 @@ mod tests {
     }
     #[test]
     fn test_verify_user() -> Result<(), Box<dyn Error>> {
-        let userdata = User::new();
+        let userdata = User::new()?;
         if userdata.verify_user("test").is_err() {
             Ok(())
         } else {
