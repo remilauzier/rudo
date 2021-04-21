@@ -59,9 +59,9 @@ clippy::let_underscore_must_use,       // It’s better to explicitly handle the
 clippy::cognitive_complexity,          // Verify the complexity of a function to not be further than 25. Can be change later if necessary.
 clippy::else_if_without_else           // Follow MISRA-C:2004 Rule 14.10 and be defensive in the code. Take care of 0.01% chance an error happens.
 )]
+// Authorized redundant else to conform to MISRA-C:2004 Rule 14.10 and to not conflict with clippy::else_if_without_else
 #![allow(clippy::redundant_else)]
 
-// Authorized redundant else to conform to MISRA-C:2004 Rule 14.10 and to not conflict with clippy::else_if_without_else
 use std::error::Error;
 
 /// Module to authenticate the Unix user with the provided configuration
