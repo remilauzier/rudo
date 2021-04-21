@@ -36,7 +36,7 @@ pub(crate) fn log_journald(debug: bool) -> Result<(), Box<dyn Error>> {
             log::set_max_level(LevelFilter::Info);
             info!("Starting logs");
         }
-    } else if journal::JournalLog::init().is_err() {
+    } else {
         return Err(From::from("Error can't initialize logging with journald"));
     }
     Ok(())

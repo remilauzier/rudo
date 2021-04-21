@@ -49,16 +49,19 @@ clippy::use_debug,                     // Prefer not to use {:?} in production c
 clippy::wrong_pub_self_convention,     // Be consistent and follow convention for clarity in code that use self
 clippy::needless_borrow,               // Removed needless borrow in code for better clarity. Nursery
 clippy::use_self,                      // Use self when its possible instead of given the name of a struct or other type everywhere. Nursery
-clippy::useless_let_if_seq,            // Prefer idiomatic rust for clarity in code .Nursery
+clippy::useless_let_if_seq,            // Prefer idiomatic rust for clarity in code . Nursery
 clippy::expect_used,                   // Refuse .expect() since Rudo is production code
 clippy::filetype_is_file,              // Prefer !FileType::is_dir() instead of is_file() since it can have problem with special file or symlink
 clippy::get_unwrap,                    // Prefer [0] instead of .get(0).unwrap when sure it's impossible to fail since it's more concise and clear
 clippy::unwrap_in_result,              // Refuse to change a recoverable error in a non-recoverable one
 clippy::unwrap_used,                   // Refuse .unwrap() since Rudo is production code
 clippy::let_underscore_must_use,       // It’s better to explicitly handle the value of a #[must_use] expr
-clippy::cognitive_complexity           // Verify the complexity of a function to not be further than 25. Can be change later if necessary.
+clippy::cognitive_complexity,          // Verify the complexity of a function to not be further than 25. Can be change later if necessary.
+clippy::else_if_without_else           // Follow MISRA-C:2004 Rule 14.10 and be defensive in the code. Take care of 0.01% chance an error happens.
 )]
+#![allow(clippy::redundant_else)]
 
+// Authorized redundant else to conform to MISRA-C:2004 Rule 14.10 and to not conflict with clippy::else_if_without_else
 use std::error::Error;
 
 /// Module to authenticate the Unix user with the provided configuration

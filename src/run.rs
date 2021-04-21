@@ -186,6 +186,10 @@ fn run_command(
 
         // Wait for the editor to finish, or the program will end before the editor
         child.wait()?;
+    } else {
+        return Err(From::from(
+            "You shouldn't be able to see this error. CLI should have stopped you",
+        ));
     }
     Ok(())
 }
