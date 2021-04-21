@@ -20,48 +20,43 @@ to authorize a user to have privilege access with verification
 like group membership and validity of the account
 */
 #![deny(
-    rustdoc,
-    future_incompatible,
-    nonstandard_style,
-    rust_2018_compatibility,
-    rust_2018_idioms,
-    warnings,
-    unused,
-    missing_docs,
-    unreachable_pub,
-    macro_use_extern_crate,
-    single_use_lifetimes,
-    unused_lifetimes
+rustdoc,                 // rustdoc is for verifying the validity of some part of the documentation
+future_incompatible,     // future_incompatible is to ensure to be ready for future version of rust
+nonstandard_style,       // nonstandard_style is for verifying that Rudo respect convention
+rust_2018_compatibility, // rust_2018_compatibility is for forcing the 2018 convention as some small thing can be ignored by compiler
+rust_2018_idioms,        // rust_2018_idioms is for forcing the 2018 convention as some small thing can be ignored by compiler
+warnings,                // Switch all warning to deny, to force better code by default
+unused,                  // Force to deny all unused code
+unreachable_pub,         // unreachable_pub is for verifying that public code get pub(crate) as Rudo is a binary only
+macro_use_extern_crate,  // Prefer to declare in each file the macro that must be use instead of #[macro_use]
+single_use_lifetimes,    // Prefer <'_> for single_use_lifetimes instead of <'a>
+unused_lifetimes,        // Detect unused_lifetimes and force to remove it
+unused_qualifications,   // Detect unnecessary qualifications for simpler code style
+missing_crate_level_docs // Verify that the crate always have a documentation explaining its utility
 )]
 #![deny(
-    clippy::all,
-    clippy::pedantic,
-    clippy::wildcard_dependencies,
-    clippy::cargo_common_metadata,
-    clippy::missing_docs_in_private_items,
-    clippy::create_dir,
-    clippy::verbose_file_reads,
-    clippy::str_to_string,
-    clippy::pattern_type_mismatch,
-    clippy::string_add,
-    clippy::string_to_string,
-    clippy::use_debug,
-    clippy::wrong_pub_self_convention,
-    clippy::fallible_impl_from,
-    clippy::needless_borrow,
-    clippy::use_self,
-    clippy::useless_let_if_seq,
-    clippy::useless_transmute,
-    clippy::unnecessary_unwrap,
-    clippy::panicking_unwrap,
-    clippy::fallible_impl_from,
-    clippy::expect_used,
-    clippy::filetype_is_file,
-    clippy::get_unwrap,
-    clippy::unwrap_in_result,
-    clippy::unwrap_used,
-    clippy::let_underscore_must_use,
-    clippy::cognitive_complexity
+clippy::all,                           // Deny everything that is in the correctness, performance, style and complexity categories to be more strict in code quality
+clippy::pedantic,                      // Deny everything in the pedantic categories to be more strict on code quality
+clippy::wildcard_dependencies,         // Refuse to work with * in a version of dependency since Rudo can't work with every possible version
+clippy::cargo_common_metadata,         // Verify that cargo.toml as a minimum of metadata to ensure discoverability
+clippy::missing_docs_in_private_items, // Verify that private items have documentation to help others understand Rudo functionality
+clippy::create_dir,                    // Ensure to use create_dir_all since we must create a long chain of directory in Rudo for the token
+clippy::verbose_file_reads,            // Use read_to_string instead of open and read to reduce code size. 1 lines instead of 3.
+clippy::str_to_string,                 // Prefer to_owned instead of to_string for better clarity since other type can be to_string
+clippy::string_add,                    // Prefer push_str instead of + for more clarity
+clippy::string_to_string,              // Prefer clone instead of to_string on string for better clarity
+clippy::use_debug,                     // Prefer not to use {:?} in production code, but it doesn't catch them all for now. Rust-1.51
+clippy::wrong_pub_self_convention,     // Be consistent and follow convention for clarity in code that use self
+clippy::needless_borrow,               // Removed needless borrow in code for better clarity. Nursery
+clippy::use_self,                      // Use self when its possible instead of given the name of a struct or other type everywhere. Nursery
+clippy::useless_let_if_seq,            // Prefer idiomatic rust for clarity in code .Nursery
+clippy::expect_used,                   // Refuse .expect() since Rudo is production code
+clippy::filetype_is_file,              // Prefer !FileType::is_dir() instead of is_file() since it can have problem with special file or symlink
+clippy::get_unwrap,                    // Prefer [0] instead of .get(0).unwrap when sure it's impossible to fail since it's more concise and clear
+clippy::unwrap_in_result,              // Refuse to change a recoverable error in a non-recoverable one
+clippy::unwrap_used,                   // Refuse .unwrap() since Rudo is production code
+clippy::let_underscore_must_use,       // It’s better to explicitly handle the value of a #[must_use] expr
+clippy::cognitive_complexity           // Verify the complexity of a function to not be further than 25. Can be change later if necessary.
 )]
 
 use std::error::Error;
