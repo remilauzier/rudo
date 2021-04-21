@@ -27,7 +27,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::CONFIG_PATH;
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Clone)]
 /// `UserConf` structure is the representation of the data of a part of the configuration file
 pub(crate) struct UserConf {
     /// The Unix username of an authorized user
@@ -63,7 +63,7 @@ impl Default for UserConf {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Clone)]
 /// `RudoConf` is where the program stock is configuration
 pub(crate) struct RudoConf {
     /// impuser is the Unix name of the user you want to impersonate
@@ -78,7 +78,7 @@ impl Default for RudoConf {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Clone)]
 /// Config is the sum of `UserConf` and `RudoConf` as represent in the configuration file
 pub(crate) struct Config {
     /// rudo is where the program stock is configuration

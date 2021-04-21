@@ -31,7 +31,7 @@ use crate::SESSION_DIR;
 
 /// Create a structure to contain the UUID of the terminal, and the timestamp to determine
 /// if the session is valid for later use
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize)]
 pub(crate) struct Token {
     /// Name of the TTY
     tty_name: String,
