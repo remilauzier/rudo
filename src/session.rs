@@ -66,11 +66,11 @@ impl Token {
     pub(crate) fn create_token_file(&self, username: &str) -> Result<(), Box<dyn Error>> {
         // Create the path of the file with the name of the program, the username to distinguish user
         // and the name of TTY to let user have multiple session, on multiple terminal
-        let token_path = format!("{}{}{}", SESSION_DIR, username, self.tty_name);
-        let token_path = Path::new(&token_path);
+        let token_path_string = format!("{}{}{}", SESSION_DIR, username, self.tty_name);
+        let token_path = Path::new(&token_path_string);
         debug!(
-            "token_path has been created, will verify if it exists : {:?}",
-            token_path
+            "token_path has been created, will verify if it exists : {}",
+            token_path_string
         );
 
         // Verify the existence of the path to act accordingly
@@ -107,11 +107,15 @@ impl Token {
                 Some(path) => path,
                 None => return Err(From::from("Error in token_path! Unable to give the parent")),
             };
+            let path_str = match path.to_str() {
+                Some(data) => data,
+                None => return Err(From::from("Couldn't convert a path to str!")),
+            };
 
             // Create the directory with mode 600 to restraint access
             debug!(
-                "Create directory: {:?} with mode 600 to restraint access",
-                path
+                "Create directory: {} with mode 600 to restraint access",
+                path_str
             );
             DirBuilder::new().mode(0o600).recursive(true).create(path)?;
 
@@ -193,15 +197,15 @@ pub(crate) fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
     }
 
     // Create the second part of the path for further use
-    let user_path = format!("{}{}/", SESSION_DIR, username);
-    let user_path = Path::new(&user_path);
+    let user_path_string = format!("{}{}/", SESSION_DIR, username);
+    let user_path = Path::new(&user_path_string);
 
     // Verifying if the path exist and act accordingly
-    debug!("Verifying that user_path exist: {:?}", user_path);
+    debug!("Verifying that user_path exist: {}", user_path_string);
     if !user_path.exists() {
         info!(
-            "{:?} doesn't exist, creating it with mode 600 to restraint access",
-            user_path
+            "{} doesn't exist, creating it with mode 600 to restraint access",
+            user_path_string
         );
         // Create the path with permissions of 600 to restraint access
         DirBuilder::new()
@@ -209,15 +213,15 @@ pub(crate) fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
             .recursive(true)
             .create(user_path)?;
     } else if user_path.is_file() {
-        error!("Error: {:?} is not a directory", user_path);
-        let err = format!("Error: {:?} is not a directory", user_path);
+        let err = format!("Error: {} is not a directory", user_path_string);
+        error!("{}", err);
         return Err(From::from(err));
     } else {
         // Extract permissions from the directory for further use
         let metadata = fs::metadata(user_path)?;
         let mut perms = metadata.permissions();
         // Verifying if the permission of the directory and act accordingly
-        debug!("Verifying {:?} permissions", user_path);
+        debug!("Verifying {} permissions", user_path_string);
         if perms.mode() != 0o600 {
             warn!("Permissions are incorrect, adjusting it to 600 to restraint access");
             perms.set_mode(0o600);
