@@ -31,7 +31,7 @@ pub(crate) fn password_input(
     if password {
         // Authenticate the user (ask for password, 2nd-factor token, fingerprint, etc.)
         debug!("Password will be asked a maximum of 3 time to the user");
-        let mut count = 0;
+        let mut count: u8 = 0;
         while count < 3 {
             if let Ok(()) = context.authenticate(Flag::DISALLOW_NULL_AUTHTOK) {
                 break;
