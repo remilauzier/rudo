@@ -1,6 +1,6 @@
 [package]
 name = "rudo"
-version = "0.8.3"
+version = "0.8.4"
 edition = "2018"
 license = "GPL-2.0-or-later"
 authors = ["Rémi Lauzier <remilauzier@protonmail.com>"]
@@ -27,7 +27,11 @@ pam-client = "0.2"
 systemd = "0.8"
 
 [target.'cfg(target_os = "macos")'.dependencies]
-oslog = "0.1"
+oslog = { version = "0.1", optional = true }
+
+[features]
+default = []
+macos = ["oslog"]
 
 [profile.dev]
 lto = true

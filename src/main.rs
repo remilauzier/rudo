@@ -106,7 +106,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Use journald for logging
     journal::log_journald(debug)?;
 
-    #[cfg(target_os = "macos")]
+    #[cfg(all(target_os = "macos", feature = "macos"))]
     // Use oslog for logging
     journal::log_oslog(debug)?;
 

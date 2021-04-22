@@ -18,7 +18,7 @@
 use std::error::Error;
 
 use log::{info, LevelFilter};
-#[cfg(target_os = "macos")]
+#[cfg(all(target_os = "macos", feature = "macos"))]
 use oslog::OsLogger;
 #[cfg(target_os = "linux")]
 use systemd::journal;
@@ -42,7 +42,7 @@ pub(crate) fn log_journald(debug: bool) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-#[cfg(target_os = "macos")]
+#[cfg(all(target_os = "macos", feature = "macos"))]
 /// Function to decide the maximum level of logging that oslog server will receive with the user supply option
 pub(crate) fn log_oslog(debug: bool) -> Result<(), Box<dyn Error>> {
     if debug {
@@ -65,7 +65,7 @@ pub(crate) fn log_oslog(debug: bool) -> Result<(), Box<dyn Error>> {
 mod tests {
     #[cfg(target_os = "linux")]
     use super::log_journald;
-    #[cfg(target_os = "macos")]
+    #[cfg(all(target_os = "macos", feature = "macos"))]
     use super::log_oslog;
     use super::Error;
 
@@ -75,7 +75,7 @@ mod tests {
         log_journald(false)
     }
 
-    #[cfg(target_os = "macos")]
+    #[cfg(all(target_os = "macos", feature = "macos"))]
     #[test]
     fn test_oslog() -> Result<(), Box<dyn Error>> {
         log_oslog(false)
