@@ -5,7 +5,7 @@
 %global crate rudo
 
 Name:           rust-%{crate}
-Version:        0.8.2
+Version:        0.8.3
 Release:        1%{?dist}
 Summary:        Utility to gain privilege access on Unix system with Pam
 
@@ -34,7 +34,7 @@ Requires:       pam
 %license LICENSE
 %{_mandir}/man1/rudo.1*
 %{_mandir}/man5/rudo.conf.5*
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/pam.d/rudo
+%attr(0644,root,root) %config %{_sysconfdir}/pam.d/rudo
 %attr(0640,root,root) %config(noreplace) %{_sysconfdir}/rudo.conf
 %attr(4755,root,root) %{_bindir}/rudo
 
@@ -65,5 +65,5 @@ install -pm 0644 man/rudo.conf.5 %{buildroot}%{_mandir}/man5/rudo.conf.5
 %endif
 
 %changelog
-* Mon Apr 19 21:55:29 EDT 2021 Rémi Lauzier <remilauzier@protonmail.com> - 0.8.2-1
+* Thu Apr 22 00:49:49 EDT 2021 Rémi Lauzier <remilauzier@protonmail.com> - 0.8.3-1
 - Initial package

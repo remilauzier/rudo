@@ -8,7 +8,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/remilauzier/rudo?style=flat-square)](https://github.com/remilauzier/rudo/issues)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/remilauzier/rudo?style=flat-square)
 ![Lines of code](https://img.shields.io/tokei/lines/github/remilauzier/rudo?style=flat-square)
-[![dependency status](https://deps.rs/crate/rudo/0.8.2/status.svg)](https://deps.rs/crate/rudo/0.8.2)
+[![dependency status](https://deps.rs/crate/rudo/0.8.3/status.svg)](https://deps.rs/crate/rudo/0.8.3)
 # Description
 **Rudo** "Rust User do" allows a system administrator to give certain users the ability to run some commands as **root**
 or another user while logging all commands, and it's arguments. \
@@ -49,5 +49,8 @@ You need to change the owner of the binary to root for now to make it work, exce
 **GPLv2 or later**
 
 # Warning
-Required `serde_yaml` `>=0.8.4` because of [RUSTSEC-2018-0005](https://rustsec.org/advisories/RUSTSEC-2018-0005.html) \
+
+**Required** `serde_yaml` `>=0.8.4` because
+of [RUSTSEC-2018-0005](https://rustsec.org/advisories/RUSTSEC-2018-0005.html) \
+**Rudo** as use `serde_yaml` version `0.8.17` at its debut, so it has never been affected by it \
 **No security audit was perform on Rudo**
