@@ -61,7 +61,20 @@ pub(crate) fn vec_to_string(data: Vec<&str>) -> String {
 
 #[cfg(test)]
 mod tests {
-    use super::{Command, Error};
+    use super::{vec_to_string, Command, Error};
+
+    #[test]
+    fn test_vec_to_string() -> Result<(), Box<dyn Error>> {
+        let data = vec!["test", "case"];
+        let buffer = vec_to_string(data);
+        if buffer.is_empty() {
+            Err(From::from("Test failed. Shouldn't be empty"))
+        } else if buffer == "testcase" {
+            Ok(())
+        } else {
+            Err(From::from("Test failed to convert vec to string correctly"))
+        }
+    }
 
     #[test]
     fn test_command_new() -> Result<(), Box<dyn Error>> {
@@ -72,6 +85,7 @@ mod tests {
             Err(From::from("Test failed to create structure"))
         }
     }
+
     #[test]
     fn test_command_new_empty() -> Result<(), Box<dyn Error>> {
         let command = Command::new(vec![]);
