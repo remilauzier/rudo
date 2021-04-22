@@ -105,7 +105,7 @@ impl Config {
         debug!("Syncing data to drive");
         file.sync_all()?;
         // Set permissions of 640 to restraint access
-        debug!("Set file permission to 640 to restreint access");
+        debug!("Set file permission to 640 to restraint access");
         let mut perms = file.metadata()?.permissions();
         perms.set_mode(0o640);
         file.set_permissions(perms)?;
