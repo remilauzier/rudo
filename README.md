@@ -49,5 +49,5 @@ You need to change the owner of the binary to root for now to make it work, exce
 **GPLv2 or later**
 
 # Warning
-Required `serde_yaml` `>=0.8.4` because of [RUSTSEC-2018-0005](https://rustsec.org/advisories/RUSTSEC-2018-0005.html)
+Required `serde_yaml` `>=0.8.4` because of [RUSTSEC-2018-0005](https://rustsec.org/advisories/RUSTSEC-2018-0005.html) \
 **No security audit was perform on Rudo**
