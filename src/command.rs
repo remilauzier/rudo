@@ -50,6 +50,15 @@ impl<'a> Command<'a> {
     }
 }
 
+/// `vec_to_string` take a vector of str and put each str in a string for later use
+pub(crate) fn vec_to_string(data: Vec<&str>) -> String {
+    let mut buffer = String::new();
+    for buf in data {
+        buffer.push_str(buf);
+    }
+    buffer
+}
+
 #[cfg(test)]
 mod tests {
     use super::{Command, Error};

@@ -56,7 +56,7 @@ clippy::get_unwrap,                    // Prefer [0] instead of .get(0).unwrap w
 clippy::unwrap_in_result,              // Refuse to change a recoverable error in a non-recoverable one. Rule LANG-NOPANIC anssi
 clippy::unwrap_used,                   // Refuse .unwrap() since Rudo is production code. Rule LANG-NOPANIC anssi
 clippy::let_underscore_must_use,       // It’s better to explicitly handle the value of a #[must_use] expr
-clippy::cognitive_complexity,          // Verify the complexity of a function to not be further than 25. Can be change later if necessary.
+clippy::cognitive_complexity,          // Verify the complexity of a function to not be further than 25. Can be change later if necessary. Nursery
 clippy::else_if_without_else,          // Follow MISRA-C:2004 Rule 14.10 and be defensive in the code. Take care of 0.01% chance an error happens.
 clippy::mem_forget,                    // Don't use mem_forget since it can cause memory leaks. Rule MEM-FORGET and Recommendation MEM-FORGET-LINT anssi
 clippy::shadow_reuse,                  // Ensure the code is easy to follow by refusing meaningless shadowing

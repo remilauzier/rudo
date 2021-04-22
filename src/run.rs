@@ -120,11 +120,12 @@ fn run_command(
             }
         };
         let data = command::Command::new(command)?;
+        let args = command::vec_to_string(data.args.clone());
 
         // Log the user, and it's command for further audit by system administrator
         info!(
-            "{} has been authorized. Command: {} {:?}",
-            userdata.username, data.program, data.args
+            "{} has been authorized. Command: {} {}",
+            userdata.username, data.program, args
         );
 
         // Creation and ignition of the new command
