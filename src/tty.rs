@@ -48,6 +48,8 @@ pub(crate) fn get_tty_name() -> Result<String, Box<dyn Error>> {
     }
 }
 
+/// `terminal_uuid` is a function to determine the identity of the use terminal across time
+/// with different environment variable.
 /// WINDOWID is the least trust because of is small size and don't change for different tabs.
 /// It only changes the last five number most of the time,
 /// But it is used by st, xterm, sakura, kitty, xfce terminal, mate terminal and terminology.
