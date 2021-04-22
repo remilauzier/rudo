@@ -8,7 +8,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/remilauzier/rudo?style=flat-square)](https://github.com/remilauzier/rudo/issues)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/remilauzier/rudo?style=flat-square)
 ![Lines of code](https://img.shields.io/tokei/lines/github/remilauzier/rudo?style=flat-square)
-[![dependency status](https://deps.rs/crate/rudo/0.8.3/status.svg)](https://deps.rs/crate/rudo/0.8.3)
+[![dependency status](https://deps.rs/crate/rudo/0.8.4/status.svg)](https://deps.rs/crate/rudo/0.8.4)
 # Description
 **Rudo** "Rust User do" allows a system administrator to give certain users the ability to run some commands as **root**
 or another user while logging all commands, and it's arguments. \
