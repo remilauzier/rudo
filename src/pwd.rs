@@ -44,5 +44,5 @@ pub(crate) fn password_input(
             return Err(From::from("You have made three mistake! Rudo Out!"));
         }
     }
-    Ok(())
+    return Ok(());
 }

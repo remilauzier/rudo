@@ -48,18 +48,18 @@ impl UserConf {
             debug!("Greeting value will be update");
             self.greeting = true;
         }
-        self
+        return self;
     }
 }
 
 impl Default for UserConf {
     fn default() -> Self {
-        Self {
+        return Self {
             username: String::from("root"),
             group: String::from("wheel"),
             password: true,
             greeting: true,
-        }
+        };
     }
 }
 
@@ -72,9 +72,9 @@ pub(crate) struct RudoConf {
 
 impl Default for RudoConf {
     fn default() -> Self {
-        Self {
+        return Self {
             impuser: String::from("root"),
-        }
+        };
     }
 }
 
@@ -110,7 +110,7 @@ impl Config {
         perms.set_mode(0o640);
         file.set_permissions(perms)?;
 
-        Ok(())
+        return Ok(());
     }
     /// Function to update the name of the impersonated user with the value give in the command-line
     pub(crate) fn update(mut self, matches: &ArgMatches<'_>) -> Result<Self, Box<dyn Error>> {
@@ -122,16 +122,16 @@ impl Config {
                 None => return Err(From::from("user value couldn't be converted to a string")),
             };
         }
-        Ok(self)
+        return Ok(self);
     }
 }
 // Default value for configuration
 impl Default for Config {
     fn default() -> Self {
-        Self {
+        return Self {
             rudo: RudoConf::default(),
             user: vec![UserConf::default()],
-        }
+        };
     }
 }
 /// Function to initialize the configuration with the default data if necessary
@@ -172,7 +172,7 @@ pub(crate) fn init_conf() -> Result<Config, Box<dyn Error>> {
         eprintln!("{} doesn't exist! Creating it", CONFIG_PATH);
         conf.create_config_file()?;
     }
-    Ok(conf)
+    return Ok(conf);
 }
 
 /// Function to read the configuration file and extract its data
@@ -186,7 +186,7 @@ pub(crate) fn read_config_file() -> Result<Config, Box<dyn Error>> {
     debug!("Transform data to a structure with serde");
     let config: Config = serde_yaml::from_str(&buffer)?;
     // Return the configuration
-    Ok(config)
+    return Ok(config);
 }
 
 /// Extract, from the vector of `UserConf` of the configuration file, the user presently accessing Rudo,
@@ -198,7 +198,7 @@ pub(crate) fn extract_userconf(conf: Vec<UserConf>, username: &str) -> UserConf 
             user = cf;
         }
     }
-    user
+    return user;
 }
 
 #[cfg(test)]

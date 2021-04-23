@@ -55,12 +55,12 @@ impl Token {
             Some(time) => time,
             None => return Err(From::from("Couldn't create final timestamp")),
         };
-        Ok(Self {
+        return Ok(Self {
             tty_name,
             tty_uuid,
             timestamp,
             final_timestamp,
-        })
+        });
     }
     /// Create the file that will contain the token if it doesn't exist
     pub(crate) fn create_token_file(&self, username: &str) -> Result<(), Box<dyn Error>> {
@@ -141,7 +141,7 @@ impl Token {
             perms.set_mode(0o600);
             file.set_permissions(perms)?;
         }
-        Ok(())
+        return Ok(());
     }
     /// Verify that the token is valid to decide if we must reuse the session or not
     pub(crate) fn verify_token(
@@ -152,16 +152,16 @@ impl Token {
         let clock = SystemTime::now();
         if self.final_timestamp <= clock {
             debug!("Session has expired");
-            Err(From::from("Session has expired"))
+            return Err(From::from("Session has expired"));
         } else if self.tty_name == tty_name
             && self.tty_uuid == tty_uuid
             && self.final_timestamp > clock
         {
             debug!("Session is valid, will reuse it");
-            Ok(())
+            return Ok(());
         } else {
             debug!("Not the same session");
-            Err(From::from("Not the same session"))
+            return Err(From::from("Not the same session"));
         }
     }
 }
@@ -228,7 +228,7 @@ pub(crate) fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
             fs::set_permissions(user_path, perms)?;
         }
     }
-    Ok(())
+    return Ok(());
 }
 
 /// Function to extract the token from its file with `serde_yaml`
@@ -243,7 +243,7 @@ pub(crate) fn read_token_file(token_path: &str) -> Result<Token, Box<dyn Error>>
     // Transform the buffer to the token structure
     debug!("Transform the buffer to the token structure");
     let token: Token = serde_yaml::from_str(&buffer)?;
-    Ok(token)
+    return Ok(token);
 }
 
 #[cfg(test)]

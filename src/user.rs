@@ -51,7 +51,7 @@ impl User {
                 ))
             }
         };
-        Ok(Self { username, group })
+        return Ok(Self { username, group });
     }
     /// Function that verify that the user is part of the list of authorized users as defined in the configuration file
     pub(crate) fn verify_user(&self, username: &str) -> Result<(), Box<dyn Error>> {
@@ -62,14 +62,14 @@ impl User {
         let actualuser = &self.username;
         if actualuser == username {
             debug!("{} has been authorized", actualuser);
-            Ok(())
+            return Ok(());
         } else {
             let err = format!(
                 "{} is not authorized to use Rudo! Will be report to administrator!",
                 actualuser
             );
             error!("{}", err);
-            Err(From::from(err))
+            return Err(From::from(err));
         }
     }
     /// Function that take the vector containing the list of groups the user is a member,
@@ -90,15 +90,15 @@ impl User {
         }
         if count == 1 {
             info!("User is a member of the authorized group: {}", arggroup);
-            Ok(())
+            return Ok(());
         } else if count >= 2 {
             let err = format!("{} is list multiple time", arggroup);
             error!("{}", err);
-            Err(From::from(err))
+            return Err(From::from(err));
         } else {
             let error = format!("User is not a member of the authorized group: {}", arggroup);
             error!("{}", error);
-            Err(From::from(error))
+            return Err(From::from(error));
         }
     }
 }

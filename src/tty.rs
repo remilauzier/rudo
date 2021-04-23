@@ -44,7 +44,7 @@ pub(crate) fn get_tty_name() -> Result<String, Box<dyn Error>> {
         // Transform the c_char to a rust string
         let ttyname_rust = CStr::from_ptr(ttyname_c).to_string_lossy().into_owned();
         debug!("Terminal: {} is use", ttyname_rust);
-        Ok(ttyname_rust)
+        return Ok(ttyname_rust);
     }
 }
 
@@ -60,23 +60,23 @@ pub(crate) fn terminal_uuid() -> Result<String, Box<dyn Error>> {
     if env::var("GNOME_TERMINAL_SCREEN").is_ok() {
         let uuid = env::var("GNOME_TERMINAL_SCREEN")?;
         debug!("GNOME_TERMINAL_SCREEN: {}", uuid);
-        Ok(uuid)
+        return Ok(uuid);
     } else if env::var("SHELL_SESSION_ID").is_ok() {
         let uuid = env::var("SHELL_SESSION_ID")?;
         debug!("SHELL_SESSION_ID: {}", uuid);
-        Ok(uuid)
+        return Ok(uuid);
     } else if env::var("TERMINATOR_UUID").is_ok() {
         let uuid = env::var("TERMINATOR_UUID")?;
         debug!("TERMINATOR_UUID: {}", uuid);
-        Ok(uuid)
+        return Ok(uuid);
     } else if env::var("TILIX_ID").is_ok() {
         let uuid = env::var("TILIX_ID")?;
         debug!("TILIX_ID: {}", uuid);
-        Ok(uuid)
+        return Ok(uuid);
     } else if env::var("ROXTERM_ID").is_ok() {
         let uuid = env::var("ROXTERM_ID")?;
         debug!("ROXTERM_ID: {}", uuid);
-        Ok(uuid)
+        return Ok(uuid);
     } else if env::var("WINDOWID").is_ok() {
         let uuid = env::var("WINDOWID")?;
         debug!("WINDOWID: {}", uuid);
@@ -84,10 +84,10 @@ pub(crate) fn terminal_uuid() -> Result<String, Box<dyn Error>> {
             error!("Error: terminal has a UUID of zero");
             return Err(From::from("Error: terminal has a UUID of zero"));
         }
-        Ok(uuid)
+        return Ok(uuid);
     } else {
         error!("Couldn't determine the terminal UUID");
-        Err(From::from("Couldn't determine the terminal UUID"))
+        return Err(From::from("Couldn't determine the terminal UUID"));
     }
 }
 

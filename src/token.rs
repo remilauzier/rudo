@@ -37,7 +37,7 @@ pub(crate) fn verify_path(
         // Erase the path if it's a directory
         error!("token_path is a directory and will be erased");
         fs::remove_dir(token_path)?;
-        Ok(false)
+        return Ok(false);
     } else if token_path.exists() && token_path.is_file() {
         // Read the token file and return false if invalid or expired
         debug!("Token will be read from file and validate");
@@ -51,10 +51,10 @@ pub(crate) fn verify_path(
             return Ok(false);
         }
         debug!("Token was valid");
-        Ok(true)
+        return Ok(true);
     } else {
         debug!("Token was non-existent");
-        Ok(false)
+        return Ok(false);
     }
 }
 

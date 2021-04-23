@@ -65,10 +65,13 @@ clippy::as_conversions,                // Ensure no lossy conversion are perform
 clippy::exit,                          // Ensure no exit() is performed on code. Always use an error that go to the main function.
 clippy::multiple_inherent_impl,        // Ensure to have only one impl for each struct
 clippy::integer_arithmetic,            // Prefer safer method to avoid overflow like saturating_add(). Rule LANG-ARITH anssi
-clippy::indexing_slicing               // Prefer get() method with good error management to avoid panic in runtime. Rule LANG-ARRINDEXING anssi
+clippy::indexing_slicing,              // Prefer get() method with good error management to avoid panic in runtime. Rule LANG-ARRINDEXING anssi
+clippy::implicit_return                // Prefer to have explicit return instead of implicit for better clarity in some part of the code
 )]
 // Authorized redundant else to conform to MISRA-C:2004 Rule 14.10 and to not conflict with clippy::else_if_without_else
 #![allow(clippy::redundant_else)]
+// Allow needless return to remove conflict with clippy::implicit_return for better clarity in some part of the code
+#![allow(clippy::needless_return)]
 
 use std::error::Error;
 
@@ -121,5 +124,5 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Principal function of Rudo
     run::run(&matches)?;
 
-    Ok(())
+    return Ok(());
 }

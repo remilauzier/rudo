@@ -39,7 +39,7 @@ pub(crate) fn log_journald(debug: bool) -> Result<(), Box<dyn Error>> {
     } else {
         return Err(From::from("Error can't initialize logging with journald"));
     }
-    Ok(())
+    return Ok(());
 }
 
 #[cfg(all(target_os = "macos", feature = "macos"))]
@@ -58,7 +58,7 @@ pub(crate) fn log_oslog(debug: bool) -> Result<(), Box<dyn Error>> {
             .init()?;
         info!("Starting logs");
     }
-    Ok(())
+    return Ok(());
 }
 
 #[cfg(test)]

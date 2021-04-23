@@ -45,7 +45,7 @@ pub(crate) fn authentification(
     );
     userdata.verify_group(&userconf.group)?;
 
-    Ok(())
+    return Ok(());
 }
 
 /// Function to verify that the user is authorized to run Rudo with Pam and if a precedent session is valid
@@ -113,5 +113,5 @@ pub(crate) fn authentification_pam(
     context.set_user(Some(conf.rudo.impuser.as_str()))?;
     info!("User was change to: {}", conf.rudo.impuser);
 
-    Ok(context)
+    return Ok(context);
 }

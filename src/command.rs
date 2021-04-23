@@ -46,7 +46,7 @@ impl<'a> Command<'a> {
         // Copy the rest of the value and return it
         let args = command;
         debug!("Return the new Command structure");
-        Ok(Self { program, args })
+        return Ok(Self { program, args });
     }
 }
 
@@ -56,7 +56,7 @@ pub(crate) fn vec_to_string(data: Vec<&str>) -> String {
     for buf in data {
         buffer.push_str(buf);
     }
-    buffer
+    return buffer;
 }
 
 #[cfg(test)]

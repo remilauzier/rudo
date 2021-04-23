@@ -91,5 +91,5 @@ pub(crate) fn init_command_line() -> ArgMatches<'static> {
                 .takes_value(true),
         )
         .get_matches();
-    matches
+    return matches;
 }
