@@ -100,13 +100,13 @@ mod tests {
         env::set_var("GNOME_TERMINAL_SCREEN", "325768");
         let ttyuuid = terminal_uuid()?;
         if ttyuuid.is_empty() {
-            Err(From::from("ttyuuid shouldn't be empty"))
+            return Err(From::from("ttyuuid shouldn't be empty"));
         } else if ttyuuid == "325768" {
-            Ok(())
+            return Ok(());
         } else {
-            Err(From::from(
+            return Err(From::from(
                 "Test Failed: should have been the same number as WINDOWID",
-            ))
+            ));
         }
     }
 }

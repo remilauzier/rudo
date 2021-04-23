@@ -72,12 +72,12 @@ mod tests {
     #[cfg(target_os = "linux")]
     #[test]
     fn test_journald() -> Result<(), Box<dyn Error>> {
-        log_journald(false)
+        return log_journald(false);
     }
 
     #[cfg(all(target_os = "macos", feature = "macos"))]
     #[test]
     fn test_oslog() -> Result<(), Box<dyn Error>> {
-        log_oslog(false)
+        return log_oslog(false);
     }
 }

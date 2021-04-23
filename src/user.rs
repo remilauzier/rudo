@@ -111,18 +111,18 @@ mod tests {
     fn test_verify_group() -> Result<(), Box<dyn Error>> {
         let userdata = User::new()?;
         if userdata.verify_group("test").is_err() {
-            Ok(())
+            return Ok(());
         } else {
-            Err(From::from("The group should not correspond with test"))
+            return Err(From::from("The group should not correspond with test"));
         }
     }
     #[test]
     fn test_verify_user() -> Result<(), Box<dyn Error>> {
         let userdata = User::new()?;
         if userdata.verify_user("test").is_err() {
-            Ok(())
+            return Ok(());
         } else {
-            Err(From::from("The user should not correspond with test"))
+            return Err(From::from("The user should not correspond with test"));
         }
     }
 }

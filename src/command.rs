@@ -68,11 +68,11 @@ mod tests {
         let data = vec!["test", "case"];
         let buffer = vec_to_string(data);
         if buffer.is_empty() {
-            Err(From::from("Test failed. Shouldn't be empty"))
+            return Err(From::from("Test failed. Shouldn't be empty"));
         } else if buffer == "testcase" {
-            Ok(())
+            return Ok(());
         } else {
-            Err(From::from("Test failed to convert vec to string correctly"))
+            return Err(From::from("Test failed to convert vec to string correctly"));
         }
     }
 
@@ -80,9 +80,9 @@ mod tests {
     fn test_command_new() -> Result<(), Box<dyn Error>> {
         let command = Command::new(vec!["test"]);
         if command.is_ok() {
-            Ok(())
+            return Ok(());
         } else {
-            Err(From::from("Test failed to create structure"))
+            return Err(From::from("Test failed to create structure"));
         }
     }
 
@@ -90,18 +90,18 @@ mod tests {
     fn test_command_new_empty() -> Result<(), Box<dyn Error>> {
         let command = Command::new(vec![]);
         if command.is_err() {
-            Ok(())
+            return Ok(());
         } else {
-            Err(From::from("Test failed to see an empty vector"))
+            return Err(From::from("Test failed to see an empty vector"));
         }
     }
     #[test]
     fn test_command_new_full() -> Result<(), Box<dyn Error>> {
         let command = Command::new(vec!["test", "command", "full"])?;
         if command.program == "test" && command.args == vec!["command", "full"] {
-            Ok(())
+            return Ok(());
         } else {
-            Err(From::from("Test failed to reproduced structure"))
+            return Err(From::from("Test failed to reproduced structure"));
         }
     }
 }

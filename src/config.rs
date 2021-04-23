@@ -210,9 +210,9 @@ mod tests {
         let conf = UserConf::default();
         let conf = vec![conf];
         if extract_userconf(conf, "root").username == "root" {
-            Ok(())
+            return Ok(());
         } else {
-            Err(From::from("Test failed when extracting the userconf"))
+            return Err(From::from("Test failed when extracting the userconf"));
         }
     }
 }

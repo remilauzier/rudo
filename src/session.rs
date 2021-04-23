@@ -255,9 +255,9 @@ mod tests {
         let token = Token::new(String::from("name"), String::from("1234"))?;
         let duration = std::time::Duration::from_secs(DEFAULT_SESSION_TIMEOUT);
         if token.final_timestamp - duration == token.timestamp {
-            Ok(())
+            return Ok(());
         } else {
-            Err(From::from("Test failed: timestamp creation got wrong"))
+            return Err(From::from("Test failed: timestamp creation got wrong"));
         }
     }
 }
