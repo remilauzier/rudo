@@ -17,7 +17,7 @@
  */
 use std::error::Error;
 
-use log::{debug, error};
+use log::debug;
 
 /// Structure to keep the result of the extraction of the command give in the command-line interface
 pub(crate) struct Command<'a> {
@@ -30,23 +30,23 @@ pub(crate) struct Command<'a> {
 impl<'a> Command<'a> {
     /// Create the new Command with the command supply by the user with the command-line interface
     pub(crate) fn new(mut command: Vec<&'a str>) -> Result<Self, Box<dyn Error>> {
-        // Verify that it's not empty
-        debug!("Verifying that command is not empty");
-        if command.is_empty() {
-            // Error if the command is empty
-            error!("Command is empty");
-            Err(From::from("Command is empty"))
-        } else {
-            debug!("command is not empty, proceeding to extraction");
-            let mut program = String::new();
-            // Extract the first word then remove it
-            program.push_str(command[0]);
-            command.remove(0);
-            // Copy the rest of the value and return it
-            let args = command;
-            debug!("Return the new Command structure");
-            Ok(Self { program, args })
-        }
+        let mut program = String::new();
+        // Extract the first word then remove it after verifying its existence
+        debug!("Extract the first word then remove it after verifying its existence");
+        let data = match command.get(0) {
+            Some(data) => data,
+            None => {
+                return Err(From::from(
+                    "Command is empty! Please give Rudo something to launch",
+                ))
+            }
+        };
+        program.push_str(data);
+        command.remove(0);
+        // Copy the rest of the value and return it
+        let args = command;
+        debug!("Return the new Command structure");
+        Ok(Self { program, args })
     }
 }
 

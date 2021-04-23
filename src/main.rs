@@ -52,7 +52,7 @@ clippy::use_self,                      // Use self when its possible instead of 
 clippy::useless_let_if_seq,            // Prefer idiomatic rust for clarity in code . Nursery
 clippy::expect_used,                   // Refuse .expect() since Rudo is production code. Rule LANG-NOPANIC anssi
 clippy::filetype_is_file,              // Prefer !FileType::is_dir() instead of is_file() since it can have problem with special file or symlink
-clippy::get_unwrap,                    // Prefer [0] instead of .get(0).unwrap when sure it's impossible to fail since it's more concise and clear
+clippy::get_unwrap,                    // Prefer get() with good error management instead of .get(0).unwrap to avoid panic at runtime. Rule LANG-ARRINDEXING anssi
 clippy::unwrap_in_result,              // Refuse to change a recoverable error in a non-recoverable one. Rule LANG-NOPANIC anssi
 clippy::unwrap_used,                   // Refuse .unwrap() since Rudo is production code. Rule LANG-NOPANIC anssi
 clippy::let_underscore_must_use,       // It’s better to explicitly handle the value of a #[must_use] expr
@@ -64,8 +64,8 @@ clippy::shadow_same,                   // Ensure the code is easy to follow by r
 clippy::as_conversions,                // Ensure no lossy conversion are performed silently
 clippy::exit,                          // Ensure no exit() is performed on code. Always use an error that go to the main function.
 clippy::multiple_inherent_impl,        // Ensure to have only one impl for each struct
-clippy::wrong_pub_self_convention,     // Follow the convention for pub self like for non pub self
-clippy::integer_arithmetic             // Prefer safer method to avoid overflow like saturating_add(). Rule LANG-ARITH anssi
+clippy::integer_arithmetic,            // Prefer safer method to avoid overflow like saturating_add(). Rule LANG-ARITH anssi
+clippy::indexing_slicing               // Prefer get() method with good error management to avoid panic in runtime. Rule LANG-ARRINDEXING anssi
 )]
 // Authorized redundant else to conform to MISRA-C:2004 Rule 14.10 and to not conflict with clippy::else_if_without_else
 #![allow(clippy::redundant_else)]
