@@ -38,14 +38,14 @@ missing_crate_level_docs // Verify that the crate always have a documentation ex
 clippy::all,                           // Deny everything that is in the correctness, performance, style and complexity categories to be more strict in code quality
 clippy::pedantic,                      // Deny everything in the pedantic categories to be more strict on code quality
 clippy::wildcard_dependencies,         // Refuse to work with * in a version of dependency since Rudo can't work with every possible version
-clippy::cargo_common_metadata,         // Verify that cargo.toml as a minimum of metadata to ensure discoverability
+clippy::cargo_common_metadata,         // Verify that cargo.toml as a minimum of metadata to ensure discoverability. C-METADATA of rust api guideline
 clippy::missing_docs_in_private_items, // Verify that private items have documentation to help others understand Rudo functionality
 clippy::create_dir,                    // Ensure to use create_dir_all since we must create a long chain of directory in Rudo for the token
 clippy::verbose_file_reads,            // Use read_to_string instead of open and read to reduce code size. 1 lines instead of 3.
 clippy::str_to_string,                 // Prefer to_owned instead of to_string for better clarity since other type can be to_string
 clippy::string_add,                    // Prefer push_str instead of + for more clarity
 clippy::string_to_string,              // Prefer clone instead of to_string on string for better clarity
-clippy::use_debug,                     // Prefer not to use {:?} in production code, but it doesn't catch them all for now. Rust-1.51
+clippy::use_debug,                     // Prefer not to use {:?} in production code, but it doesn't catch them in log macro for now. Rust-1.51
 clippy::wrong_pub_self_convention,     // Be consistent and follow convention for clarity in code that use self
 clippy::needless_borrow,               // Removed needless borrow in code for better clarity. Nursery
 clippy::use_self,                      // Use self when its possible instead of given the name of a struct or other type everywhere. Nursery
