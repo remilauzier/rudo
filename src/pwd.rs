@@ -38,7 +38,7 @@ pub(crate) fn password_input(
             }
             error!("Password was incorrect! Will be report to administrator!");
             eprintln!("Password was incorrect! Will be report to administrator!");
-            count += 1
+            count = count.saturating_add(1);
         }
         if count == 3 {
             return Err(From::from("You have made three mistake! Rudo Out!"));

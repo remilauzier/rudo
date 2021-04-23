@@ -60,7 +60,12 @@ clippy::cognitive_complexity,          // Verify the complexity of a function to
 clippy::else_if_without_else,          // Follow MISRA-C:2004 Rule 14.10 and be defensive in the code. Take care of 0.01% chance an error happens.
 clippy::mem_forget,                    // Don't use mem_forget since it can cause memory leaks. Rule MEM-FORGET and Recommendation MEM-FORGET-LINT anssi
 clippy::shadow_reuse,                  // Ensure the code is easy to follow by refusing meaningless shadowing
-clippy::shadow_same                    // Ensure the code is easy to follow by refusing meaningless shadowing
+clippy::shadow_same,                   // Ensure the code is easy to follow by refusing meaningless shadowing
+clippy::as_conversions,                // Ensure no lossy conversion are performed silently
+clippy::exit,                          // Ensure no exit() is performed on code. Always use an error that go to the main function.
+clippy::multiple_inherent_impl,        // Ensure to have only one impl for each struct
+clippy::wrong_pub_self_convention,     // Follow the convention for pub self like for non pub self
+clippy::integer_arithmetic             // Prefer safer method to avoid overflow like saturating_add(). Rule LANG-ARITH anssi
 )]
 // Authorized redundant else to conform to MISRA-C:2004 Rule 14.10 and to not conflict with clippy::else_if_without_else
 #![allow(clippy::redundant_else)]

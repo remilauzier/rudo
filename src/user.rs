@@ -80,12 +80,12 @@ impl User {
             arggroup
         );
         let group = &self.group;
-        let mut count = 0;
+        let mut count: u8 = 0;
 
         // Compare the supply group with the list of the user membership
         for gr in group {
             if gr.name() == arggroup {
-                count += 1;
+                count = count.saturating_add(1);
             }
         }
         if count == 1 {
