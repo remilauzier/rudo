@@ -1,8 +1,8 @@
 msrv = "1.43"
 warn-on-all-wildcard-imports = true
-cognitive-complexity-threshold = 20
+cognitive-complexity-threshold = 25
 single-char-binding-names-threshold = 0
 max-fn-params-bools = 1
 too-many-lines-threshold = 100
 too-many-arguments-threshold = 4
-type-complexity-threshold = 250
+type-complexity-threshold = 150

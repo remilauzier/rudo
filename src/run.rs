@@ -63,8 +63,6 @@ pub(crate) fn run(matches: &ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
         Some(impuser) => impuser,
         None => return Err(From::from("Please give Rudo a real unix username")),
     };
-    let impuser_uid = impuser.uid();
-    let impuser_group_id = impuser.primary_group_id();
 
     // Greet the user if the configuration said so
     if userconf.greeting {
@@ -95,7 +93,7 @@ pub(crate) fn run(matches: &ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
 
     // Run the command the user as choose
     debug!("Run the command {} as choose", userdata.username);
-    run_command(matches, &session, impuser_uid, impuser_group_id, &userdata)?;
+    run_command(matches, &session, &impuser, &userdata)?;
 
     return Ok(());
 }
@@ -103,10 +101,11 @@ pub(crate) fn run(matches: &ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
 fn run_command(
     matches: &ArgMatches<'_>,
     session: &Session<'_, Conversation>,
-    uid: u32,
-    group_id: u32,
+    impuser: &users::User,
     userdata: &user::User,
 ) -> Result<(), Box<dyn Error>> {
+    let uid = impuser.uid();
+    let group_id = impuser.primary_group_id();
     // Verify the option the user as pass and act accordingly
     if matches.is_present("command") {
         // Extract the command in two part. First the name of the program then it's arguments.
