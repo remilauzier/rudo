@@ -117,17 +117,6 @@ mod tests {
     use super::{env, terminal_uuid, Error};
 
     #[test]
-    fn test_ttyuuid_windowid_zero() -> Result<(), Box<dyn Error>> {
-        env::set_var("WINDOWID", "0");
-        let result = terminal_uuid();
-        if result.is_err() {
-            return Ok(());
-        } else {
-            return Err(From::from("Test failed! It shouldn't accept 0"));
-        }
-    }
-
-    #[test]
     fn test_ttyuuid_windowid() -> Result<(), Box<dyn Error>> {
         env::set_var("WINDOWID", "325768");
         let ttyuuid = terminal_uuid()?;
