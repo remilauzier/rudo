@@ -123,7 +123,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Extract debug logging variable for further use
     let debug = matches.is_present("debug");
 
-    #[cfg(target_os = "linux")]
+    #[cfg(all(target_os = "linux", feature = "journald"))]
     // Use journald for logging
     journal::log_journald(debug)?;
 

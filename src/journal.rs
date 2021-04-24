@@ -20,10 +20,10 @@ use std::error::Error;
 use log::{info, LevelFilter};
 #[cfg(all(target_os = "macos", feature = "macos"))]
 use oslog::OsLogger;
-#[cfg(target_os = "linux")]
+#[cfg(all(target_os = "linux", feature = "journald"))]
 use systemd::journal;
 
-#[cfg(target_os = "linux")]
+#[cfg(all(target_os = "linux", feature = "journald"))]
 /// Function to decide the maximum level of logging that journald will receive with the user supply option
 pub(crate) fn log_journald(debug: bool) -> Result<(), Box<dyn Error>> {
     // Initialize Logs with journald
@@ -63,13 +63,13 @@ pub(crate) fn log_oslog(debug: bool) -> Result<(), Box<dyn Error>> {
 
 #[cfg(test)]
 mod tests {
-    #[cfg(target_os = "linux")]
+    #[cfg(all(target_os = "linux", feature = "journald"))]
     use super::log_journald;
     #[cfg(all(target_os = "macos", feature = "macos"))]
     use super::log_oslog;
     use super::Error;
 
-    #[cfg(target_os = "linux")]
+    #[cfg(all(target_os = "linux", feature = "journald"))]
     #[test]
     fn test_journald() -> Result<(), Box<dyn Error>> {
         return log_journald(false);

@@ -24,13 +24,14 @@ users = "0.11"
 pam-client = "0.2"
 
 [target.'cfg(target_os = "linux")'.dependencies]
-systemd = "0.8"
+systemd = { version = "0.8", optional = true }
 
 [target.'cfg(target_os = "macos")'.dependencies]
 oslog = { version = "0.1", optional = true }
 
 [features]
-default = []
+default = ["journald"]
+journald = ["systemd"]
 macos = ["oslog"]
 
 [profile.dev]
