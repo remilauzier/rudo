@@ -1,4 +1,5 @@
 # Rudo
+
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/remilauzier/rudo?style=flat-square)
 ![Crates.io](https://img.shields.io/crates/v/rudo?style=flat-square)
 ![Crates.io](https://img.shields.io/crates/d/rudo?style=flat-square)
@@ -8,13 +9,35 @@
 [![GitHub issues](https://img.shields.io/github/issues/remilauzier/rudo?style=flat-square)](https://github.com/remilauzier/rudo/issues)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/remilauzier/rudo?style=flat-square)
 ![Lines of code](https://img.shields.io/tokei/lines/github/remilauzier/rudo?style=flat-square)
-[![dependency status](https://deps.rs/crate/rudo/0.8.4/status.svg)](https://deps.rs/crate/rudo/0.8.4)
+[![dependency status](https://deps.rs/crate/rudo/0.8.5/status.svg)](https://deps.rs/crate/rudo/0.8.5)
+
 # Description
+
 **Rudo** "Rust User do" allows a system administrator to give certain users the ability to run some commands as **root**
-or another user while logging all commands, and it's arguments. \
-Compile with rust ``1.43`` and later, on ``ubuntu-20.04`` and ``macos-10.15``, as test in **CI**. ``2021-04-17``
+or another user while logging all commands, and it's arguments.
+
+# Rust version and operating system support
+
+Compile with **rust** ``1.43`` and later, on ``ubuntu-20.04`` and ``macos-10.15``, as test in **CI**. ``2021-04-17``
+
+# Security rules apply to Rudo via clippy and rust lints
+
+**Rule LANG-NAMING** of anssi with `nonstandard_style` \
+**C-METADATA** of rust api guideline with `clippy::cargo_common_metadata` \
+**Rule LANG-NOPANIC** of anssi with `clippy::expect_used`, `clippy::unwrap_in_result` and `clippy::unwrap_used` \
+**Rule LANG-ARRINDEXING** of anssi with `clippy::get_unwrap` and `clippy::indexing_slicing` \
+**MISRA-C:2004 Rule 14.10** of **MISRA** with `clippy::else_if_without_else` \
+**Rule MEM-FORGET** and **Recommendation MEM-FORGET-LINT** of anssi with `clippy::mem_forget` \
+**Rule LANG-ARITH** of anssi with `clippy::integer_arithmetic` \
+
+# Security advisory
+
+**Required** `serde_yaml` `>=0.8.4` because
+of [RUSTSEC-2018-0005](https://rustsec.org/advisories/RUSTSEC-2018-0005.html) \
+**Rudo** as use `serde_yaml` version `0.8.17` at its debut, so it has never been affected by it \
 
 # Package
+
 https://copr.fedorainfracloud.org/coprs/remilauzier/rudo/
 
 # Functionality
@@ -29,7 +52,6 @@ https://copr.fedorainfracloud.org/coprs/remilauzier/rudo/
 * You can log debug or info messages to ``journald`` on **Linux** or to `oslog` on **macOS**
 
 # Configuration
-
 * The config file is in **YAML** and must be at `/etc/rudo.conf` or it will be created
 * **Invalid** file will be **REMOVE** and **REPLACED** with default
 * You can change the user to impersonate
@@ -40,17 +62,9 @@ https://copr.fedorainfracloud.org/coprs/remilauzier/rudo/
 
 # Problem
 
-You need to change the owner of the binary to root for now to make it work, except copr package
-
+You need to change the owner of the binary to root to make it work, except for the copr package
 * `sudo chown root:root`
 * `sudo chmod 4755`
 
-# License
-**GPLv2 or later**
-
 # Warning
-
-**Required** `serde_yaml` `>=0.8.4` because
-of [RUSTSEC-2018-0005](https://rustsec.org/advisories/RUSTSEC-2018-0005.html) \
-**Rudo** as use `serde_yaml` version `0.8.17` at its debut, so it has never been affected by it \
 **No security audit was perform on Rudo**
