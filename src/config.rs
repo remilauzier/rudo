@@ -21,7 +21,6 @@ use std::io::Write;
 use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
 
-use clap::ArgMatches;
 use log::{debug, error, info, warn};
 use serde::{Deserialize, Serialize};
 
@@ -42,12 +41,10 @@ pub(crate) struct UserConf {
 
 impl UserConf {
     /// Function to update the greeting Boolean if the "-g" option was given
-    pub(crate) fn update(mut self, matches: &ArgMatches<'_>) -> Self {
-        // Update greeting value if CLI option is present
-        if matches.is_present("greeting") {
-            debug!("Greeting value will be update");
-            self.greeting = true;
-        }
+    pub(crate) fn update_greeting(mut self) -> Self {
+        // Update greeting value with CLI option
+        debug!("Greeting value will be update");
+        self.greeting = true;
         return self;
     }
 }
@@ -113,16 +110,11 @@ impl Config {
         return Ok(());
     }
     /// Function to update the name of the impersonated user with the value give in the command-line
-    pub(crate) fn update(mut self, matches: &ArgMatches<'_>) -> Result<Self, Box<dyn Error>> {
-        // Update user value if CLI option is present
-        if matches.is_present("user") {
-            debug!("User value will be update");
-            self.rudo.impuser = match matches.value_of("user") {
-                Some(user) => user.to_owned(),
-                None => return Err(From::from("user value couldn't be converted to a string")),
-            };
-        }
-        return Ok(self);
+    pub(crate) fn update_user(mut self, impuser: String) -> Self {
+        // Update user value with CLI value
+        debug!("User value will be update");
+        self.rudo.impuser = impuser;
+        return self;
     }
 }
 // Default value for configuration
@@ -203,7 +195,34 @@ pub(crate) fn extract_userconf(conf: Vec<UserConf>, username: &str) -> UserConf 
 
 #[cfg(test)]
 mod tests {
-    use super::{extract_userconf, Error, UserConf};
+    use super::{extract_userconf, Config, Error, UserConf};
+
+    #[test]
+    fn test_update_greeting() -> Result<(), Box<dyn Error>> {
+        let conf = UserConf {
+            username: String::from("nano"),
+            group: String::from("micro"),
+            password: false,
+            greeting: false,
+        };
+        let conf = conf.update_greeting();
+        if conf.greeting {
+            return Ok(());
+        } else {
+            return Err(From::from("Test failed to update greeting value!"));
+        }
+    }
+
+    #[test]
+    fn test_update_user() -> Result<(), Box<dyn Error>> {
+        let conf = Config::default();
+        let conf = conf.update_user(String::from("nano"));
+        if conf.rudo.impuser == "nano" {
+            return Ok(());
+        } else {
+            return Err(From::from("Test failed to update impuser value!"));
+        }
+    }
 
     #[test]
     fn test_extract_userconf() -> Result<(), Box<dyn Error>> {

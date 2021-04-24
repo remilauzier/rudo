@@ -36,7 +36,7 @@ use crate::user;
 pub(crate) fn run(matches: &ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
     // Initialize configuration
     debug!("Starting configuration initialization");
-    let conf = config::init_conf()?;
+    let mut conf = config::init_conf()?;
 
     // Create the user data for later use
     debug!("Starting extraction of User information");
@@ -47,12 +47,20 @@ pub(crate) fn run(matches: &ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
         "Starting extraction of the vector of UserConf tie to {} in rudo.conf",
         &userdata.username
     );
-    let userconf = config::extract_userconf(conf.user.clone(), &userdata.username);
+    let mut userconf = config::extract_userconf(conf.user.clone(), &userdata.username);
 
     // Update configuration if necessary, as CLI as the priority
-    debug!("Update configuration with CLI option as it as the priority");
-    let userconf = config::UserConf::update(userconf, matches);
-    let conf = config::Config::update(conf, matches)?;
+    if matches.is_present("greeting") {
+        debug!("Update configuration with CLI option as it as the priority");
+        userconf = config::UserConf::update_greeting(userconf);
+    }
+    if matches.is_present("user") {
+        let impuser = match matches.value_of("user") {
+            Some(user) => user.to_owned(),
+            None => return Err(From::from("user value couldn't be found!")),
+        };
+        conf = config::Config::update_user(conf, impuser);
+    }
 
     // Get the UID and GID of the impersonated user for further use
     debug!(
