@@ -119,7 +119,8 @@ mod tests {
     #[test]
     fn test_ttyuuid_windowid_zero() -> Result<(), Box<dyn Error>> {
         env::set_var("WINDOWID", "0");
-        if terminal_uuid().is_err() {
+        let result = terminal_uuid();
+        if result.is_err() {
             return Ok(());
         } else {
             return Err(From::from("Test failed! It shouldn't accept 0"));
