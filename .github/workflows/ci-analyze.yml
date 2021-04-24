@@ -11,10 +11,14 @@ env:
 
 jobs:
   code-analyze:
-    runs-on: ubuntu-20.04
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-20.04, macos-10.15 ]
     steps:
       - uses: actions/checkout@v2
       - name: Install dependency
+        if: matrix.os == 'ubuntu-20.04'
         run: sudo apt install libpam0g-dev libsystemd-dev
       - name: cargo clippy
         run: cargo clippy --all-targets --all-features --verbose
