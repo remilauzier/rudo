@@ -62,22 +62,20 @@ pub(crate) fn authentification_pam(
         Conversation::new(),
     )?;
 
-    // Extract the TTY name with libc
-    let tty_name = tty::get_tty_name()?;
-    debug!("TTY name has been extract: {}", tty_name);
+    // Extract the Terminal name and identifier
+    let tty = tty::Terminal::new()?;
 
-    // extract the UUID of the terminal for later use
-    let tty_uuid = tty::terminal_uuid()?;
-    debug!("Terminal UUID is {}", tty_uuid);
+    debug!("TTY name is: {}", tty.terminal_name);
+    debug!("Terminal UUID is {}", tty.terminal_uuid);
 
     // Create the token path with the base, the username and the TTY name
-    let token_path = format!("{}{}{}", SESSION_DIR, &userdata.username, tty_name);
+    let token_path = format!("{}{}{}", SESSION_DIR, &userdata.username, tty.terminal_name);
     debug!("token_path has been created: {}", token_path);
 
     // Verify that token_path is valid and that the session is not expired,
     // then pass the result.
     debug!("Verifying token_path validity and extracting result");
-    let result = token::verify_path(&token_path, &tty_name, &tty_uuid)?;
+    let result = token::verify_path(&token_path, &tty)?;
 
     debug!("Asking for password if token is invalid or non-existent");
     if !result {
@@ -101,8 +99,11 @@ pub(crate) fn authentification_pam(
         session::create_dir_run(&userdata.username)?;
 
         // Create token with all the necessary information
-        let token = session::Token::new(tty_name.clone(), tty_uuid.clone());
-        debug!("Token was created for {} with UUID: {}", tty_name, tty_uuid);
+        let token = session::Token::new(&tty.terminal_name, &tty.terminal_uuid);
+        debug!(
+            "Token was created for {} with UUID: {}",
+            tty.terminal_name, tty.terminal_uuid
+        );
 
         // Write the token to file
         debug!("Token will be written to {}", token_path);

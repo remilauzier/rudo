@@ -22,12 +22,12 @@ use std::path::Path;
 use log::{debug, error};
 
 use crate::session;
+use crate::tty;
 
 /// `verify_path` analyze if the token exist, and it's valid, then it returns a bool for the result.
 pub(crate) fn verify_path(
     token_path_str: &str,
-    tty_name: &str,
-    tty_uuid: &str,
+    tty: &tty::Terminal,
 ) -> Result<bool, Box<dyn Error>> {
     let token_path = Path::new(&token_path_str);
 
@@ -46,7 +46,10 @@ pub(crate) fn verify_path(
             debug!("Token was invalid");
             return Ok(false);
         }
-        if token?.verify_token(tty_name, tty_uuid).is_err() {
+        if token?
+            .verify_token(&tty.terminal_name, &tty.terminal_uuid)
+            .is_err()
+        {
             debug!("Token was invalid");
             return Ok(false);
         }
@@ -60,11 +63,15 @@ pub(crate) fn verify_path(
 
 #[cfg(test)]
 mod tests {
-    use super::{verify_path, Error};
+    use super::{tty::Terminal, verify_path, Error};
 
     #[test]
     fn test_verify_path_non_existent() -> Result<(), Box<dyn Error>> {
-        let result = verify_path("/run/rudo/pts/0", "pts/0/", "964045904534593458953")?;
+        let tty = Terminal {
+            terminal_name: String::from("pts/0/"),
+            terminal_uuid: String::from("964045904534593458953"),
+        };
+        let result = verify_path("/run/rudo/pts/0", &tty)?;
         if result {
             return Err(From::from("Test failed: the path should not be valid"));
         } else {

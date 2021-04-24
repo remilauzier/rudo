@@ -45,7 +45,7 @@ pub(crate) struct Token {
 
 impl Token {
     /// Create the token and all it's parameter
-    pub(crate) fn new(tty_name: String, tty_uuid: String) -> Result<Self, Box<dyn Error>> {
+    pub(crate) fn new(tty_name: &str, tty_uuid: &str) -> Result<Self, Box<dyn Error>> {
         debug!("Create the timestamp of the token");
         let timestamp = SystemTime::now();
         // Create the timestamp where the session become invalid
@@ -56,8 +56,8 @@ impl Token {
             None => return Err(From::from("Couldn't create final timestamp")),
         };
         return Ok(Self {
-            tty_name,
-            tty_uuid,
+            tty_name: String::from(tty_name),
+            tty_uuid: String::from(tty_uuid),
             timestamp,
             final_timestamp,
         });
@@ -252,7 +252,7 @@ mod tests {
 
     #[test]
     fn test_timestamp() -> Result<(), Box<dyn Error>> {
-        let token = Token::new(String::from("name"), String::from("1234"))?;
+        let token = Token::new("name", "1234")?;
         let duration = std::time::Duration::from_secs(DEFAULT_SESSION_TIMEOUT);
         if token.final_timestamp - duration == token.timestamp {
             return Ok(());

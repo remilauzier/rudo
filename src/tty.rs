@@ -22,9 +22,30 @@ use std::ffi::CStr;
 use libc::{isatty, ttyname};
 use log::{debug, error};
 
+/// `Terminal` is a struct that contain the name and the identifier of a terminal
+pub(crate) struct Terminal {
+    /// Name of the terminal
+    pub(crate) terminal_name: String,
+    /// Identifier of the terminal
+    pub(crate) terminal_uuid: String,
+}
+
+impl Terminal {
+    /// Create a new instance of the terminal structure to have its name and identifier
+    pub(crate) fn new() -> Result<Self, Box<dyn Error>> {
+        let terminal_name = get_tty_name()?;
+        let terminal_uuid = terminal_uuid()?;
+
+        return Ok(Self {
+            terminal_name,
+            terminal_uuid,
+        });
+    }
+}
+
 /// Safe wrapper to get the name of the current TTY
 /// and return it as a Rust string for further use
-pub(crate) fn get_tty_name() -> Result<String, Box<dyn Error>> {
+fn get_tty_name() -> Result<String, Box<dyn Error>> {
     unsafe {
         // Verify that we are indeed in a terminal
         if isatty(0) == 0 {
@@ -56,7 +77,7 @@ pub(crate) fn get_tty_name() -> Result<String, Box<dyn Error>> {
 /// Rox terminal use a value that change only the last six number but change for tabs.
 /// Qterminal is insecure as it put 0 in WINDOWID and Rudo will refuse to consider it.
 /// Guake, lxterminal, elementary terminal and deepin terminal as no UUID to use for now.
-pub(crate) fn terminal_uuid() -> Result<String, Box<dyn Error>> {
+fn terminal_uuid() -> Result<String, Box<dyn Error>> {
     if env::var("GNOME_TERMINAL_SCREEN").is_ok() {
         let uuid = env::var("GNOME_TERMINAL_SCREEN")?;
         debug!("GNOME_TERMINAL_SCREEN: {}", uuid);
