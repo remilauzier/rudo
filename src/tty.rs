@@ -117,6 +117,22 @@ mod tests {
     use super::{env, terminal_uuid, Error};
 
     #[test]
+    fn test_ttyuuid_empty() -> Result<(), Box<dyn Error>> {
+        env::remove_var("GNOME_TERMINAL_SCREEN");
+        env::remove_var("SHELL_SESSION_ID");
+        env::remove_var("TERMINATOR_UUID");
+        env::remove_var("TILIX_ID");
+        env::remove_var("ROXTERM_ID");
+        env::remove_var("WINDOWID");
+        let result = terminal_uuid();
+        if result.is_err() {
+            return Ok(());
+        } else {
+            return Err(From::from("Test failed! It shouldn't accept 0"));
+        }
+    }
+
+    #[test]
     fn test_ttyuuid_windowid_zero() -> Result<(), Box<dyn Error>> {
         env::remove_var("GNOME_TERMINAL_SCREEN");
         env::remove_var("SHELL_SESSION_ID");
