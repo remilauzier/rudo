@@ -117,12 +117,33 @@ mod tests {
     use super::{env, terminal_uuid, Error};
 
     #[test]
+    fn test_ttyuuid_windowid_zero() -> Result<(), Box<dyn Error>> {
+        env::remove_var("GNOME_TERMINAL_SCREEN");
+        env::remove_var("SHELL_SESSION_ID");
+        env::remove_var("TERMINATOR_UUID");
+        env::remove_var("TILIX_ID");
+        env::remove_var("ROXTERM_ID");
+        env::set_var("WINDOWID", "0");
+        let result = terminal_uuid();
+        if result.is_err() {
+            return Ok(());
+        } else {
+            return Err(From::from("Test failed! It shouldn't accept 0"));
+        }
+    }
+
+    #[test]
     fn test_ttyuuid_windowid() -> Result<(), Box<dyn Error>> {
-        env::set_var("WINDOWID", "325768");
+        env::remove_var("GNOME_TERMINAL_SCREEN");
+        env::remove_var("SHELL_SESSION_ID");
+        env::remove_var("TERMINATOR_UUID");
+        env::remove_var("TILIX_ID");
+        env::remove_var("ROXTERM_ID");
+        env::set_var("WINDOWID", "325");
         let ttyuuid = terminal_uuid()?;
         if ttyuuid.is_empty() {
             return Err(From::from("ttyuuid shouldn't be empty"));
-        } else if ttyuuid == "325768" {
+        } else if ttyuuid == "325" {
             return Ok(());
         } else {
             return Err(From::from(
@@ -133,6 +154,10 @@ mod tests {
 
     #[test]
     fn test_ttyuuid_roxterm_id() -> Result<(), Box<dyn Error>> {
+        env::remove_var("GNOME_TERMINAL_SCREEN");
+        env::remove_var("SHELL_SESSION_ID");
+        env::remove_var("TERMINATOR_UUID");
+        env::remove_var("TILIX_ID");
         env::set_var("ROXTERM_ID", "325768");
         let ttyuuid = terminal_uuid()?;
         if ttyuuid.is_empty() {
@@ -148,11 +173,14 @@ mod tests {
 
     #[test]
     fn test_ttyuuid_tilix_id() -> Result<(), Box<dyn Error>> {
-        env::set_var("TILIX_ID", "325768");
+        env::remove_var("GNOME_TERMINAL_SCREEN");
+        env::remove_var("SHELL_SESSION_ID");
+        env::remove_var("TERMINATOR_UUID");
+        env::set_var("TILIX_ID", "32576");
         let ttyuuid = terminal_uuid()?;
         if ttyuuid.is_empty() {
             return Err(From::from("ttyuuid shouldn't be empty"));
-        } else if ttyuuid == "325768" {
+        } else if ttyuuid == "32576" {
             return Ok(());
         } else {
             return Err(From::from(
@@ -163,11 +191,13 @@ mod tests {
 
     #[test]
     fn test_ttyuuid_terminator_uuid() -> Result<(), Box<dyn Error>> {
-        env::set_var("TERMINATOR_UUID", "325768");
+        env::remove_var("GNOME_TERMINAL_SCREEN");
+        env::remove_var("SHELL_SESSION_ID");
+        env::set_var("TERMINATOR_UUID", "3257689");
         let ttyuuid = terminal_uuid()?;
         if ttyuuid.is_empty() {
             return Err(From::from("ttyuuid shouldn't be empty"));
-        } else if ttyuuid == "325768" {
+        } else if ttyuuid == "3257689" {
             return Ok(());
         } else {
             return Err(From::from(
@@ -178,11 +208,12 @@ mod tests {
 
     #[test]
     fn test_ttyuuid_shell_session_id() -> Result<(), Box<dyn Error>> {
-        env::set_var("SHELL_SESSION_ID", "325768");
+        env::remove_var("GNOME_TERMINAL_SCREEN");
+        env::set_var("SHELL_SESSION_ID", "325768vd");
         let ttyuuid = terminal_uuid()?;
         if ttyuuid.is_empty() {
             return Err(From::from("ttyuuid shouldn't be empty"));
-        } else if ttyuuid == "325768" {
+        } else if ttyuuid == "325768vd" {
             return Ok(());
         } else {
             return Err(From::from(
@@ -193,11 +224,11 @@ mod tests {
 
     #[test]
     fn test_ttyuuid_gnome_terminal_screen() -> Result<(), Box<dyn Error>> {
-        env::set_var("GNOME_TERMINAL_SCREEN", "325768");
+        env::set_var("GNOME_TERMINAL_SCREEN", "32576821");
         let ttyuuid = terminal_uuid()?;
         if ttyuuid.is_empty() {
             return Err(From::from("ttyuuid shouldn't be empty"));
-        } else if ttyuuid == "325768" {
+        } else if ttyuuid == "32576821" {
             return Ok(());
         } else {
             return Err(From::from(
