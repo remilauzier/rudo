@@ -88,7 +88,11 @@ impl User {
                 count = count.saturating_add(1);
             }
         }
-        if count == 1 {
+        if count == 0 {
+            let error = format!("User is not a member of the authorized group: {}", arggroup);
+            error!("{}", error);
+            return Err(From::from(error));
+        } else if count == 1 {
             info!("User is a member of the authorized group: {}", arggroup);
             return Ok(());
         } else if count >= 2 {
@@ -96,9 +100,7 @@ impl User {
             error!("{}", err);
             return Err(From::from(err));
         } else {
-            let error = format!("User is not a member of the authorized group: {}", arggroup);
-            error!("{}", error);
-            return Err(From::from(error));
+            return Err(From::from("You shouldn't see this error!"));
         }
     }
 }
