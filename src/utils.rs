@@ -57,8 +57,9 @@ pub(crate) fn create_file(path: &Path, mode: u32, data: &str) -> Result<(), Box<
 #[cfg(test)]
 mod tests {
     use std::error::Error;
+    use std::fs;
 
-    use super::vec_to_string;
+    use super::{create_file, vec_to_string, Path};
 
     #[test]
     fn test_vec_to_string() -> Result<(), Box<dyn Error>> {
@@ -70,6 +71,20 @@ mod tests {
             return Ok(());
         } else {
             return Err(From::from("Test failed to convert vec to string correctly"));
+        }
+    }
+
+    #[test]
+    fn test_create_file() -> Result<(), Box<dyn Error>> {
+        let path = Path::new("test.txt");
+        create_file(path, 0o600, "1234")?;
+        let data = fs::read_to_string(path)?;
+        if data == "1234" {
+            return Ok(());
+        } else {
+            return Err(From::from(
+                "Test failed! file was not create with the right data",
+            ));
         }
     }
 }

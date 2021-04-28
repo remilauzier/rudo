@@ -11,3 +11,6 @@
 
 # remove idea file
 /.idea/
+
+# remove test file
+test.txt
