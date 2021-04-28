@@ -29,6 +29,7 @@ use crate::auth;
 use crate::command;
 use crate::config;
 use crate::user;
+use crate::utils;
 
 /// Run function of Rudo.
 /// It takes the result of the command-line interface to decide
@@ -127,7 +128,7 @@ fn run_command(
             }
         };
         let data = command::Command::new(command)?;
-        let args = command::vec_to_string(data.args.clone());
+        let args = utils::vec_to_string(data.args.clone());
 
         // Log the user, and it's command for further audit by system administrator
         info!(

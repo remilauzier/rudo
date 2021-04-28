@@ -6,3 +6,4 @@ max-fn-params-bools = 1
 too-many-lines-threshold = 100
 too-many-arguments-threshold = 4
 type-complexity-threshold = 150
+#upper-case-acronyms-aggressive = true

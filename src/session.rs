@@ -16,8 +16,7 @@
  *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 use std::error::Error;
-use std::fs::{self, DirBuilder, File};
-use std::io::Write;
+use std::fs::{self, DirBuilder};
 use std::os::unix::fs::DirBuilderExt;
 use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
@@ -26,6 +25,7 @@ use std::time::SystemTime;
 use log::{debug, error, info, warn};
 use serde::{Deserialize, Serialize};
 
+use crate::utils;
 use crate::DEFAULT_SESSION_TIMEOUT;
 use crate::SESSION_DIR;
 
@@ -64,8 +64,8 @@ impl Token {
     }
     /// Create the file that will contain the token if it doesn't exist
     pub(crate) fn create_token_file(&self, username: &str) -> Result<(), Box<dyn Error>> {
-        // Create the path of the file with the name of the program, the username to distinguish user
-        // and the name of TTY to let user have multiple session, on multiple terminal
+        // Create the path of the file with the name of the program, the username to distinguish the user, and
+        // the name of TTY to let the user have multiple session, on multiple terminal
         let token_path_string = format!("{}{}{}", SESSION_DIR, username, self.tty_name);
         let token_path = Path::new(&token_path_string);
         debug!(
@@ -83,23 +83,8 @@ impl Token {
             debug!("Put Token in a string");
             let token_file = serde_yaml::to_string(&self)?;
 
-            // Creating the file for the token
-            debug!("Creating the token file");
-            let mut file = File::create(token_path)?;
-
-            // Write the token data in the file
-            debug!("Write the string in the file");
-            file.write_all(token_file.as_bytes())?;
-
-            // Sync data to be sure everything is writing on drive
-            debug!("Syncing data on drive");
-            file.sync_all()?;
-
-            // Put file permission to 600 to restraint access
-            debug!("Set file permission to 600 to restraint access");
-            let mut perms = file.metadata()?.permissions();
-            perms.set_mode(0o600);
-            file.set_permissions(perms)?;
+            // Create the token file
+            utils::create_file(token_path, 0o600, &token_file)?;
         } else {
             debug!("token_path doesn't exist, will create it");
 
@@ -123,23 +108,8 @@ impl Token {
             debug!("Put Token in a string");
             let token_file = serde_yaml::to_string(&self)?;
 
-            // Creating the file for the token
-            debug!("creating the token file");
-            let mut file = File::create(token_path)?;
-
-            // Write the token data in the file
-            debug!("write the string in the file");
-            file.write_all(token_file.as_bytes())?;
-
-            // Sync data to be sure everything is writing on drive
-            debug!("Syncing data on drive");
-            file.sync_all()?;
-
-            // Put file permission to 600 to restraint access
-            debug!("Set file permission to 600 to restraint access");
-            let mut perms = file.metadata()?.permissions();
-            perms.set_mode(0o600);
-            file.set_permissions(perms)?;
+            // Create the token file
+            utils::create_file(path, 0o600, &token_file)?;
         }
         return Ok(());
     }

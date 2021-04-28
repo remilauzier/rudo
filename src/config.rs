@@ -16,14 +16,13 @@
  *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 use std::error::Error;
-use std::fs::{self, File};
-use std::io::Write;
-use std::os::unix::fs::PermissionsExt;
+use std::fs;
 use std::path::Path;
 
 use log::{debug, error, info, warn};
 use serde::{Deserialize, Serialize};
 
+use crate::utils;
 use crate::CONFIG_PATH;
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -94,19 +93,7 @@ impl Config {
         let config_file = serde_yaml::to_string(&self)?;
         // Create the configuration file
         debug!("Creating configuration file at {}", CONFIG_PATH);
-        let mut file = File::create(config_path)?;
-        // Write data in the file
-        debug!("Writing data to file");
-        file.write_all(config_file.as_bytes())?;
-        // Sync data to drive
-        debug!("Syncing data to drive");
-        file.sync_all()?;
-        // Set permissions of 640 to restraint access
-        debug!("Set file permission to 640 to restraint access");
-        let mut perms = file.metadata()?.permissions();
-        perms.set_mode(0o640);
-        file.set_permissions(perms)?;
-
+        utils::create_file(config_path, 0o640, &config_file)?;
         return Ok(());
     }
     /// Function to update the name of the impersonated user with the value give in the command-line

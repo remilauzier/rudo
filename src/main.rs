@@ -76,7 +76,8 @@ clippy::exit,                          // Ensure no exit() is performed on code.
 clippy::multiple_inherent_impl,        // Ensure to have only one impl for each struct
 clippy::integer_arithmetic,            // Prefer safer method to avoid overflow like saturating_add(). Rule LANG-ARITH anssi
 clippy::indexing_slicing,              // Prefer get() method with good error management to avoid panic in runtime. Rule LANG-ARRINDEXING anssi
-clippy::implicit_return                // Prefer to have explicit return instead of implicit for better clarity in some part of the code
+clippy::implicit_return,               // Prefer to have explicit return instead of implicit for better clarity in some part of the code
+//clippy::semicolon_if_nothing_returned  // Prefer to finish function with a semicolon even if the function is one line
 )]
 // Authorized redundant else to conform to MISRA-C:2004 Rule 14.10 and to not conflict with clippy::else_if_without_else
 #![allow(clippy::redundant_else)]
@@ -107,6 +108,8 @@ mod token;
 mod tty;
 /// Module that create user information and all the function with it
 mod user;
+/// Generics Function that can be reused by others modules
+mod utils;
 
 /// The amount of time the session stay valid
 pub(crate) static DEFAULT_SESSION_TIMEOUT: u64 = 600;

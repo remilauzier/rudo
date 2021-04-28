@@ -50,31 +50,9 @@ impl<'a> Command<'a> {
     }
 }
 
-/// `vec_to_string` take a vector of str and put each str in a string for later use
-pub(crate) fn vec_to_string(data: Vec<&str>) -> String {
-    let mut buffer = String::new();
-    for buf in data {
-        buffer.push_str(buf);
-    }
-    return buffer;
-}
-
 #[cfg(test)]
 mod tests {
-    use super::{vec_to_string, Command, Error};
-
-    #[test]
-    fn test_vec_to_string() -> Result<(), Box<dyn Error>> {
-        let data = vec!["test", "case"];
-        let buffer = vec_to_string(data);
-        if buffer.is_empty() {
-            return Err(From::from("Test failed. Shouldn't be empty"));
-        } else if buffer == "testcase" {
-            return Ok(());
-        } else {
-            return Err(From::from("Test failed to convert vec to string correctly"));
-        }
-    }
+    use super::{Command, Error};
 
     #[test]
     fn test_command_new() -> Result<(), Box<dyn Error>> {
