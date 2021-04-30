@@ -127,15 +127,8 @@ pub(crate) fn init_conf() -> Result<Config, Box<dyn Error>> {
         debug!("Loading {}", CONFIG_PATH);
         let result = read_config_file();
         if let Err(err) = result {
-            eprintln!("{}", err);
             error!("{}", err);
-            // Remove invalid file
-            warn!("Removing invalid file");
-            fs::remove_file(path)?;
-            // Create new file with defaults
-            info!("Creating new file with defaults at {}", CONFIG_PATH);
-            conf.create_config_file()?;
-            return Ok(conf);
+            return Err(err);
         }
         // Return the valid data of the configuration file
         debug!("Returning the content of the configuration file");
