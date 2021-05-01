@@ -17,7 +17,7 @@
  */
 /*! Rudo is a program that permit a system administrator
 to authorize a user to have privilege access with verification
-like group membership and validity of the account
+like group membership
 */
 #![deny(
 rustdoc,                       // rustdoc is for verifying the validity of some part of the documentation
@@ -26,11 +26,11 @@ nonstandard_style,             // nonstandard_style is for verifying that Rudo r
 rust_2018_compatibility,       // rust_2018_compatibility is for forcing the 2018 convention as some small thing can be ignored by compiler
 rust_2018_idioms,              // rust_2018_idioms is for forcing the 2018 convention as some small thing can be ignored by compiler
 warnings,                      // Switch all warning to deny, to force better code by default
-unused,                        // Force to deny all unused code
+unused,                        // Deny all unused code
 unreachable_pub,               // unreachable_pub is for verifying that public code get pub(crate) as Rudo is a binary only
 macro_use_extern_crate,        // Prefer to declare in each file the macro that must be use instead of #[macro_use]
 single_use_lifetimes,          // Prefer <'_> for single_use_lifetimes instead of <'a>
-unused_lifetimes,              // Detect unused_lifetimes and force to remove it
+unused_lifetimes,              // Detect unused_lifetimes and remove them
 unused_qualifications,         // Detect unnecessary qualifications for simpler code style
 missing_crate_level_docs,      // Verify that the crate always have a documentation explaining its utility
 disjoint_capture_drop_reorder, // Ensure the variable are capture properly when using capture_disjoint_fields ||
@@ -40,10 +40,9 @@ trivial_casts,                 // Ensure cast are not misused and prefer coercio
 trivial_numeric_casts,         // Ensure cast are not misused and prefer coercion instead
 unaligned_references,          // Force alignment of reference to avoid Undefined Behavior in unsafe function
 unused_crate_dependencies,     // Ensure no unused crate get compiled or used
-unused_import_braces           // Ensure brace are use only for multiple items only
+unused_import_braces,          // Ensure brace are use only for multiple items only
+variant_size_differences       // Detect if some enum contain variable of different size that could consume more memory
 )]
-// Warn if some enum contain variable of different size that could consume more memory
-#![warn(variant_size_differences)]
 #![deny(
 clippy::all,                           // Deny everything that is in the correctness, performance, style and complexity categories to be more strict in code quality
 clippy::pedantic,                      // Deny everything in the pedantic categories to be more strict on code quality
@@ -91,7 +90,7 @@ mod auth;
 /// Module to instantiate the command-line interface, and it's options
 mod cli;
 /// Module to extract the command, and it's arguments when user provide one
-mod command;
+mod cmd;
 /// Module that manage the configuration file, and it's options
 mod config;
 /// Module that manage the logs that Rudo create
@@ -114,7 +113,7 @@ mod utils;
 /// The amount of time the session stay valid
 pub(crate) static DEFAULT_SESSION_TIMEOUT: u64 = 600;
 /// The beginning of the path where the session token will be written
-pub(crate) static SESSION_DIR: &str = "/run/rudo/";
+pub(crate) static SESSION_PATH: &str = "/run/rudo/";
 /// The default path of the configuration file
 pub(crate) static CONFIG_PATH: &str = "/etc/rudo.conf";
 

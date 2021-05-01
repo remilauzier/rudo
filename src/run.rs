@@ -17,8 +17,6 @@
  */
 use std::env;
 use std::error::Error;
-use std::os::unix::process::CommandExt;
-use std::process::Command;
 
 use clap::ArgMatches;
 use log::{debug, info};
@@ -26,7 +24,8 @@ use pam_client::conv_cli::Conversation;
 use pam_client::{Flag, Session};
 
 use crate::auth;
-use crate::command;
+use crate::cmd;
+use crate::cmd::CmdData;
 use crate::config;
 use crate::user;
 use crate::utils;
@@ -113,8 +112,6 @@ fn run_command(
     impuser: &users::User,
     userdata: &user::User,
 ) -> Result<(), Box<dyn Error>> {
-    let uid = impuser.uid();
-    let group_id = impuser.primary_group_id();
     // Verify the option the user as pass and act accordingly
     if matches.is_present("command") {
         // Extract the command in two part. First the name of the program then it's arguments.
@@ -127,7 +124,7 @@ fn run_command(
                 ))
             }
         };
-        let data = command::Command::new(command)?;
+        let data = cmd::CmdData::new(command)?;
         let args = utils::vec_to_string(data.args.clone());
 
         // Log the user, and it's command for further audit by system administrator
@@ -136,17 +133,7 @@ fn run_command(
             userdata.username, data.program, args
         );
 
-        // Creation and ignition of the new command
-        debug!("Start the supply command");
-        let mut child = Command::new(data.program)
-            .args(data.args)
-            .envs(session.envlist().iter_tuples()) // Pass the Pam session to the new process
-            .uid(uid) // Necessary to have full access
-            .gid(group_id) // Necessary to have full access
-            .spawn()?;
-
-        // Wait for the command to finish, or the program end before the command
-        child.wait()?;
+        cmd::start_command(data, session, impuser)?;
     } else if matches.is_present("shell") {
         // Extraction of the shell environment variable
         debug!("Extracting shell environment variable");
@@ -155,17 +142,13 @@ fn run_command(
         // Log the user, and it's shell for further audit by system administrator
         info!("{} has been authorized to use {}", userdata.username, shell);
 
-        // Creation and ignition of the new shell
-        debug!("Starting {}", shell);
-        let mut child = Command::new(shell)
-            .arg("-l") // Login shell
-            .envs(session.envlist().iter_tuples()) // Pass the Pam session to the new process
-            .uid(uid) // Necessary to have full access
-            .gid(group_id) // Necessary to have full access
-            .spawn()?;
+        // Pass the name of the shell, and the arguments "-l" to have a login shell
+        let data = CmdData {
+            program: shell,
+            args: vec!["-l"],
+        };
 
-        // Wait for the shell to finish, or the program end before the shell
-        child.wait()?;
+        cmd::start_command(data, session, impuser)?;
     } else if matches.is_present("edit") {
         // Extraction of the editor environment variable
         debug!("Extracting editor environment variable");
@@ -184,17 +167,12 @@ fn run_command(
             userdata.username, editor, arg
         );
 
-        // Creation and ignition of the new editor
-        debug!("Starting {}", editor);
-        let mut child = Command::new(editor)
-            .arg(arg)
-            .envs(session.envlist().iter_tuples()) // Pass the Pam session to the new process
-            .uid(uid) // Necessary to have full access
-            .gid(group_id) // Necessary to have full access
-            .spawn()?;
+        let data = CmdData {
+            program: editor,
+            args: vec![arg],
+        };
 
-        // Wait for the editor to finish, or the program will end before the editor
-        child.wait()?;
+        cmd::start_command(data, session, impuser)?;
     } else {
         return Err(From::from(
             "You shouldn't be able to see this error. CLI should have stopped you",

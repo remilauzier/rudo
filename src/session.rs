@@ -27,7 +27,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::utils;
 use crate::DEFAULT_SESSION_TIMEOUT;
-use crate::SESSION_DIR;
+use crate::SESSION_PATH;
 
 /// Create a structure to contain the UUID of the terminal, and the timestamp to determine
 /// if the session is valid for later use
@@ -66,7 +66,7 @@ impl Token {
     pub(crate) fn create_token_file(&self, username: &str) -> Result<(), Box<dyn Error>> {
         // Create the path of the file with the name of the program, the username to distinguish the user, and
         // the name of TTY to let the user have multiple session, on multiple terminal
-        let token_path_string = format!("{}{}{}", SESSION_DIR, username, self.tty_name);
+        let token_path_string = format!("{}{}{}", SESSION_PATH, username, self.tty_name);
         let token_path = Path::new(&token_path_string);
         debug!(
             "token_path has been created, will verify if it exists : {}",
@@ -139,35 +139,35 @@ impl Token {
 /// Create the full path of the directory containing the token file
 pub(crate) fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
     // Create the first part of the path
-    let run_path = Path::new(SESSION_DIR);
+    let run_path = Path::new(SESSION_PATH);
 
     // Verify that the first part of the path exist first
-    debug!("Verify that {} exist", SESSION_DIR);
+    debug!("Verify that {} exist", SESSION_PATH);
     if !run_path.exists() {
         info!(
             "{} doesn't exist, creating it with mode 600 to restraint access",
-            SESSION_DIR
+            SESSION_PATH
         );
         // Create the path with permissions of 600 to restraint access
         DirBuilder::new()
             .mode(0o600)
             .recursive(true)
-            .create(SESSION_DIR)?;
+            .create(SESSION_PATH)?;
     }
     // Extract permissions from the directory for further use
-    let metadata = fs::metadata(SESSION_DIR)?;
+    let metadata = fs::metadata(SESSION_PATH)?;
     let mut perms = metadata.permissions();
 
     // Verify the permissions of the directory and act accordingly
-    debug!("Verifying permission on {}", SESSION_DIR);
+    debug!("Verifying permission on {}", SESSION_PATH);
     if perms.mode() != 0o600 {
         warn!("Permissions are incorrect and will be adjusted to 600");
         perms.set_mode(0o600);
-        fs::set_permissions(SESSION_DIR, perms)?;
+        fs::set_permissions(SESSION_PATH, perms)?;
     }
 
     // Create the second part of the path for further use
-    let user_path_string = format!("{}{}/", SESSION_DIR, username);
+    let user_path_string = format!("{}{}/", SESSION_PATH, username);
     let user_path = Path::new(&user_path_string);
 
     // Verifying if the path exist and act accordingly

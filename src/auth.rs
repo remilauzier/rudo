@@ -27,7 +27,7 @@ use crate::session;
 use crate::token;
 use crate::tty;
 use crate::user;
-use crate::SESSION_DIR;
+use crate::SESSION_PATH;
 
 /// Function to verify if the user is authorized before using Pam
 pub(crate) fn authentification(
@@ -69,7 +69,10 @@ pub(crate) fn authentification_pam(
     debug!("Terminal UUID is {}", tty.terminal_uuid);
 
     // Create the token path with the base, the username and the TTY name
-    let token_path = format!("{}{}{}", SESSION_DIR, &userdata.username, tty.terminal_name);
+    let token_path = format!(
+        "{}{}{}",
+        SESSION_PATH, &userdata.username, tty.terminal_name
+    );
     debug!("token_path has been created: {}", token_path);
 
     // Verify that token_path is valid and that the session is not expired,
@@ -80,7 +83,7 @@ pub(crate) fn authentification_pam(
     debug!("Asking for password if token is invalid or non-existent");
     if !result {
         info!(
-            "{} demand authorization to use Rudo, password will be ask",
+            "{} demand authorization to use Rudo, password will be asked",
             userdata.username
         );
         // Password will be asked to validate the authorization
