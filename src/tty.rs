@@ -182,7 +182,7 @@ mod tests {
             return Ok(());
         } else {
             return Err(From::from(
-                "Test Failed: should have been the same number as ROXTERM_ID",
+                "Test Failed: It should have been the same number as ROXTERM_ID",
             ));
         }
     }
@@ -200,7 +200,7 @@ mod tests {
             return Ok(());
         } else {
             return Err(From::from(
-                "Test Failed: should have been the same number as TILIX_ID",
+                "Test Failed: It should have been the same number as TILIX_ID",
             ));
         }
     }
@@ -217,7 +217,7 @@ mod tests {
             return Ok(());
         } else {
             return Err(From::from(
-                "Test Failed: should have been the same number as TERMINATOR_UUID",
+                "Test Failed: It should have been the same number as TERMINATOR_UUID",
             ));
         }
     }
@@ -233,7 +233,7 @@ mod tests {
             return Ok(());
         } else {
             return Err(From::from(
-                "Test Failed: should have been the same number as SHELL_SESSION_ID",
+                "Test Failed: It should have been the same number as SHELL_SESSION_ID",
             ));
         }
     }
@@ -248,7 +248,7 @@ mod tests {
             return Ok(());
         } else {
             return Err(From::from(
-                "Test Failed: should have been the same number as GNOME_TERMINAL_SCREEN",
+                "Test Failed: It should have been the same number as GNOME_TERMINAL_SCREEN",
             ));
         }
     }
