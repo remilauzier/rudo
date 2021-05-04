@@ -18,25 +18,24 @@ Need ``pam-devel``, ``openssl-devel`` and ``systemd-devel`` for compilation
 
 # Package
 
-[crate.io](https://crates.io/crates/rudo)
+[crate.io](https://crates.io/crates/rudo) \
 [Copr](https://copr.fedorainfracloud.org/coprs/remilauzier/rudo/)
 
 # Functionality
 
-* [Rudo](https://github.com/remilauzier/rudo/blob/main/man/rudo.md) \
-* ``man rudo``
+[Rudo](https://github.com/remilauzier/rudo/blob/main/man/rudo.md) \
+``man rudo``
 
 # Configuration
 
-* [rudo.conf](https://github.com/remilauzier/rudo/blob/main/man/rudo.conf.md)
-* ``man rudo.conf``
+[rudo.conf](https://github.com/remilauzier/rudo/blob/main/man/rudo.conf.md) \
+``man rudo.conf``
 
 # Problem
 
-You need to change the owner of the binary to root to make it work, except for the distro package
-
-* `sudo chown root:root`
-* `sudo chmod 4755`
+You need to change the owner of the binary to root to make it work, except for the distro package \
+`sudo chown root:root` \
+`sudo chmod 4755`
 
 # Warning
 
