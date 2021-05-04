@@ -23,11 +23,13 @@ Need ``pam-devel``, ``openssl-devel`` and ``systemd-devel`` for compilation
 
 # Functionality
 
-[Rudo](https://github.com/remilauzier/rudo/blob/main/man/rudo.md)
+* [Rudo](https://github.com/remilauzier/rudo/blob/main/man/rudo.md) \
+* ``man rudo``
 
 # Configuration
 
-[rudo.conf](https://github.com/remilauzier/rudo/blob/main/man/rudo.conf.md)
+* [rudo.conf](https://github.com/remilauzier/rudo/blob/main/man/rudo.conf.md)
+* ``man rudo.conf``
 
 # Problem
 
