@@ -41,7 +41,8 @@ trivial_numeric_casts,         // Ensure cast are not misused and prefer coercio
 unaligned_references,          // Force alignment of reference to avoid Undefined Behavior in unsafe function
 unused_crate_dependencies,     // Ensure no unused crate get compiled or used
 unused_import_braces,          // Ensure brace are use only for multiple items only
-variant_size_differences       // Detect if some enum contain variable of different size that could consume more memory
+variant_size_differences,      // Detect if some enum contain variable of different size that could consume more memory
+unsafe_op_in_unsafe_fn         // Force unsafe block in unsafe function
 )]
 #![deny(
 clippy::all,                           // Deny everything that is in the correctness, performance, style and complexity categories to be more strict in code quality
