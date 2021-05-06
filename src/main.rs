@@ -20,7 +20,7 @@ to authorize a user to have privilege access with verification
 like group membership
 */
 #![deny(
-rustdoc::all,                       // rustdoc is for verifying the validity of some part of the documentation
+rustdoc::all,                  // rustdoc is for verifying the validity of some part of the documentation
 future_incompatible,           // future_incompatible is to ensure to be ready for future version of rust
 nonstandard_style,             // nonstandard_style is for verifying that Rudo respect convention. Rule LANG-NAMING anssi
 rust_2018_compatibility,       // rust_2018_compatibility is for forcing the 2018 convention as some small thing can be ignored by compiler
