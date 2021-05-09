@@ -18,7 +18,7 @@ Need ``pam-devel``, ``openssl-devel`` and ``systemd-devel`` for compilation
 
 # Package
 
-[crate.io](https://crates.io/crates/rudo) \
+[crates.io](https://crates.io/crates/rudo) \
 [Copr](https://copr.fedorainfracloud.org/coprs/remilauzier/rudo/)
 
 # Functionality
