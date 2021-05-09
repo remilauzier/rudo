@@ -20,7 +20,7 @@ to authorize a user to have privilege access with verification
 like group membership
 */
 #![deny(
-rustdoc::all,                  // rustdoc is for verifying the validity of some part of the documentation
+//rustdoc::all,                  // rustdoc is for verifying the validity of some part of the documentation
 future_incompatible,           // future_incompatible is to ensure to be ready for future version of rust
 nonstandard_style,             // nonstandard_style is for verifying that Rudo respect convention. Rule LANG-NAMING anssi
 rust_2018_compatibility,       // rust_2018_compatibility is for forcing the 2018 convention as some small thing can be ignored by compiler
@@ -42,7 +42,7 @@ unaligned_references,          // Force alignment of reference to avoid Undefine
 unused_crate_dependencies,     // Ensure no unused crate get compiled or used
 unused_import_braces,          // Ensure brace are use only for multiple items only
 variant_size_differences,      // Detect if some enum contain variable of different size that could consume more memory
-unsafe_op_in_unsafe_fn         // Force unsafe block in unsafe function
+//unsafe_op_in_unsafe_fn         // Force unsafe block in unsafe function
 )]
 #![deny(
 clippy::all,                           // Deny everything that is in the correctness, performance, style and complexity categories to be more strict in code quality
