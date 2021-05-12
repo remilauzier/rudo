@@ -31,25 +31,25 @@ jobs:
         toolchain: ${{ matrix.rust }}
     - name: Run ubuntu cargo build
       if: matrix.os == 'ubuntu-20.04'
-      uses: actions-rs/cargo@v1
+      uses: actions-rs/cargo@v1.0.3
       with:
         command: build
         args: --release --all-targets --all-features --verbose
     - name: Run macOS cargo build
       if: matrix.os == 'macos-10.15'
-      uses: actions-rs/cargo@v1
+      uses: actions-rs/cargo@v1.0.3
       with:
         command: build
         args: --release --all-targets --all-features --verbose
     - name: Run ubuntu cargo tests
       if: matrix.os == 'ubuntu-20.04'
-      uses: actions-rs/cargo@v1
+      uses: actions-rs/cargo@v1.0.3
       with:
         command: test
         args: --release --all-targets --all-features --verbose
     - name: Run macos cargo tests
       if: matrix.os == 'macos-10.15'
-      uses: actions-rs/cargo@v1
+      uses: actions-rs/cargo@v1.0.3
       with:
         command: test
         args: --release --all-targets --all-features --verbose
