@@ -25,7 +25,7 @@ jobs:
     - name: Install dependency
       if: matrix.os == 'ubuntu-20.04'
       run: sudo apt install libpam0g-dev libsystemd-dev
-    - uses: actions-rs/toolchain@v1
+    - uses: actions-rs/toolchain@v1.0.7
       with:
         profile: minimal
         toolchain: ${{ matrix.rust }}
