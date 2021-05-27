@@ -21,6 +21,9 @@ jobs:
       - name: Install dependency
         if: matrix.os == 'ubuntu-20.04'
         run: sudo apt install libpam0g-dev libsystemd-dev
+      - name: Update CI
+        if: matrix.os == 'ubuntu-20.04'
+        run: sudo apt update
       - name: cargo clippy
         run: cargo clippy --all-targets --all-features --verbose
         #- uses: actions-rs/clippy-check@v1
