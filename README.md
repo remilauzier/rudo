@@ -19,7 +19,7 @@ Need ``pam-devel``, ``openssl-devel`` and ``systemd-devel`` for compilation
 # Package
 
 [crates.io](https://crates.io/crates/rudo) \
-[Copr](https://copr.fedorainfracloud.org/coprs/remilauzier/rudo/)
+[fedora] dnf install rust-rudo
 
 # Functionality
 
