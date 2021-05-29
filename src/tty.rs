@@ -111,7 +111,7 @@ fn terminal_uuid() -> Result<String, Box<dyn Error>> {
         return Err(From::from("Couldn't determine the terminal UUID"));
     }
 }
-
+/*
 #[cfg(test)]
 mod tests {
     use super::{env, terminal_uuid, Error};
@@ -253,3 +253,4 @@ mod tests {
         }
     }
 }
+*/
