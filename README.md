@@ -1,6 +1,6 @@
 [![Crates.io](https://img.shields.io/crates/v/rudo?style=flat-square)](https://crates.io/crates/rudo)
 [![Crates.io](https://img.shields.io/crates/d/rudo?style=flat-square)](https://crates.io/crates/rudo)
-[![dependency status](https://deps.rs/crate/rudo/0.8.5/status.svg)](https://deps.rs/crate/rudo/0.8.5)
+[![dependency status](https://deps.rs/crate/rudo/0.8.6/status.svg)](https://deps.rs/crate/rudo/0.8.6)
 [![CI](https://github.com/remilauzier/rudo/actions/workflows/ci.yml/badge.svg)](https://github.com/remilauzier/rudo/actions/workflows/ci.yml)
 [![CI-Analyze](https://github.com/remilauzier/rudo/actions/workflows/ci-analyze.yml/badge.svg)](https://github.com/remilauzier/rudo/actions/workflows/ci-analyze.yml)
 [![Security-audit](https://github.com/remilauzier/rudo/actions/workflows/security-audit.yml/badge.svg)](https://github.com/remilauzier/rudo/actions/workflows/security-audit.yml)
@@ -19,7 +19,7 @@ Need ``pam-devel``, ``openssl-devel`` and ``systemd-devel`` for compilation
 # Package
 
 [crates.io](https://crates.io/crates/rudo) \
-[fedora] dnf install rust-rudo
+fedora: dnf install rust-rudo
 
 # Functionality
 
