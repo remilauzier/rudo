@@ -109,7 +109,7 @@ impl Token {
             let token_file = serde_yaml::to_string(&self)?;
 
             // Create the token file
-            utils::create_file(path, 0o600, &token_file)?;
+            utils::create_file(token_path, 0o600, &token_file)?;
         }
         return Ok(());
     }
