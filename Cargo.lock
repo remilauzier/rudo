@@ -245,15 +245,15 @@ dependencies = [
 name = "rudo"
 version = "0.8.7"
 dependencies = [
-    "clap",
-    "libc",
-    "log",
-    "oslog",
-    "pam-client",
-    "serde",
-    "serde_yaml",
-    "systemd",
-    "users",
+ "clap",
+ "libc",
+ "log",
+ "oslog",
+ "pam-client",
+ "serde",
+ "serde_yaml",
+ "systemd",
+ "users",
 ]
 
 [[package]]
