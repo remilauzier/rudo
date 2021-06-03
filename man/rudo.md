@@ -1,4 +1,4 @@
-# rudo 1 2021-05-29 0.8.6 "Rudo User manual"
+# rudo 1 2021-05-30 0.8.7 "Rudo User manual"
 
 # NAME
 Rudo is a utility to gain privilege access on Unix system with Pam.
