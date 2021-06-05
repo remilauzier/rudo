@@ -19,7 +19,7 @@ Need ``pam-devel``, ``openssl-devel`` and ``systemd-devel`` for compilation
 # Package
 
 [crates.io](https://crates.io/crates/rudo) \
-fedora: dnf install rust-rudo
+fedora 35+: dnf install rust-rudo
 
 # Functionality
 
