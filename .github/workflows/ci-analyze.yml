@@ -2,9 +2,9 @@ name: CI-Analyze
 
 on:
   push:
-    paths-ignore: [man/**, conf/**, README.md, LICENSE, .gitignore, rust-rudo.spec]
+    paths-ignore: [man/**, conf/**, docs/**, README.md, LICENSE, .gitignore, rust-rudo.spec]
   pull_request:
-    paths-ignore: [man/**, conf/**, README.md, LICENSE, .gitignore, rust-rudo.spec]
+    paths-ignore: [man/**, conf/**, docs/**, README.md, LICENSE, .gitignore, rust-rudo.spec]
 
 env:
   CARGO_TERM_COLOR: always
