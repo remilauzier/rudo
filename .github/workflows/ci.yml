@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    paths-ignore: [man/**, conf/**, docs/**, README.md, LICENSE, .gitignore, .index.html]
+    paths-ignore: [ man/**, conf/**, docs/**, README.md, LICENSE, .gitignore ]
   pull_request:
-    paths-ignore: [man/**, conf/**, docs/**, README.md, LICENSE, .gitignore, .index.html]
+    paths-ignore: [ man/**, conf/**, docs/**, README.md, LICENSE, .gitignore ]
 
 env:
   CARGO_TERM_COLOR: always
