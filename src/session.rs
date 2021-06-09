@@ -78,13 +78,6 @@ impl Token {
             // Erase the ancient file and create new one
             debug!("token_path exist will be erased and replace");
             fs::remove_file(token_path)?;
-
-            // Put the token data in a string of YAML
-            debug!("Put Token in a string");
-            let token_file = serde_yaml::to_string(&self)?;
-
-            // Create the token file
-            utils::create_file(token_path, 0o600, &token_file)?;
         } else {
             debug!("token_path doesn't exist, will create it");
 
@@ -103,14 +96,13 @@ impl Token {
                 path_str
             );
             DirBuilder::new().mode(0o600).recursive(true).create(path)?;
-
-            // Put the token data in a string of YAML
-            debug!("Put Token in a string");
-            let token_file = serde_yaml::to_string(&self)?;
-
-            // Create the token file
-            utils::create_file(token_path, 0o600, &token_file)?;
         }
+        // Put the token data in a string of YAML
+        debug!("Put Token in a string");
+        let token_file = serde_yaml::to_string(&self)?;
+
+        // Create the token file
+        utils::create_file(token_path, 0o600, &token_file)?;
         return Ok(());
     }
     /// Verify that the token is valid to decide if we must reuse the session or not
