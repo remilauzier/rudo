@@ -33,7 +33,7 @@ single_use_lifetimes,          // Prefer <'_> for single_use_lifetimes instead o
 unused_lifetimes,              // Detect unused_lifetimes and remove them
 unused_qualifications,         // Detect unnecessary qualifications for simpler code style
 missing_crate_level_docs,      // Verify that the crate always have a documentation explaining its utility
-disjoint_capture_drop_reorder, // Ensure the variable are capture properly when using capture_disjoint_fields ||
+//disjoint_capture_drop_reorder, // Ensure the variable are capture properly when using capture_disjoint_fields ||
 missing_docs,                  // Ensure documentation is present
 non_ascii_idents,              // Ensure variable have only ascii character for security reason and clarity of code
 trivial_casts,                 // Ensure cast are not misused and prefer coercion instead
@@ -56,7 +56,7 @@ clippy::str_to_string,                 // Prefer to_owned instead of to_string f
 clippy::string_add,                    // Prefer push_str instead of + for more clarity
 clippy::string_to_string,              // Prefer clone instead of to_string on string for better clarity
 clippy::use_debug,                     // Prefer not to use {:?} in production code, but it doesn't catch them in log macro for now. Rust-1.51
-clippy::wrong_pub_self_convention,     // Be consistent and follow convention for clarity in code that use self
+//clippy::wrong_pub_self_convention,     // Be consistent and follow convention for clarity in code that use self
 clippy::needless_borrow,               // Removed needless borrow in code for better clarity. Nursery
 clippy::use_self,                      // Use self when its possible instead of given the name of a struct or other type everywhere. Nursery
 clippy::useless_let_if_seq,            // Prefer idiomatic rust for clarity in code . Nursery
