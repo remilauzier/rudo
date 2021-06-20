@@ -32,14 +32,13 @@ macro_use_extern_crate,        // Prefer to declare in each file the macro that 
 single_use_lifetimes,          // Prefer <'_> for single_use_lifetimes instead of <'a>
 unused_lifetimes,              // Detect unused_lifetimes and remove them
 unused_qualifications,         // Detect unnecessary qualifications for simpler code style
-missing_crate_level_docs,      // Verify that the crate always have a documentation explaining its utility
-//disjoint_capture_drop_reorder, // Ensure the variable are capture properly when using capture_disjoint_fields ||
+//missing_crate_level_docs,      // Verify that the crate always have a documentation explaining its utility
 missing_docs,                  // Ensure documentation is present
 non_ascii_idents,              // Ensure variable have only ascii character for security reason and clarity of code
 trivial_casts,                 // Ensure cast are not misused and prefer coercion instead
 trivial_numeric_casts,         // Ensure cast are not misused and prefer coercion instead
-unaligned_references,          // Force alignment of reference to avoid Undefined Behavior in unsafe function
-unused_crate_dependencies,     // Ensure no unused crate get compiled or used
+//unaligned_references,          // Force alignment of reference to avoid Undefined Behavior in unsafe function
+//unused_crate_dependencies,     // Ensure no unused crate get compiled or used
 unused_import_braces,          // Ensure brace are use only for multiple items only
 variant_size_differences,      // Detect if some enum contain variable of different size that could consume more memory
 //unsafe_op_in_unsafe_fn         // Force unsafe block in unsafe function
@@ -56,7 +55,6 @@ clippy::str_to_string,                 // Prefer to_owned instead of to_string f
 clippy::string_add,                    // Prefer push_str instead of + for more clarity
 clippy::string_to_string,              // Prefer clone instead of to_string on string for better clarity
 clippy::use_debug,                     // Prefer not to use {:?} in production code, but it doesn't catch them in log macro for now. Rust-1.51
-//clippy::wrong_pub_self_convention,     // Be consistent and follow convention for clarity in code that use self
 clippy::needless_borrow,               // Removed needless borrow in code for better clarity. Nursery
 clippy::use_self,                      // Use self when its possible instead of given the name of a struct or other type everywhere. Nursery
 clippy::useless_let_if_seq,            // Prefer idiomatic rust for clarity in code . Nursery
@@ -77,7 +75,9 @@ clippy::multiple_inherent_impl,        // Ensure to have only one impl for each 
 clippy::integer_arithmetic,            // Prefer safer method to avoid overflow like saturating_add(). Rule LANG-ARITH anssi
 clippy::indexing_slicing,              // Prefer get() method with good error management to avoid panic in runtime. Rule LANG-ARRINDEXING anssi
 clippy::implicit_return,               // Prefer to have explicit return instead of implicit for better clarity in some part of the code
-clippy::semicolon_if_nothing_returned  // Prefer to finish function with a semicolon even if the function is one line
+clippy::semicolon_if_nothing_returned, // Prefer to finish function with a semicolon even if the function is one line
+clippy::if_then_some_else_none,        // Prefer less redundant code
+clippy::unnecessary_self_imports       // Prefer clearer code
 )]
 // Authorized redundant else to conform to MISRA-C:2004 Rule 14.10 and to not conflict with clippy::else_if_without_else
 #![allow(clippy::redundant_else)]
