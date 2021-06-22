@@ -29,7 +29,7 @@ pub(crate) fn vec_to_string(data: Vec<&str>) -> String {
     for buf in data {
         buffer.push_str(buf);
     }
-    return buffer;
+    buffer
 }
 
 /// Function that create a file with a path, a mode and with data
@@ -51,7 +51,7 @@ pub(crate) fn create_file(path: &Path, mode: u32, data: &str) -> Result<(), Box<
     let mut perms = file.metadata()?.permissions();
     perms.set_mode(mode);
     file.set_permissions(perms)?;
-    return Ok(());
+    Ok(())
 }
 
 #[cfg(test)]
@@ -66,11 +66,11 @@ mod tests {
         let data = vec!["test", "case"];
         let buffer = vec_to_string(data);
         if buffer.is_empty() {
-            return Err(From::from("Test failed. Shouldn't be empty"));
+            Err(From::from("Test failed. Shouldn't be empty"))
         } else if buffer == "testcase" {
-            return Ok(());
+            Ok(())
         } else {
-            return Err(From::from("Test failed to convert vec to string correctly"));
+            Err(From::from("Test failed to convert vec to string correctly"))
         }
     }
 
@@ -80,11 +80,11 @@ mod tests {
         create_file(path, 0o600, "1234")?;
         let data = fs::read_to_string(path)?;
         if data == "1234" {
-            return Ok(());
+            Ok(())
         } else {
-            return Err(From::from(
+            Err(From::from(
                 "Test failed! file was not create with the right data",
-            ));
+            ))
         }
     }
 }

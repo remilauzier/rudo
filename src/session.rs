@@ -55,12 +55,12 @@ impl Token {
             Some(time) => time,
             None => return Err(From::from("Couldn't create final timestamp")),
         };
-        return Ok(Self {
+        Ok(Self {
             tty_name: String::from(tty_name),
             tty_uuid: String::from(tty_uuid),
             timestamp,
             final_timestamp,
-        });
+        })
     }
     /// Create the file that will contain the token if it doesn't exist
     pub(crate) fn create_token_file(&self, username: &str) -> Result<(), Box<dyn Error>> {
@@ -103,7 +103,7 @@ impl Token {
 
         // Create the token file
         utils::create_file(token_path, 0o600, &token_file)?;
-        return Ok(());
+        Ok(())
     }
     /// Verify that the token is valid to decide if we must reuse the session or not
     pub(crate) fn verify_token(
@@ -114,16 +114,16 @@ impl Token {
         let clock = SystemTime::now();
         if self.final_timestamp <= clock {
             debug!("Session has expired");
-            return Err(From::from("Session has expired"));
+            Err(From::from("Session has expired"))
         } else if self.tty_name == tty_name
             && self.tty_uuid == tty_uuid
             && self.final_timestamp > clock
         {
             debug!("Session is valid, will reuse it");
-            return Ok(());
+            Ok(())
         } else {
             debug!("Not the same session");
-            return Err(From::from("Not the same session"));
+            Err(From::from("Not the same session"))
         }
     }
 }
@@ -190,7 +190,7 @@ pub(crate) fn create_dir_run(username: &str) -> Result<(), Box<dyn Error>> {
             fs::set_permissions(user_path, perms)?;
         }
     }
-    return Ok(());
+    Ok(())
 }
 
 /// Function to extract the token from its file with `serde_yaml`
@@ -205,7 +205,7 @@ pub(crate) fn read_token_file(token_path: &str) -> Result<Token, Box<dyn Error>>
     // Transform the buffer to the token structure
     debug!("Transform the buffer to the token structure");
     let token: Token = serde_yaml::from_str(&buffer)?;
-    return Ok(token);
+    Ok(token)
 }
 
 #[cfg(test)]
@@ -217,9 +217,9 @@ mod tests {
         let token = Token::new("name", "1234")?;
         let duration = std::time::Duration::from_secs(DEFAULT_SESSION_TIMEOUT);
         if token.final_timestamp - duration == token.timestamp {
-            return Ok(());
+            Ok(())
         } else {
-            return Err(From::from("Test failed: timestamp creation got wrong"));
+            Err(From::from("Test failed: timestamp creation got wrong"))
         }
     }
 }

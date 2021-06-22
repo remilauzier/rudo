@@ -103,7 +103,7 @@ pub(crate) fn run(matches: &ArgMatches<'_>) -> Result<(), Box<dyn Error>> {
     debug!("Run the command {} as choose", userdata.username);
     run_command(matches, &session, &impuser, &userdata)?;
 
-    return Ok(());
+    Ok(())
 }
 /// `run_command` is a function that run the precise command the user demand
 fn run_command(
@@ -137,7 +137,7 @@ fn run_command(
     } else if matches.is_present("shell") {
         // Extraction of the shell environment variable
         debug!("Extracting shell environment variable");
-        let shell = env::var("SHELL").unwrap_or_else(|_| return String::from("/bin/sh"));
+        let shell = env::var("SHELL").unwrap_or_else(|_| String::from("/bin/sh"));
 
         // Log the user, and it's shell for further audit by system administrator
         info!("{} has been authorized to use {}", userdata.username, shell);
@@ -178,5 +178,5 @@ fn run_command(
             "You shouldn't be able to see this error. CLI should have stopped you",
         ));
     }
-    return Ok(());
+    Ok(())
 }
