@@ -58,7 +58,7 @@ pub(crate) fn log_oslog(debug: bool) -> Result<(), Box<dyn Error>> {
             .init()?;
         info!("Starting logs");
     }
-    return Ok(());
+    Ok(())
 }
 
 #[cfg(test)]
