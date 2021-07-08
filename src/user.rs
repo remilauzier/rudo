@@ -51,7 +51,7 @@ impl User {
                 ))
             }
         };
-        return Ok(Self { username, group });
+        Ok(Self { username, group })
     }
     /// Function that verify that the user is part of the list of authorized users as defined in the configuration file
     pub(crate) fn verify_user(&self, username: &str) -> Result<(), Box<dyn Error>> {
@@ -62,14 +62,14 @@ impl User {
         let actualuser = &self.username;
         if actualuser == username {
             debug!("{} has been authorized", actualuser);
-            return Ok(());
+            Ok(())
         } else {
             let err = format!(
                 "{} is not authorized to use Rudo! Will be report to administrator!",
                 actualuser
             );
             error!("{}", err);
-            return Err(From::from(err));
+            Err(From::from(err))
         }
     }
     /// Function that take the vector containing the list of groups the user is a member,
@@ -91,16 +91,16 @@ impl User {
         if count == 0 {
             let error = format!("User is not a member of the authorized group: {}", arggroup);
             error!("{}", error);
-            return Err(From::from(error));
+            Err(From::from(error))
         } else if count == 1 {
             info!("User is a member of the authorized group: {}", arggroup);
-            return Ok(());
+            Ok(())
         } else if count >= 2 {
             let err = format!("{} is list multiple time", arggroup);
             error!("{}", err);
-            return Err(From::from(err));
+            Err(From::from(err))
         } else {
-            return Err(From::from("You shouldn't see this error!"));
+            Err(From::from("You shouldn't see this error!"))
         }
     }
 }
@@ -113,18 +113,18 @@ mod tests {
     fn test_verify_group() -> Result<(), Box<dyn Error>> {
         let userdata = User::new()?;
         if userdata.verify_group("test").is_err() {
-            return Ok(());
+            Ok(())
         } else {
-            return Err(From::from("The group should not correspond with test"));
+            Err(From::from("The group should not correspond with test"))
         }
     }
     #[test]
     fn test_verify_user() -> Result<(), Box<dyn Error>> {
         let userdata = User::new()?;
         if userdata.verify_user("test").is_err() {
-            return Ok(());
+            Ok(())
         } else {
-            return Err(From::from("The user should not correspond with test"));
+            Err(From::from("The user should not correspond with test"))
         }
     }
 }

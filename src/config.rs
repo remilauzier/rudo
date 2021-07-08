@@ -44,18 +44,18 @@ impl UserConf {
         // Update greeting value with CLI option
         debug!("Greeting value will be update");
         self.greeting = true;
-        return self;
+        self
     }
 }
 
 impl Default for UserConf {
     fn default() -> Self {
-        return Self {
+        Self {
             username: String::from("root"),
             group: String::from("wheel"),
             password: true,
             greeting: true,
-        };
+        }
     }
 }
 
@@ -68,9 +68,9 @@ pub(crate) struct RudoConf {
 
 impl Default for RudoConf {
     fn default() -> Self {
-        return Self {
+        Self {
             impuser: String::from("root"),
-        };
+        }
     }
 }
 
@@ -94,23 +94,23 @@ impl Config {
         // Create the configuration file
         debug!("Creating configuration file at {}", CONFIG_PATH);
         utils::create_file(config_path, 0o640, &config_file)?;
-        return Ok(());
+        Ok(())
     }
     /// Function to update the name of the impersonated user with the value give in the command-line
     pub(crate) fn update_user(mut self, impuser: String) -> Self {
         // Update user value with CLI value
         debug!("User value will be update");
         self.rudo.impuser = impuser;
-        return self;
+        self
     }
 }
 // Default value for configuration
 impl Default for Config {
     fn default() -> Self {
-        return Self {
+        Self {
             rudo: RudoConf::default(),
             user: vec![UserConf::default()],
-        };
+        }
     }
 }
 /// Function to initialize the configuration with the default data if necessary
@@ -144,7 +144,7 @@ pub(crate) fn init_conf() -> Result<Config, Box<dyn Error>> {
         eprintln!("{} doesn't exist! Creating it", CONFIG_PATH);
         conf.create_config_file()?;
     }
-    return Ok(conf);
+    Ok(conf)
 }
 
 /// Function to read the configuration file and extract its data
@@ -158,7 +158,7 @@ pub(crate) fn read_config_file() -> Result<Config, Box<dyn Error>> {
     debug!("Transform data to a structure with serde");
     let config: Config = serde_yaml::from_str(&buffer)?;
     // Return the configuration
-    return Ok(config);
+    Ok(config)
 }
 
 /// Extract, from the vector of `UserConf` of the configuration file, the user presently accessing Rudo,
@@ -170,7 +170,7 @@ pub(crate) fn extract_userconf(conf: Vec<UserConf>, username: &str) -> UserConf 
             user = cf;
         }
     }
-    return user;
+    user
 }
 
 #[cfg(test)]
@@ -187,9 +187,9 @@ mod tests {
         };
         let conf = conf.update_greeting();
         if conf.greeting {
-            return Ok(());
+            Ok(())
         } else {
-            return Err(From::from("Test failed to update greeting value!"));
+            Err(From::from("Test failed to update greeting value!"))
         }
     }
 
@@ -198,9 +198,9 @@ mod tests {
         let conf = Config::default();
         let conf = conf.update_user(String::from("nano"));
         if conf.rudo.impuser == "nano" {
-            return Ok(());
+            Ok(())
         } else {
-            return Err(From::from("Test failed to update impuser value!"));
+            Err(From::from("Test failed to update impuser value!"))
         }
     }
 
@@ -209,9 +209,9 @@ mod tests {
         let conf = UserConf::default();
         let conf = vec![conf];
         if extract_userconf(conf, "root").username == "root" {
-            return Ok(());
+            Ok(())
         } else {
-            return Err(From::from("Test failed when extracting the userconf"));
+            Err(From::from("Test failed when extracting the userconf"))
         }
     }
 }

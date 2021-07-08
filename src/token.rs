@@ -37,7 +37,7 @@ pub(crate) fn verify_path(
         // Erase the path if it's a directory
         error!("token_path is a directory and will be erased");
         fs::remove_dir(token_path)?;
-        return Ok(false);
+        Ok(false)
     } else if token_path.exists() && token_path.is_file() {
         // Read the token file and return false if invalid or expired
         debug!("Token will be read from file and validate");
@@ -54,10 +54,10 @@ pub(crate) fn verify_path(
             return Ok(false);
         }
         debug!("Token was valid");
-        return Ok(true);
+        Ok(true)
     } else {
         debug!("Token was non-existent");
-        return Ok(false);
+        Ok(false)
     }
 }
 
@@ -73,9 +73,9 @@ mod tests {
         };
         let result = verify_path("/run/rudo/pts/0", &tty)?;
         if result {
-            return Err(From::from("Test failed: the path should not be valid"));
+            Err(From::from("Test failed: the path should not be valid"))
         } else {
-            return Ok(());
+            Ok(())
         }
     }
 }

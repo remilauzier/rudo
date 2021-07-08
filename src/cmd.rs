@@ -50,7 +50,7 @@ impl<'a> CmdData<'a> {
         // Copy the rest of the value and return it
         let args = command;
         debug!("Return the new Command structure");
-        return Ok(Self { program, args });
+        Ok(Self { program, args })
     }
 }
 
@@ -71,7 +71,7 @@ pub(crate) fn start_command(
 
     // Wait for the command to finish, or the program end before the command
     child.wait()?;
-    return Ok(());
+    Ok(())
 }
 
 #[cfg(test)]
@@ -82,9 +82,9 @@ mod tests {
     fn test_command_new() -> Result<(), Box<dyn Error>> {
         let command = CmdData::new(vec!["test"]);
         if command.is_ok() {
-            return Ok(());
+            Ok(())
         } else {
-            return Err(From::from("Test failed to create structure"));
+            Err(From::from("Test failed to create structure"))
         }
     }
 
@@ -92,18 +92,18 @@ mod tests {
     fn test_command_new_empty() -> Result<(), Box<dyn Error>> {
         let command = CmdData::new(vec![]);
         if command.is_err() {
-            return Ok(());
+            Ok(())
         } else {
-            return Err(From::from("Test failed to see an empty vector"));
+            Err(From::from("Test failed to see an empty vector"))
         }
     }
     #[test]
     fn test_command_new_full() -> Result<(), Box<dyn Error>> {
         let command = CmdData::new(vec!["test", "command", "full"])?;
         if command.program == "test" && command.args == vec!["command", "full"] {
-            return Ok(());
+            Ok(())
         } else {
-            return Err(From::from("Test failed to reproduced structure"));
+            Err(From::from("Test failed to reproduced structure"))
         }
     }
 }
