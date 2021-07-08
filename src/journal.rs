@@ -78,6 +78,6 @@ mod tests {
     #[cfg(all(target_os = "macos", feature = "macos"))]
     #[test]
     fn test_oslog() -> Result<(), Box<dyn Error>> {
-        return log_oslog(false);
+        log_oslog(false);
     }
 }
