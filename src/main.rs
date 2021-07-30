@@ -19,8 +19,9 @@
 to authorize a user to have privilege access with verification
 like group membership
 */
+#![allow(unknown_lints)]
 #![deny(
-//rustdoc::all,                  // rustdoc is for verifying the validity of some part of the documentation
+rustdoc::all,                  // rustdoc is for verifying the validity of some part of the documentation
 future_incompatible,           // future_incompatible is to ensure to be ready for future version of rust
 nonstandard_style,             // nonstandard_style is for verifying that Rudo respect convention. Rule LANG-NAMING anssi
 rust_2018_compatibility,       // rust_2018_compatibility is for forcing the 2018 convention as some small thing can be ignored by compiler
@@ -32,16 +33,18 @@ macro_use_extern_crate,        // Prefer to declare in each file the macro that 
 single_use_lifetimes,          // Prefer <'_> for single_use_lifetimes instead of <'a>
 unused_lifetimes,              // Detect unused_lifetimes and remove them
 unused_qualifications,         // Detect unnecessary qualifications for simpler code style
-//missing_crate_level_docs,      // Verify that the crate always have a documentation explaining its utility
+missing_crate_level_docs,      // Verify that the crate always have a documentation explaining its utility
 missing_docs,                  // Ensure documentation is present
 non_ascii_idents,              // Ensure variable have only ascii character for security reason and clarity of code
 trivial_casts,                 // Ensure cast are not misused and prefer coercion instead
 trivial_numeric_casts,         // Ensure cast are not misused and prefer coercion instead
-//unaligned_references,          // Force alignment of reference to avoid Undefined Behavior in unsafe function
-//unused_crate_dependencies,     // Ensure no unused crate get compiled or used
+unaligned_references,          // Force alignment of reference to avoid Undefined Behavior in unsafe function
+unused_crate_dependencies,     // Ensure no unused crate get compiled or used
 unused_import_braces,          // Ensure brace are use only for multiple items only
 variant_size_differences,      // Detect if some enum contain variable of different size that could consume more memory
-//unsafe_op_in_unsafe_fn         // Force unsafe block in unsafe function
+unsafe_op_in_unsafe_fn,         // Force unsafe block in unsafe function
+missing_copy_implementations,
+missing_debug_implementations
 )]
 #![deny(
 clippy::all,                           // Deny everything that is in the correctness, performance, style and complexity categories to be more strict in code quality
