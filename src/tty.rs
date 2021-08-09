@@ -15,9 +15,7 @@
  *    with this program; if not, write to the Free Software Foundation, Inc.,
  *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-use std::env;
-use std::error::Error;
-use std::ffi::CStr;
+use std::{env, error::Error, ffi::CStr};
 
 use libc::{isatty, ttyname};
 use log::{debug, error};

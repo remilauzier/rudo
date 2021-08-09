@@ -15,14 +15,11 @@
  *    with this program; if not, write to the Free Software Foundation, Inc.,
  *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-use std::error::Error;
-use std::fs;
-use std::path::Path;
+use std::{error::Error, fs, path::Path};
 
 use log::{debug, error};
 
-use crate::session;
-use crate::tty;
+use crate::{session, tty};
 
 /// `verify_path` analyze if the token exist, and it's valid, then it returns a bool for the result.
 pub(crate) fn verify_path(

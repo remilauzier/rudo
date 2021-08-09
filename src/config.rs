@@ -15,15 +15,12 @@
  *    with this program; if not, write to the Free Software Foundation, Inc.,
  *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-use std::error::Error;
-use std::fs;
-use std::path::Path;
+use std::{error::Error, fs, path::Path};
 
 use log::{debug, error, warn};
 use serde::{Deserialize, Serialize};
 
-use crate::utils;
-use crate::CONFIG_PATH;
+use crate::{utils, CONFIG_PATH};
 
 #[derive(Serialize, Deserialize, Clone)]
 /// `UserConf` structure is the representation of the data of a part of the configuration file

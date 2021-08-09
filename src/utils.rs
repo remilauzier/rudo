@@ -15,11 +15,7 @@
  *    with this program; if not, write to the Free Software Foundation, Inc.,
  *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-use std::error::Error;
-use std::fs::File;
-use std::io::Write;
-use std::os::unix::fs::PermissionsExt;
-use std::path::Path;
+use std::{error::Error, fs::File, io::Write, os::unix::fs::PermissionsExt, path::Path};
 
 use log::debug;
 
@@ -56,8 +52,7 @@ pub(crate) fn create_file(path: &Path, mode: u32, data: &str) -> Result<(), Box<
 
 #[cfg(test)]
 mod tests {
-    use std::error::Error;
-    use std::fs;
+    use std::{error::Error, fs};
 
     use super::{create_file, vec_to_string, Path};
 

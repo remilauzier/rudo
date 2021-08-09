@@ -15,19 +15,18 @@
  *    with this program; if not, write to the Free Software Foundation, Inc.,
  *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-use std::error::Error;
-use std::fs::{self, DirBuilder};
-use std::os::unix::fs::DirBuilderExt;
-use std::os::unix::fs::PermissionsExt;
-use std::path::Path;
-use std::time::SystemTime;
+use std::{
+    error::Error,
+    fs::{self, DirBuilder},
+    os::unix::fs::{DirBuilderExt, PermissionsExt},
+    path::Path,
+    time::SystemTime,
+};
 
 use log::{debug, error, info, warn};
 use serde::{Deserialize, Serialize};
 
-use crate::utils;
-use crate::DEFAULT_SESSION_TIMEOUT;
-use crate::SESSION_PATH;
+use crate::{utils, DEFAULT_SESSION_TIMEOUT, SESSION_PATH};
 
 /// Create a structure to contain the UUID of the terminal, and the timestamp to determine
 /// if the session is valid for later use

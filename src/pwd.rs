@@ -18,8 +18,7 @@
 use std::error::Error;
 
 use log::{debug, error};
-use pam_client::conv_cli::Conversation;
-use pam_client::{Context, Flag};
+use pam_client::{conv_cli::Conversation, Context, Flag};
 
 /// `Password_input` is a function that ask the user for their password.
 /// Pam validates the password

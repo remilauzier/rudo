@@ -15,20 +15,13 @@
  *    with this program; if not, write to the Free Software Foundation, Inc.,
  *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-use std::env;
-use std::error::Error;
+use std::{env, error::Error};
 
 use clap::ArgMatches;
 use log::{debug, info};
-use pam_client::conv_cli::Conversation;
-use pam_client::{Flag, Session};
+use pam_client::{conv_cli::Conversation, Flag, Session};
 
-use crate::auth;
-use crate::cmd;
-use crate::cmd::CmdData;
-use crate::config;
-use crate::user;
-use crate::utils;
+use crate::{auth, cmd, cmd::CmdData, config, user, utils};
 
 /// Run function of Rudo.
 /// It takes the result of the command-line interface to decide

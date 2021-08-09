@@ -18,16 +18,9 @@
 use std::error::Error;
 
 use log::{debug, info};
-use pam_client::conv_cli::Conversation;
-use pam_client::{Context, Flag};
+use pam_client::{conv_cli::Conversation, Context, Flag};
 
-use crate::config;
-use crate::pwd;
-use crate::session;
-use crate::token;
-use crate::tty;
-use crate::user;
-use crate::SESSION_PATH;
+use crate::{config, pwd, session, token, tty, user, SESSION_PATH};
 
 /// Function to verify if the user is authorized before using Pam
 pub(crate) fn authentification(
